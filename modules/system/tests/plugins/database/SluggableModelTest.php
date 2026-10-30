@@ -3,10 +3,13 @@
 namespace System\Tests\Plugins\Database;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Database\Tester\Models\SluggablePost;
 
 class SluggableModelTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp() : void
     {
         parent::setUp();

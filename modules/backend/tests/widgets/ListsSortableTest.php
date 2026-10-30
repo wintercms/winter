@@ -3,6 +3,7 @@
 namespace Backend\Tests\Widgets;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Exception\ApplicationException;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use Backend\Tests\Fixtures\Models\SortableFixture;
@@ -11,6 +12,8 @@ use Illuminate\Http\Request as HttpRequest;
 
 class ListsSortableTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();

@@ -8,6 +8,7 @@ use Backend\Models\ImportModel;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Exception\ApplicationException;
 
 /**
@@ -117,6 +118,8 @@ class UngatedImportExportController extends Controller
 
 class ImportExportControllerPermissionsTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();

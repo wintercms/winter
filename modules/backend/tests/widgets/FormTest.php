@@ -3,6 +3,7 @@
 namespace Backend\Tests\Widgets
 {
     use System\Tests\Bootstrap\PluginTestCase;
+    use System\Tests\Concerns\MigratesDatabaseOnce;
     use Winter\Storm\Database\Model;
     use Backend\Tests\Fixtures\Models\UserFixture;
     use Backend\Widgets\Form;
@@ -37,6 +38,8 @@ namespace Backend\Tests\Widgets
 
     class FormTest extends PluginTestCase
     {
+        use MigratesDatabaseOnce;
+
         public function testRestrictedFieldWithUserWithNoPermissions()
         {
             $user = new UserFixture;

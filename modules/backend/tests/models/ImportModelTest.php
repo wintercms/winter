@@ -3,6 +3,7 @@
 namespace Backend\Tests\Models;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Backend\Models\ImportModel;
 use System\Models\File as FileModel;
 
@@ -22,6 +23,8 @@ class ExampleImportModel extends ImportModel
 
 class ImportModelTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
 
     //
     // Tests

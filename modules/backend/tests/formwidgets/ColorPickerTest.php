@@ -6,10 +6,13 @@ use Backend\Classes\Controller;
 use Backend\Classes\FormField;
 use Backend\FormWidgets\ColorPicker;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Exception\ApplicationException;
 
 class ColorPickerTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function testDefaultSaveValue(): void
     {
         $widget = $this->makeWidget();

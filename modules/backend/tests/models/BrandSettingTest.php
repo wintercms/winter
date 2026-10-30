@@ -4,9 +4,12 @@ namespace Backend\Tests\Models;
 
 use Backend\Models\BrandSetting;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 class BrandSettingTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();

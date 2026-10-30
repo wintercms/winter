@@ -5,9 +5,12 @@ namespace System\Tests\Models;
 use System\Controllers\MailBrandSettings;
 use System\Models\MailBrandSetting;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 class MailBrandSettingTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     /** A CSS variable value that would close the generated ruleset and emit markup into the compiled stylesheet. */
     const BREAKOUT_VALUE = 'red; .xss::before { content: "</style><img src=x onerror=alert(1)>"; }';
 

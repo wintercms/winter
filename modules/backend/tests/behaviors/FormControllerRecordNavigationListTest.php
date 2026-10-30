@@ -6,6 +6,7 @@ use Backend\Classes\Controller;
 use Backend\Models\User;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 /**
  * Coverage for which list record navigation walks, and for overriding it.
@@ -103,6 +104,8 @@ class NavigationOverrideController extends NavigationController
 
 class FormControllerRecordNavigationListTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected User $inBothLists;
 
     protected User $archivedOnly;

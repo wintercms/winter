@@ -7,6 +7,7 @@ use Backend\Models\UserRole;
 use System\Classes\SettingsManager;
 use System\Models\MailSetting;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Facades\Config;
 
@@ -20,6 +21,8 @@ use Winter\Storm\Support\Facades\Config;
  */
 class SettingsSecurityTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();

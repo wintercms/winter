@@ -6,10 +6,13 @@ use Backend\Tests\Fixtures\Models\UserFixture;
 use Cms\Controllers\Index;
 use Illuminate\Support\Facades\Request;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Exception\ApplicationException;
 
 class AssetListPermissionTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function testOnUploadRejectsThemeMismatch(): void
     {
         $user = (new UserFixture)->withPermission('cms.manage_assets', true);

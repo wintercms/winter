@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use System\Models\Parameter as SystemParameters;
 use System\Classes\SettingsManager;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Facades\Config;
 
@@ -121,6 +122,8 @@ class ExtraPropertyContainer extends \Backend\Widgets\ReportContainer
  */
 class ReportContainerSecurityTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected User $dashboardOnly;
     protected User $privileged;
     protected User $publisher;

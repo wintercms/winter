@@ -4,6 +4,7 @@ namespace Cms\Tests\Classes;
 
 use Exception;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Cms\Classes\AutoDatasource;
 use Winter\Storm\Database\MemoryCache;
 use Winter\Storm\Database\Model;
@@ -22,6 +23,8 @@ class CmsThemeTemplateFixture extends Model
 
 class AutoDatasourceTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     /**
      * Array of model fixtures.
      *

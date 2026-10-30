@@ -6,6 +6,7 @@ use Backend\Models\User;
 use Backend\Widgets\Form;
 use DOMDocument;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 /**
  * Nothing constrains a dropdown value to its option list server side -- Form::getSaveData() stores the posted value
@@ -13,6 +14,8 @@ use System\Tests\Bootstrap\PluginTestCase;
  */
 class FormFieldEscapingTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     /** Inert in a text context, markup in an attribute context: it re-opens an attribute to swallow the sink's quote. */
     protected const PAYLOAD = '"><script>window.pwned=1</script><b onmouseover="window.pwned=1" x="';
 

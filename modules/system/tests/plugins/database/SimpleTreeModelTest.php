@@ -3,12 +3,15 @@
 namespace System\Tests\Plugins\Database;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Carbon\Carbon;
 use Database\Tester\Models\CategorySimple;
 use Model;
 
 class SimpleTreeModelTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp() : void
     {
         parent::setUp();

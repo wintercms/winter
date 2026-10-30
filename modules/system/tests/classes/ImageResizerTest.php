@@ -14,11 +14,14 @@ use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Models\File as FileModel;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use URL;
 use Winter\Storm\Exception\SystemException;
 
 class ImageResizerTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     use ArraySubsetAsserts;
 
     protected $originalThemesPath = '';

@@ -4,6 +4,7 @@ namespace Backend\Tests\Widgets;
 
 use Backend\Widgets\Table;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 /**
  * Regression coverage for GHSA-hq84-x37p-j6q5.
@@ -18,6 +19,8 @@ use System\Tests\Bootstrap\PluginTestCase;
  */
 class TableSearchEscapingTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     /**
      * The partial emits exactly two template blocks: [data-table-toolbar] and
      * [data-table-toolbar-search]. Any extra closing tag in the output means a payload

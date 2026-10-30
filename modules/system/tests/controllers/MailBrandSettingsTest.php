@@ -7,6 +7,7 @@ use Backend\Models\UserRole;
 use System\Models\MailBrandSetting;
 use System\Models\MailPartial;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Facades\Config;
 
@@ -16,6 +17,8 @@ use Winter\Storm\Support\Facades\Config;
  */
 class MailBrandSettingsTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     const BREAKOUT_VALUE = 'red; .xss::before { content: "</style><img src=x onerror=alert(1)>"; }';
 
     public function setUp(): void

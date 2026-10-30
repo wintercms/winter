@@ -4,9 +4,12 @@ namespace Backend\Tests\Models;
 
 use Backend\Models\EditorSetting;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 class EditorSettingTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();

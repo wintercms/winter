@@ -3,6 +3,7 @@
 namespace System\Tests\Plugins\Database;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Database\Tester\Models\User;
 use Database\Tester\Models\Author;
 use Database\Tester\Models\UserWithAuthor;
@@ -14,6 +15,8 @@ use Model;
 
 class SoftDeleteModelTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp() : void
     {
         parent::setUp();

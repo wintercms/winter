@@ -5,6 +5,7 @@ namespace Backend\Tests;
 use Backend\Classes\BackendController;
 use Backend\Models\User as BackendUser;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Database\Model;
 
 /**
@@ -12,6 +13,8 @@ use Winter\Storm\Database\Model;
  */
 abstract class BackendTestCase extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();

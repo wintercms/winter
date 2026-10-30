@@ -3,12 +3,15 @@
 namespace System\Tests\Plugins\Database;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Carbon\Carbon;
 use Database\Tester\Models\RevisionablePost;
 use DateTime;
 
 class RevisionableModelTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp() : void
     {
         parent::setUp();

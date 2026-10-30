@@ -9,6 +9,7 @@ use Backend\Widgets\Lists;
 use Illuminate\Http\Request as HttpRequest;
 use Winter\Storm\Support\Facades\DB;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Exception\ApplicationException;
 
 /**
@@ -26,6 +27,8 @@ use Winter\Storm\Exception\ApplicationException;
  */
 class ListsSelectionTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();

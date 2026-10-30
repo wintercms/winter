@@ -5,10 +5,13 @@ namespace System\Tests\Models;
 use System\Models\LogSetting;
 use System\Models\RequestLog;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Support\Facades\DB;
 
 class RequestLogTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();

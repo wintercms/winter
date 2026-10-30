@@ -5,6 +5,7 @@ namespace Backend\Tests\Controllers;
 use Backend\Controllers\MyAccount;
 use Backend\Models\User;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Support\Facades\Config;
@@ -19,6 +20,8 @@ use Winter\Storm\Support\Facades\Config;
  */
 class MyAccountSecurityTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected User $mallory;
     protected User $alice;
 

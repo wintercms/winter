@@ -3,9 +3,12 @@
 namespace System\Tests;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 class AliasesTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function testInputFacadeAlias()
     {
         $this->assertTrue(class_exists('Illuminate\Support\Facades\Input'));

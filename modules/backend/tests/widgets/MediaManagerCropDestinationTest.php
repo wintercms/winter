@@ -10,6 +10,7 @@ use File;
 use Request;
 use System\Classes\ImageResizer;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**
@@ -18,6 +19,8 @@ use Winter\Storm\Filesystem\Definitions as FileDefinitions;
  */
 class MediaManagerCropDestinationTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();

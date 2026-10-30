@@ -3,6 +3,7 @@
 namespace System\Tests\Plugins\Database;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Database\Tester\Models\Post;
 use Database\Tester\Models\Author;
 use Database\Tester\Models\EventLog;
@@ -10,6 +11,8 @@ use Model;
 
 class MorphToModelTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp() : void
     {
         parent::setUp();

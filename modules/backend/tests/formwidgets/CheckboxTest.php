@@ -5,9 +5,12 @@ namespace Backend\Tests\FormWidgets;
 use Backend\Widgets\Form;
 use Winter\Storm\Database\Model;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 class CheckboxTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public $form = null;
 
     public function setUp(): void
