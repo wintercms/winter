@@ -30,6 +30,15 @@ class MailBrandSettings extends Controller
     ];
 
     /**
+     * @var array methods that are blocked from being called as actions
+     *
+     * This screen edits a single settings record, reached through index(). The form behaviour's
+     * record-scoped actions take a caller-supplied key, and every settings model shares the
+     * system_settings table, so they would resolve another feature's settings row.
+     */
+    protected $guarded = ['create', 'update', 'preview'];
+
+    /**
      * @var array Permissions required to view this page.
      */
     public $requiredPermissions = ['system.manage_mail_templates'];

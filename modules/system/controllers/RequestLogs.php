@@ -24,6 +24,15 @@ class RequestLogs extends Controller
     ];
 
     /**
+     * @var array methods that are blocked from being called as actions
+     *
+     * This screen implements the form behaviour for its preview action alone. The behaviour's
+     * create and update actions would let a holder of system.access_logs rewrite an entry or
+     * insert one of their own.
+     */
+    protected $guarded = ['create', 'update'];
+
+    /**
      * @var array Permissions required to view this page.
      */
     public $requiredPermissions = ['system.access_logs'];
