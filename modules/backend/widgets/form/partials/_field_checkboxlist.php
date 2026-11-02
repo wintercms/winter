@@ -91,7 +91,6 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
             <?php
             $index = 0;
             if ($displayTree):
-
                 $renderCheckboxLine = function (
                     $field,
                     array $checkedValues,
