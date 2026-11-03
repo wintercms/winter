@@ -6,6 +6,7 @@ use File;
 use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use System\Tests\Bootstrap\PluginTestCase;
+use Yaml;
 
 class CreateMigrationTest extends PluginTestCase
 {
@@ -18,6 +19,8 @@ class CreateMigrationTest extends PluginTestCase
         $this->table = 'winter_tester_test_model';
         $this->versionFile = plugins_path('winter/tester/updates/version.yaml');
         $this->versionFolder = plugins_path('winter/tester/updates/v0.0.1');
+        $this->prefixedVersionFolder = plugins_path('winter/tester/updates/v1.2.10');
+        $this->newVersionFolder = plugins_path('winter/tester/updates/v2.0.0');
 
         File::copy($this->versionFile, $this->versionFile . '.bak');
     }
@@ -80,10 +83,64 @@ class CreateMigrationTest extends PluginTestCase
         $this->assertFalse(Schema::hasTable($this->table));
     }
 
-    public function tearDown(): void
+    public function testCreateMigrationReusesExistingPrefixedVersionKey()
+    {
+        $this->artisan('create:migration Winter.Tester --force --for-version v1.2.10 --name create_table');
+
+        $versions = Yaml::parseFile($this->versionFile);
+
+        // The fixture mixes prefixed and unprefixed keys, and 1.5.1 is the highest, so the most
+        // recent key is unprefixed. The migration must still be merged into the existing prefixed
+        // key: adding a second key for the same version would collide in
+        // VersionManager::getFileVersions(), which normalizes keys.
+        $this->assertArrayHasKey('v1.2.10', $versions);
+        $this->assertArrayNotHasKey('1.2.10', $versions);
+        $this->assertContains('v1.2.10/create_table.php', $versions['v1.2.10']);
+    }
+
+    public function testCreateMigrationDeducesConventionFromMostRecentKey()
+    {
+        // No key matches 2.0.0, so the version is new: the convention is deduced from
+        // the most recent key, which is unprefixed (1.5.1) in this fixture. The new key
+        // is therefore unprefixed, and only the migration directory keeps the 'v'.
+        $this->artisan('create:migration Winter.Tester --force --for-version v2.0.0 --name create_table');
+
+        $versions = Yaml::parseFile($this->versionFile);
+
+        $this->assertArrayHasKey('2.0.0', $versions);
+        $this->assertArrayNotHasKey('v2.0.0', $versions);
+        $this->assertContains('v2.0.0/create_table.php', $versions['2.0.0']);
+    }
+
+    public function testCreateMigrationWithEmptyVersionFile()
+    {
+        // Winter.NoUpdates ships an empty version file, so there is no convention to
+        // deduce: the documented one applies — an unprefixed key, with the 'v'
+        // retained only on the migration directory name.
+        $noUpdatesFile = plugins_path('winter/noupdates/updates/version.yaml');
+        $noUpdatesFolder = plugins_path('winter/noupdates/updates/v1.0.0');
+        File::copy($noUpdatesFile, $noUpdatesFile . '.bak');
+
+        try {
+            $this->artisan('create:migration Winter.NoUpdates --force --for-version v1.0.0 --name create_table');
+
+            $versions = Yaml::parseFile($noUpdatesFile);
+
+            $this->assertArrayHasKey('1.0.0', $versions);
+            $this->assertArrayNotHasKey('v1.0.0', $versions);
+            $this->assertContains('v1.0.0/create_table.php', $versions['1.0.0']);
+        } finally {
+            File::move($noUpdatesFile . '.bak', $noUpdatesFile);
+            File::deleteDirectory($noUpdatesFolder);
+        }
+    }
+
+    public function tearDown() : void
     {
         File::move($this->versionFile . '.bak', $this->versionFile);
         File::deleteDirectory($this->versionFolder);
+        File::deleteDirectory($this->prefixedVersionFolder);
+        File::deleteDirectory($this->newVersionFolder);
 
         parent::tearDown();
     }

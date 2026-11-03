@@ -440,7 +440,8 @@ class PluginBase extends ServiceProviderBase
     }
 
     /**
-     * Gets the contents of the plugin's updates/version.yaml file and normalizes the results
+     * Gets the contents of the plugin's updates/version.yaml file and sorts the results by
+     * normalized version, preserving the keys as written in the file
      */
     public function getPluginVersions(bool $includeScripts = true): array
     {
@@ -454,8 +455,15 @@ class PluginBase extends ServiceProviderBase
             return (array) $yaml->parseFile($versionFile);
         });
 
+        // Compare on the normalized version so that a 'v' prefixed key sorts among its
+        // unprefixed counterparts, but keep the key exactly as it was written.
+        // VersionManager is resolved statically: resolving the singleton here would recurse,
+        // as its initialization depends on PluginManager, which loads the plugins being read.
         uksort($updates, function ($a, $b) {
-            return version_compare($a, $b);
+            return version_compare(
+                VersionManager::normalizeVersionKey((string) $a),
+                VersionManager::normalizeVersionKey((string) $b)
+            );
         });
 
         $versions = [];

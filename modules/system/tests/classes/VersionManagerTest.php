@@ -3,6 +3,7 @@
 namespace System\Tests\Classes;
 
 use System\Tests\Bootstrap\TestCase;
+use System\Classes\PluginManager;
 use System\Classes\VersionManager;
 
 class VersionManagerTest extends TestCase
@@ -15,6 +16,18 @@ class VersionManagerTest extends TestCase
         include_once base_path() . '/modules/system/tests/fixtures/plugins/winter/tester/Plugin.php';
         include_once base_path() . '/modules/system/tests/fixtures/plugins/winter/sample/Plugin.php';
         include_once base_path() . '/modules/system/tests/fixtures/plugins/winter/noupdates/Plugin.php';
+    }
+
+    public function tearDown() : void
+    {
+        // testGetFileVersionsThrowsOnCollidingKeys repoints the plugin manager at the
+        // test-plugins fixture directory. Restore the default path and drop the
+        // singletons so the next test rebuilds them against it.
+        $this->app->setPluginsPath(base_path('modules/system/tests/fixtures/plugins/'));
+        PluginManager::forgetInstance();
+        VersionManager::forgetInstance();
+
+        parent::tearDown();
     }
 
     //
@@ -35,7 +48,7 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         $result = self::callProtectedMethod($manager, 'getFileVersions', ['\Winter\\Tester']);
 
-        $this->assertCount(13, $result);
+        $this->assertCount(15, $result);
         $this->assertArrayHasKey('1.0.1', $result);
         $this->assertArrayHasKey('1.0.2', $result);
         $this->assertArrayHasKey('1.0.3', $result);
@@ -43,6 +56,10 @@ class VersionManagerTest extends TestCase
         $this->assertArrayHasKey('1.0.5', $result);
         $this->assertArrayHasKey('1.1.0', $result);
         $this->assertArrayHasKey('1.2.0', $result);
+        $this->assertArrayHasKey('1.2.9', $result);
+        // The 'v' prefix is normalized away on this path
+        $this->assertArrayHasKey('1.2.10', $result);
+        $this->assertArrayNotHasKey('v1.2.10', $result);
         $this->assertArrayHasKey('1.3.0', $result);
         $this->assertArrayHasKey('1.3.1', $result);
         $this->assertArrayHasKey('1.3.2', $result);
@@ -104,11 +121,14 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\Winter\\Tester', '1.0.3']);
 
-        $this->assertCount(10, $result);
+        $this->assertCount(12, $result);
         $this->assertArrayHasKey('1.0.4', $result);
         $this->assertArrayHasKey('1.0.5', $result);
         $this->assertArrayHasKey('1.1.0', $result);
         $this->assertArrayHasKey('1.2.0', $result);
+        $this->assertArrayHasKey('1.2.9', $result);
+        // The 'v' prefix is normalized away on this path
+        $this->assertArrayHasKey('1.2.10', $result);
         $this->assertArrayHasKey('1.3.0', $result);
         $this->assertArrayHasKey('1.3.1', $result);
         $this->assertArrayHasKey('1.3.2', $result);
@@ -122,7 +142,7 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\Winter\\Tester']);
 
-        $this->assertCount(13, $result);
+        $this->assertCount(15, $result);
         $this->assertArrayHasKey('1.0.1', $result);
         $this->assertArrayHasKey('1.0.2', $result);
         $this->assertArrayHasKey('1.0.3', $result);
@@ -130,12 +150,41 @@ class VersionManagerTest extends TestCase
         $this->assertArrayHasKey('1.0.5', $result);
         $this->assertArrayHasKey('1.1.0', $result);
         $this->assertArrayHasKey('1.2.0', $result);
+        $this->assertArrayHasKey('1.2.9', $result);
+        // The 'v' prefix is normalized away on this path
+        $this->assertArrayHasKey('1.2.10', $result);
         $this->assertArrayHasKey('1.3.0', $result);
         $this->assertArrayHasKey('1.3.1', $result);
         $this->assertArrayHasKey('1.3.2', $result);
         $this->assertArrayHasKey('1.4.1', $result);
         $this->assertArrayHasKey('1.5.0', $result);
         $this->assertArrayHasKey('1.5.1', $result);
+    }
+
+    public function testGetFileVersionsThrowsOnCollidingKeys()
+    {
+        // Winter.Collision lives in the test-plugins fixture directory, not the main
+        // one: it carries both '1.0.0' and 'v1.0.0', which normalise to the same key.
+        $this->app->setPluginsPath(base_path('modules/system/tests/fixtures/test-plugins'));
+        PluginManager::forgetInstance();
+        VersionManager::forgetInstance();
+
+        $manager = VersionManager::instance();
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Version key collision detected');
+
+        self::callProtectedMethod($manager, 'getFileVersions', ['\Winter\\Collision']);
+    }
+
+    public function testNormalizeVersionKeyStripsASingleLeadingV()
+    {
+        // The strip removes one leading 'v' and no more
+        $this->assertSame('1.0.0', VersionManager::normalizeVersionKey('v1.0.0'));
+        $this->assertSame('1.0.0', VersionManager::normalizeVersionKey('1.0.0'));
+        $this->assertSame('v1.0.0', VersionManager::normalizeVersionKey('vv1.0.0'));
+
+        // Documented, still open: a key named 'version' loses its only leading 'v'
+        $this->assertSame('ersion', VersionManager::normalizeVersionKey('version'));
     }
 
     /**

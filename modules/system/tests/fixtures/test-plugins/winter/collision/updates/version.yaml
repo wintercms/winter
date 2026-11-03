@@ -1,0 +1,6 @@
+"1.0.0":
+    - "Initial version without v prefix"
+"v1.0.0":
+    - "Duplicate version with v prefix"
+"1.1.0":
+    - "Normal version"
