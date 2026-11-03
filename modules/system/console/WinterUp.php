@@ -1,6 +1,9 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Contracts\Console\Isolatable;
 use System\Classes\UpdateManager;
 
@@ -14,13 +17,17 @@ use System\Classes\UpdateManager;
  */
 class WinterUp extends Command implements Isolatable
 {
+    use ConfirmableTrait;
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
     protected $signature = 'winter:up
-                            {--seed : Included for compatibility with Laravel default signature, no effect at this time}';
+        {--seed : Included for compatibility with Laravel default signature, no effect at this time}
+        {--force : Force the operation to run when in production}
+    ';
 
     /**
      * The console command description.
@@ -43,6 +50,10 @@ class WinterUp extends Command implements Isolatable
      */
     public function handle()
     {
+        if (config('database.console.confirm_in_prod', false) && !$this->confirmToProceed()) {
+            return 1;
+        }
+
         $this->output->writeln('<info>Migrating application and plugins...</info>');
 
         UpdateManager::instance()
