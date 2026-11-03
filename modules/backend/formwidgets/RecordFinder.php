@@ -60,7 +60,7 @@ class RecordFinder extends FormWidgetBase
     /**
      * @var string Prompt to display if no record is selected.
      */
-    public $prompt = 'Click the %s button to find a record';
+    public $prompt = null;
 
     /**
      * @var int Maximum rows to display for each page.
@@ -143,6 +143,10 @@ class RecordFinder extends FormWidgetBase
             'useRelation',
             'modelClass',
         ]);
+
+        if (!isset($this->prompt)) {
+            $this->prompt = Lang::get('backend::lang.recordfinder.default_prompt');
+        }
 
         if (!$this->useRelation && !class_exists($this->modelClass)) {
             throw new ApplicationException(Lang::get('backend::lang.recordfinder.invalid_model_class', ['modelClass' => $this->modelClass]));

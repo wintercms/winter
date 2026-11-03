@@ -87,6 +87,42 @@
     }
 
     /*
+     * Identical to getRecords except using a search query.
+     */
+    Client.prototype.searchRecords = function(query, offset, count, onSuccess) {
+        const searchFields = this.tableObj.search.getSearchableColumns();
+
+        const matched = this.data.filter(function(record) {
+            for (let i = 0; i < searchFields.length; i++) {
+                const value = record[searchFields[i]];
+
+                if (value === undefined) {
+                    continue;
+                }
+
+                if (value.toString().toLowerCase().includes(query.toLowerCase())) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
+
+        if (matched.length === 0) {
+            onSuccess([]);
+            return;
+        }
+
+        if (!count) {
+            // Return all records
+            onSuccess(matched, matched.length);
+        } else {
+            // Return a subset of records
+            onSuccess(matched.slice(offset, offset + count), matched.length);
+        }
+    }
+
+    /*
      * Updates a record with the specified key with the passed data
      *
      * - key - the record key in the dataset (primary key, etc)

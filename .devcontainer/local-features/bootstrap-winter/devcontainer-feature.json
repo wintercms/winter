@@ -1,0 +1,6 @@
+{
+    "id": "bootstrap-winter",
+    "name": "Bootstrap Winter",
+    "description": "Bootstrap and configure Winter CMS automatically for development on Winter itself",
+    "postCreateCommand": "sh ./.devcontainer/local-features/bootstrap-winter/bootstrap.sh"
+}

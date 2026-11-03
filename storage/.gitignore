@@ -1,3 +1,4 @@
 *.sqlite
 /tests
 /dusk
+/debugbar

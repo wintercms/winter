@@ -44,8 +44,7 @@
     // ============================
 
     Navigation.prototype.paginationEnabled = function() {
-        return this.tableObj.options.recordsPerPage != null &&
-            this.tableObj.options.recordsPerPage != false
+        return this.tableObj.options.recordsPerPage > 0;
     }
 
     Navigation.prototype.getPageFirstRowOffset = function() {

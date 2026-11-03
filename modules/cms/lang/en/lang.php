@@ -171,7 +171,7 @@ return [
         'not_found' => "AJAX handler ':name' was not found.",
     ],
     'cms' => [
-        'menu_label' => 'CMS',
+        'menu_label' => 'Theme Editor',
     ],
     'sidebar' => [
         'add' => 'Add',
@@ -271,15 +271,22 @@ return [
         'no_list_records' => 'No records found',
         'delete_confirm' => 'Delete selected templates?',
         'order_by' => 'Order by',
+        'type_not_permitted' => 'You require the ":permission" permission to manage :type',
     ],
     'permissions' => [
         'name' => 'CMS',
         'manage_content' => 'Manage website content files',
+        'manage_content_comment' => 'This permission should only be given to trusted users, as it allows direct access to the theme\'s content files.',
         'manage_assets' => 'Manage website assets - images, JavaScript files, CSS files',
+        'manage_assets_comment' => 'This permission should only be given to trusted users, as it allows direct access to the theme\'s asset files, which are combined and served publicly.',
         'manage_pages' => 'Create, modify and delete website pages',
+        'manage_pages_comment' => 'This permission should only be given to trusted users, as it allows direct access to the theme\'s page content files, including PHP code if enabled.',
         'manage_layouts' => 'Create, modify and delete CMS layouts',
+        'manage_layouts_comment' => 'This permission should only be given to trusted users, as it allows direct access to the theme\'s layout files, including PHP code if enabled.',
         'manage_partials' => 'Create, modify and delete CMS partials',
+        'manage_partials_comment' => 'This permission should only be given to trusted users, as it allows direct access to the theme\'s partial files, including PHP code if enabled.',
         'manage_themes' => 'Activate, deactivate and configure CMS themes',
+        'manage_themes_comment' => 'This permission should only be given to trusted users, as it allows the user to add new themes, change the existing theme, or delete themes entirely.',
         'manage_theme_options' => 'Configure customization options for the active theme',
     ],
     'theme_log' => [

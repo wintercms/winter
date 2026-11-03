@@ -18,7 +18,7 @@ class ViteCompile extends AssetCompile
     protected $signature = 'vite:compile
         {viteArgs?* : Arguments to pass through to the Vite CLI}
         {--f|production : Runs compilation in "production" mode}
-        {--s|silent : Silent mode}
+        {--s|silent : Enables silent mode, no output will be shown.}
         {--d|disable-tty : Disable tty mode}
         {--e|stop-on-error : Exit once an error is encountered}
         {--m|manifest= : Defines package.json to use for compile}
@@ -62,9 +62,18 @@ class ViteCompile extends AssetCompile
             $basePath . sprintf('%1$snode_modules%1$s.bin%1$svite', DIRECTORY_SEPARATOR),
             'build',
             $this->option('silent') ? '--logLevel=silent' : '',
-            '--base=' . Str::after($this->getPackagePath($configPath), base_path())
         );
 
         return $command;
+    }
+
+    /**
+     * Return values to append to the command env
+     */
+    protected function createCommandEnv(string $configPath): array
+    {
+        return [
+            'VITE_BASE' => Str::after($this->getPackagePath($configPath), base_path()),
+        ];
     }
 }

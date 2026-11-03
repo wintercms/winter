@@ -583,6 +583,9 @@ class ImageResizer
         // Slashes in URL params have to be double encoded to survive Laravel's router
         // @see https://github.com/octobercms/october/issues/3592#issuecomment-671017380
         $resizedUrl = rawurlencode(rawurlencode($this->getResizedUrl()));
+        // Double-encode dots (rawurlencode() skips them) to avoid issues in certain NGINX
+        // configurations where dots may trigger asset-serving rules, resulting in 404 errors
+        $resizedUrl = str_replace('.', '%252E', $resizedUrl);
 
         // Get the current configuration's identifier
         $identifier = $this->getIdentifier();
@@ -702,10 +705,11 @@ class ImageResizer
             $resizeSources = static::getAvailableSources();
             foreach ($resizeSources as $source => $details) {
                 // Normalize the source path
-                $sourcePath = static::normalizePath(rawurldecode(parse_url($details['path'], PHP_URL_PATH)));
+                $sourcePath = rtrim(static::normalizePath(rawurldecode(parse_url($details['path'], PHP_URL_PATH))), '/');
 
-                // Identify if the current source is a match
-                if (starts_with($relativePath, $sourcePath)) {
+                // Match on a path boundary, so a sibling folder whose name merely begins
+                // with this source's path is not treated as part of it
+                if (starts_with($relativePath, $sourcePath . '/')) {
                     // Attempt to handle FileModel URLs passed as strings
                     if ($source === 'filemodel') {
                         $diskName = pathinfo($relativePath, PATHINFO_BASENAME);
@@ -720,8 +724,16 @@ class ImageResizer
                         break;
                     }
 
+                    // The remainder is used verbatim as a disk path and adapters resolve
+                    // relative segments themselves. Not PathResolver's job: the path is
+                    // relative to a disk that is not necessarily local
+                    $sourceRelativePath = str_after($relativePath, $sourcePath . '/');
+                    if (in_array('..', explode('/', $sourceRelativePath), true)) {
+                        continue;
+                    }
+
                     // Generate a path relative to the selected disk
-                    $path = static::normalizePath($details['folder']) . '/' . str_after($relativePath, $sourcePath . '/');
+                    $path = static::normalizePath($details['folder']) . '/' . $sourceRelativePath;
 
                     // Handle disks of type "system" (the local file system the application is running on)
                     if ($details['disk'] === 'system') {

@@ -4,6 +4,7 @@ use File;
 use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
+use System\Classes\VersionManager;
 
 /**
  * Console command to remove a plugin.
@@ -49,6 +50,14 @@ class PluginRemove extends Command
     {
         $pluginName = $this->getPluginIdentifier();
         $pluginManager = PluginManager::instance();
+
+        if (
+            !$pluginManager->hasPlugin($pluginName)
+            && !VersionManager::instance()->getDatabaseHistory($pluginName)
+        ) {
+            $this->error(sprintf('Plugin "%s" could not be found.', $pluginName));
+            return 1;
+        }
 
         $confirmQuestion = sprintf('This will remove the files for the "%s" plugin.', $pluginName);
         if (!$this->option('no-rollback')) {

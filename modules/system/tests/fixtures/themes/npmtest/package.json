@@ -1,0 +1,11 @@
+{
+    "type": "module",
+    "workspaces": {
+        "packages": [
+            "modules/system/tests/fixtures/themes/npmtest"
+        ]
+    },
+    "scripts": {
+        "testScript": "echo \"Winter says $((1+2))\""
+    }
+}

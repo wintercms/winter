@@ -3,6 +3,7 @@
 namespace System\Classes\Asset;
 
 use Cms\Classes\Theme;
+use InvalidArgumentException;
 use System\Classes\PluginManager;
 use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Filesystem\PathResolver;
@@ -24,10 +25,14 @@ class PackageManager
 {
     use \Winter\Storm\Support\Traits\Singleton;
 
+    public const TYPE_THEME = 'theme';
+    public const TYPE_MODULE = 'module';
+    public const TYPE_PLUGIN = 'plugin';
+
     /**
      * The filename that stores the package definition.
      */
-    protected string $packageJson = 'package.json';
+    protected PackageJson $packageJson;
 
     /**
      * @var array<string, array<string, string>> List of package types and registration methods
@@ -56,6 +61,8 @@ class PackageManager
      */
     public function init(): void
     {
+        $this->setPackageJsonPath(base_path('package.json'));
+
         $packagePaths = [];
 
         /*
@@ -130,10 +137,24 @@ class PackageManager
                 }
             }
 
-            // Search plugins for compilable packages to autoregister
-            $plugins = PluginManager::instance()->getPlugins();
-            foreach ($plugins as $plugin) {
-                $path = $plugin->getPluginPath() . '/' . $config['configFile'];
+            // Search plugins for compilable packages to autoregister. When symlinked
+            // packages are supported, prefer the in-project plugin path (which honours
+            // symlinks under the plugins directory) over getPluginPath()'s realpath, so
+            // packages inside symlinked plugins register and are served from a
+            // web-accessible location under base_path().
+            $pluginManager = PluginManager::instance();
+            $inProjectPluginPaths = [];
+            if ($this->supportsSymlinkedPackages()) {
+                foreach ($pluginManager->getVendorAndPluginNames() as $vendorName => $vendorPlugins) {
+                    foreach ($vendorPlugins as $pluginName => $pluginPath) {
+                        $inProjectPluginPaths[strtolower($vendorName . '.' . $pluginName)] = $pluginPath;
+                    }
+                }
+            }
+            foreach ($pluginManager->getPlugins() as $plugin) {
+                $pluginPath = $inProjectPluginPaths[strtolower($plugin->getPluginIdentifier())]
+                    ?? $plugin->getPluginPath();
+                $path = $pluginPath . '/' . $config['configFile'];
                 if (File::exists($path)) {
                     $packagePaths[$type][$plugin->getPluginIdentifier()] = $path;
                 }
@@ -183,12 +204,14 @@ class PackageManager
     /**
      * Calls the deferred callbacks.
      */
-    public function fireCallbacks(): void
+    public function fireCallbacks(): static
     {
         // Call callbacks
         foreach (static::$callbacks as $callback) {
             $callback($this);
         }
+
+        return $this;
     }
 
     /**
@@ -205,6 +228,10 @@ class PackageManager
     public function getPackages(string $type, bool $includeIgnored = false): array
     {
         $packages = $this->packages[$type] ?? [];
+
+        foreach ($packages as $index => $package) {
+            $packages[$index]['ignored'] = $this->isPackageIgnored($package['path']);
+        }
 
         ksort($packages);
 
@@ -223,9 +250,13 @@ class PackageManager
     public function hasPackage(string $name, bool $includeIgnored = false): bool
     {
         foreach ($this->packages ?? [] as $packages) {
-            foreach ($packages as $packageName => $config) {
-                if (($name === $packageName) && (!$config['ignored'] || $includeIgnored)) {
-                    return true;
+            foreach ($packages as $packageName => $package) {
+                if ($name === $packageName) {
+                    if ((!$this->isPackageIgnored($package['path']) || $includeIgnored)) {
+                        return true;
+                    }
+
+                    return false;
                 }
             }
         }
@@ -239,15 +270,30 @@ class PackageManager
     public function getPackage(string $name, bool $includeIgnored = false): array
     {
         $results = [];
-        foreach ($this->packages ?? [] as $packages) {
-            foreach ($packages as $packageName => $config) {
-                if (($name === $packageName) && (!$config['ignored'] || $includeIgnored)) {
-                    $results[] = $config;
+        foreach ($this->packages ?? [] as $type => $packages) {
+            foreach ($packages as $packageName => $package) {
+                if (($name === $packageName)) {
+                    if (!$this->isPackageIgnored($package['path']) || $includeIgnored) {
+                        $results[] = $package + ['type' => $type];
+                    }
                 }
             }
         }
 
         return $results;
+    }
+
+    /**
+     * Whether packages provided by symlinked plugins & themes should keep their in-project
+     * path instead of the realpath that the symlink resolves to.
+     *
+     * Symlinking individual plugins or themes into a project requires
+     * "develop.allowDeepSymlinks", so the symlink handling is gated behind it and standard
+     * installs keep the original realpath behaviour.
+     */
+    protected function supportsSymlinkedPackages(): bool
+    {
+        return (bool) Config::get('develop.allowDeepSymlinks', false);
     }
 
     /**
@@ -262,7 +308,7 @@ class PackageManager
      * file for the compilable configuration
      *
      * @param string $name The name of the package being registered
-     * @param string $path The path to the compilable JS configuration file. If there is a related package.json file
+     * @param string $path The path to the compilable JS configuration file (it must be inside of the base_path()). If there is a related package.json file
      *                     then it is required to be present in the same directory as the config file
      * @param string $type The type of compilable
      * @throws SystemException
@@ -274,10 +320,31 @@ class PackageManager
 
         // Normalize the arguments
         $name = strtolower($name);
+        $base = base_path() . DIRECTORY_SEPARATOR;
         $resolvedPath = PathResolver::resolve($path);
         $pinfo = pathinfo($resolvedPath);
-        $path = Str::after($pinfo['dirname'], base_path() . DIRECTORY_SEPARATOR);
+        $relativePath = Str::after($pinfo['dirname'], $base);
         $configFile = $pinfo['basename'];
+
+        // PathResolver::resolve() canonicalises symlinks, so a plugin or theme that is
+        // symlinked into the project resolves to a realpath outside base_path() — which is
+        // neither registerable nor web-servable. When the resolved path has escaped the
+        // project but the original (symbolized) path is inside it, keep the in-project
+        // location so the package registers and its compiled assets serve from a
+        // web-accessible path.
+        if (
+            $this->supportsSymlinkedPackages()
+            && !str_starts_with($pinfo['dirname'] . DIRECTORY_SEPARATOR, $base)
+        ) {
+            // Standardize the separators first - unlike $resolvedPath, $path carries
+            // whatever separators the caller supplied, and the stored path must use the
+            // platform separator consistently for both branches.
+            $symbolized = pathinfo(PathResolver::standardize($path));
+            if (str_starts_with($symbolized['dirname'] . DIRECTORY_SEPARATOR, $base)) {
+                $relativePath = Str::after($symbolized['dirname'], $base);
+                $configFile = $symbolized['basename'];
+            }
+        }
 
         // Require $configFile to be a JS file
         $extension = File::extension($configFile);
@@ -289,11 +356,22 @@ class PackageManager
         }
 
         // Check that the package path exists
-        if (!File::exists($path)) {
-            throw new SystemException(sprintf(
+        if (!File::exists(base_path($relativePath))) {
+            throw new InvalidArgumentException(sprintf(
                 'Cannot register "%s" as a compilable package; the "%s" path does not exist.',
                 $name,
-                $path
+                base_path($relativePath)
+            ));
+        }
+
+        $package = $relativePath . '/package.json';
+        $config = $relativePath . DIRECTORY_SEPARATOR . $configFile;
+
+        if (!File::exists(base_path($config))) {
+            throw new SystemException(sprintf(
+                'Cannot register "%s" as a compilable package; the config file "%s" does not exist.',
+                $name,
+                $config
             ));
         }
 
@@ -306,12 +384,13 @@ class PackageManager
             ));
         }
 
-        $package = "$path/{$this->packageJson}";
-        $config = $path . DIRECTORY_SEPARATOR . $configFile;
-
         // Check for any existing package that already registers the given compilable config path
         foreach ($this->packages[$type] ?? [] as $packageName => $settings) {
             if ($settings['config'] === $config) {
+                // If the package name is the same, we'll just discard the repeated registration
+                if ($packageName === $name) {
+                    return;
+                }
                 throw new SystemException(sprintf(
                     'Cannot register "%s" (%s) as a compilable package; it has already been registered as %s.',
                     $name,
@@ -323,11 +402,46 @@ class PackageManager
 
         // Register the package
         $this->packages[$type][$name] = [
-            'path' => $path,
+            'path' => $relativePath,
             'package' => $package,
-            'config' => $config,
-            'ignored' => $this->isPackageIgnored($path),
+            'config' => $config
         ];
+    }
+
+    /**
+     * Returns an expected package type from its name
+     */
+    public function getPackageTypeFromName(string $package): ?string
+    {
+        // Check if package could be a module
+        if (Str::startsWith($package, 'module-') && !in_array($package, ['system', 'backend', 'cms'])) {
+            return static::TYPE_MODULE;
+        }
+
+        // Check if package could be a theme
+        if (
+            in_array('Cms', Config::get('cms.loadModules'))
+            && Str::startsWith($package, 'theme-')
+            && Theme::exists(Str::after($package, 'theme-'))
+        ) {
+            return static::TYPE_THEME;
+        }
+
+        // Check if a package could be a plugin
+        if (PluginManager::instance()->exists($package)) {
+            return static::TYPE_PLUGIN;
+        }
+
+        return null;
+    }
+
+    /**
+     * Set the package.json file path used for checking if packages are in workspaces or ignored
+     */
+    public function setPackageJsonPath(string $packageJsonPath): static
+    {
+        $this->packageJson = new PackageJson($packageJsonPath);
+        return $this;
     }
 
     /**
@@ -343,8 +457,6 @@ class PackageManager
      */
     protected function isPackageIgnored(string $packagePath): bool
     {
-        // Load the main package.json for the project
-        $packageJson = new PackageJson(base_path($this->packageJson));
-        return $packageJson->hasIgnoredPackage($packagePath);
+        return $this->packageJson->hasIgnoredPackage($packagePath);
     }
 }

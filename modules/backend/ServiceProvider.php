@@ -1,13 +1,22 @@
-<?php namespace Backend;
+<?php
 
-use Backend;
-use BackendMenu;
-use BackendAuth;
-use Backend\Models\UserRole;
+namespace Backend;
+
 use Backend\Classes\WidgetManager;
-use System\Classes\MailManager;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Backend\Facades\BackendMenu;
+use Backend\Models\AccessLog;
+use Backend\Models\UserRole;
+use Exception;
+use Illuminate\Support\Facades\Event;
+use System\Classes\Asset\PackageManager;
 use System\Classes\CombineAssets;
+use System\Classes\MailManager;
 use System\Classes\SettingsManager;
+use System\Classes\UpdateManager;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Flash;
 use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
@@ -23,8 +32,8 @@ class ServiceProvider extends ModuleServiceProvider
 
         $this->registerConsole();
         $this->registerMailer();
-        $this->registerAssetBundles();
         $this->registerBackendPermissions();
+        $this->registerBackendUserEvents();
 
         /*
          * Backend specific
@@ -44,6 +53,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function boot()
     {
+        $this->registerAssetBundles();
         parent::boot('backend');
     }
 
@@ -81,13 +91,13 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/backend/assets/less/winter.less');
             $combiner->registerBundle('~/modules/backend/assets/js/winter.js');
             $combiner->registerBundle('~/modules/backend/widgets/table/assets/js/build.js');
+            $combiner->registerBundle('~/modules/backend/assets/vendor/ace-codeeditor/build.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/js/mediamanager-browser.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/less/mediamanager.less');
             $combiner->registerBundle('~/modules/backend/widgets/reportcontainer/assets/less/reportcontainer.less');
             $combiner->registerBundle('~/modules/backend/widgets/table/assets/less/table.less');
-            $combiner->registerBundle('~/modules/backend/formwidgets/codeeditor/assets/less/codeeditor.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/repeater/assets/less/repeater.less');
-            $combiner->registerBundle('~/modules/backend/formwidgets/codeeditor/assets/js/build.js');
+            $combiner->registerBundle('~/modules/backend/formwidgets/fieldset/assets/less/fieldset.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/fileupload/assets/less/fileupload.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/nestedform/assets/less/nestedform.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/richeditor/assets/js/build-plugins.js');
@@ -101,6 +111,10 @@ class ServiceProvider extends ModuleServiceProvider
                 $combiner->registerBundle('~/modules/backend/formwidgets/richeditor/assets/less/richeditor.less');
                 $combiner->registerBundle('~/modules/backend/formwidgets/richeditor/assets/js/build.js');
             }
+        });
+
+        PackageManager::registerCallback(function ($mix) {
+            $mix->registerPackage('module-backend.formwidgets.codeeditor', '~/modules/backend/formwidgets/codeeditor/assets/winter.mix.js');
         });
     }
 
@@ -160,16 +174,19 @@ class ServiceProvider extends ModuleServiceProvider
                 'backend.manage_default_dashboard' => [
                     'label' => 'system::lang.permissions.manage_default_dashboard',
                     'tab'   => 'system::lang.permissions.name',
+                    'comment' => 'system::lang.permissions.manage_default_dashboard_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.manage_users' => [
                     'label' => 'system::lang.permissions.manage_other_administrators',
                     'tab'   => 'system::lang.permissions.name',
+                    'comment' => 'system::lang.permissions.manage_other_administrators_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.impersonate_users' => [
                     'label' => 'system::lang.permissions.impersonate_users',
                     'tab'   => 'system::lang.permissions.name',
+                    'comment' => 'system::lang.permissions.impersonate_users_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.manage_preferences' => [
@@ -180,6 +197,7 @@ class ServiceProvider extends ModuleServiceProvider
                 'backend.manage_editor' => [
                     'label' => 'system::lang.permissions.manage_editor',
                     'tab'   => 'system::lang.permissions.name',
+                    'comment' => 'system::lang.permissions.manage_editor_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.manage_own_editor' => [
@@ -190,6 +208,7 @@ class ServiceProvider extends ModuleServiceProvider
                 'backend.manage_branding' => [
                     'label' => 'system::lang.permissions.manage_branding',
                     'tab'   => 'system::lang.permissions.name',
+                    'comment' => 'system::lang.permissions.manage_branding_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'media.manage_media' => [
@@ -200,10 +219,33 @@ class ServiceProvider extends ModuleServiceProvider
                 'backend.allow_unsafe_markdown' => [
                     'label' => 'backend::lang.permissions.allow_unsafe_markdown',
                     'tab' => 'system::lang.permissions.name',
+                    'comment' => 'backend::lang.permissions.allow_unsafe_markdown_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                 ],
             ]);
             $manager->registerPermissionOwnerAlias('Winter.Backend', 'October.Backend');
+        });
+    }
+
+    /**
+     * Register the backend user events
+     */
+    protected function registerBackendUserEvents()
+    {
+        Event::listen('backend.user.login', function (\Backend\Models\User $user) {
+            // @TODO: Deprecate this, and only run migrations when it makes sense
+            $runMigrationsOnLogin = (bool) Config::get('cms.runMigrationsOnLogin', Config::get('app.debug', false));
+            if ($runMigrationsOnLogin) {
+                try {
+                    // Load version updates
+                    UpdateManager::instance()->update();
+                } catch (Exception $e) {
+                    Flash::error($e->getMessage());
+                }
+            }
+
+            // Log the sign in event
+            AccessLog::add($user);
         });
     }
 
@@ -217,6 +259,7 @@ class ServiceProvider extends ModuleServiceProvider
             $manager->registerFormWidget(\Backend\FormWidgets\ColorPicker::class, 'colorpicker');
             $manager->registerFormWidget(\Backend\FormWidgets\DataTable::class, 'datatable');
             $manager->registerFormWidget(\Backend\FormWidgets\DatePicker::class, 'datepicker');
+            $manager->registerFormWidget(\Backend\FormWidgets\FieldSet::class, 'fieldset');
             $manager->registerFormWidget(\Backend\FormWidgets\FileUpload::class, 'fileupload');
             $manager->registerFormWidget(\Backend\FormWidgets\IconPicker::class, 'iconpicker');
             $manager->registerFormWidget(\Backend\FormWidgets\MarkdownEditor::class, 'markdown');
@@ -229,7 +272,6 @@ class ServiceProvider extends ModuleServiceProvider
             $manager->registerFormWidget(\Backend\FormWidgets\RichEditor::class, 'richeditor');
             $manager->registerFormWidget(\Backend\FormWidgets\Sensitive::class, 'sensitive');
             $manager->registerFormWidget(\Backend\FormWidgets\TagList::class, 'taglist');
-            $manager->registerFormWidget(\Backend\FormWidgets\TimePicker::class, 'timepicker');
         });
     }
 
@@ -265,7 +307,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'description' => 'backend::lang.myaccount.menu_description',
                     'category'    => SettingsManager::CATEGORY_MYSETTINGS,
                     'icon'        => 'icon-user',
-                    'url'         => Backend::url('backend/users/myaccount'),
+                    'url'         => Backend::url('backend/myaccount'),
                     'order'       => 500,
                     'context'     => 'mysettings',
                     'keywords'    => 'backend::lang.myaccount.menu_keywords'

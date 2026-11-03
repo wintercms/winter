@@ -3,7 +3,9 @@
 use Lang;
 use File;
 use Config;
+use DirectoryIterator;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File as Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -11,6 +13,9 @@ use System\Classes\UpdateManager;
 use System\Classes\CombineAssets;
 use System\Models\Parameter;
 use System\Models\File as FileModel;
+use Winter\Storm\Filesystem\Zip;
+use Winter\Storm\Network\Http as NetworkHttp;
+use Winter\Storm\Support\Facades\Http;
 
 /**
  * Console command for other utility commands.
@@ -146,6 +151,67 @@ class WinterUtil extends Command
 
     protected function utilCompileAssets($type = null)
     {
+        // Download Font Awesome icons if they are missing and LESS files are being compiled
+        if (
+            (
+                !is_dir(base_path('node_modules/@fortawesome/fontawesome-free'))
+                || !is_file(base_path('node_modules/@fortawesome/fontawesome-free/less/_variables.less'))
+            )
+            && ($type === 'less' || $type === null)
+        ) {
+            $this->comment('Downloading Font Awesome icons...');
+
+            $releases = Http::get('https://api.github.com/repos/FortAwesome/Font-Awesome/releases/191042913', function (NetworkHttp $http) {
+                $http->header('Accept', 'application/json');
+                $http->header('User-Agent', 'Winter CMS');
+            });
+
+            if (!$releases->ok) {
+                $this->error('Failed to download Font Awesome icons');
+                return;
+            }
+
+            $releases = json_decode($releases->body, true);
+            $releaseName = null;
+            $zipUrl = null;
+
+            foreach ($releases['assets'] as $asset) {
+                if (
+                    str_starts_with($asset['name'], 'fontawesome-free-')
+                    && str_ends_with($asset['name'], 'web.zip')
+                ) {
+                    $zipUrl = $asset['browser_download_url'];
+                    $releaseName = pathinfo($asset['name'], PATHINFO_FILENAME);
+                }
+            }
+
+            if (is_null($zipUrl)) {
+                $this->error('Failed to find Font Awesome icons download URL');
+                return;
+            }
+
+            Http::get($zipUrl, function (NetworkHttp $http) {
+                $http->header('User-Agent', 'Winter CMS');
+                $http->toFile(storage_path('temp/fontawesome.zip'));
+            });
+
+            // Extract Font Awesome files
+            if (is_dir(storage_path('temp/fontawesome'))) {
+                $this->rimraf(storage_path('temp/fontawesome'));
+            }
+            
+            Zip::extract(storage_path('temp/fontawesome.zip'), storage_path('temp/fontawesome'));
+            Filesystem::delete(storage_path('temp/fontawesome.zip'));
+
+            // Move Font Awesome LESS and font files into place
+            Filesystem::makeDirectory(base_path('node_modules/@fortawesome/fontawesome-free/less'), 0755, true);
+            Filesystem::moveDirectory(storage_path('temp/fontawesome/' . $releaseName . '/less'), base_path('node_modules/@fortawesome/fontawesome-free/less'));
+            Filesystem::copyDirectory(storage_path('temp/fontawesome/' . $releaseName . '/webfonts'), base_path('modules/system/assets/ui/font'));
+
+            // Remove remaining files
+            $this->rimraf(storage_path('temp/fontawesome'));
+        }
+
         $this->comment('Compiling registered asset bundles...');
 
         Config::set('cms.enableAssetMinify', !$this->option('debug'));
@@ -347,7 +413,7 @@ class WinterUtil extends Command
                 $currentDir = dirname($filePath);
                 while ($currentDir !== $uploadsFolder) {
                     // Get parent directory children
-                    $children = Storage::disk($uploadsDisk)->directories($currentDir);
+                    $children = Storage::disk($uploadsDisk)->allFiles($currentDir);
                     // Parent directory is empty
                     if (count($children) === 0) {
                         Storage::disk($uploadsDisk)->deleteDirectory($currentDir);
@@ -457,5 +523,38 @@ class WinterUtil extends Command
             'system::project.name'  => $result['name'],
             'system::project.owner' => $result['owner'],
         ]);
+    }
+
+    /**
+     * PHP-based "rm -rf" command.
+     *
+     * Recursively removes a directory and all files and subdirectories within.
+     */
+    protected function rimraf(string $path): void
+    {
+        if (!file_exists($path)) {
+            return;
+        }
+
+        if (is_file($path)) {
+            @unlink($path);
+            return;
+        }
+
+        $dir = new DirectoryIterator($path);
+
+        foreach ($dir as $item) {
+            if ($item->isDot()) {
+                continue;
+            }
+
+            if ($item->isDir()) {
+                $this->rimraf($item->getPathname());
+            }
+
+            @unlink($item->getPathname());
+        }
+
+        @rmdir($path);
     }
 }

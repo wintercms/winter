@@ -7,6 +7,15 @@
 // @brand-accent
 //
 
+// Expose the brand palette as CSS custom properties so the whole backend — and
+// dark mode via color-mix() — can derive from a single live source that these
+// branding settings drive. Injected after the static winter.css, so it wins.
+:root {
+    --brand-primary: @brand-primary;
+    --brand-secondary: @brand-secondary;
+    --brand-accent: @brand-accent;
+}
+
 .br-p     { color: @brand-primary; }
 .br-s     { color: @brand-secondary; }
 .br-a     { color: @brand-accent; }
@@ -121,7 +130,7 @@ table.table.data {
 // Fancy Layout
 //
 
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .form-tabless-fields {
+.fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .form-tabless-fields {
     background: @brand-secondary;
 
     .loading-indicator-container .loading-indicator {
@@ -148,14 +157,14 @@ body.fancy-layout .master-tabs.control-tabs,
     }
 }
 
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs.primary-tabs,
-*:not(.nested-form) > .form-widget > .layout-row > .control-tabs.fancy-layout.primary-tabs {
+.fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs.primary-tabs,
+*:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs.fancy-layout.primary-tabs {
     &.master-area > div > ul.nav-tabs {
         background: @brand-secondary;
     }
 }
 
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed {
+.fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed {
     > div > ul.nav-tabs {
         background: @brand-secondary;
     }

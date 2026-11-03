@@ -16,14 +16,16 @@
 >
 
     <!-- Upload Button -->
+    <?php /* Core renders an icon-only button with no accessible name (WCAG 4.1.2). */ ?>
     <button type="button" class="btn btn-default upload-button">
-        <i class="icon-upload"></i>
+        <i class="<?= e($iconClass) ?>" aria-hidden="true"></i>
+        <span class="sr-only"><?= e(trans('backend::lang.fileupload.upload_file')) ?></span>
     </button>
 
     <!-- Existing file -->
     <div class="upload-files-container">
         <?php if ($singleFile): ?>
-            <div class="upload-object is-success" data-id="<?= $singleFile->id ?>" data-path="<?= $singleFile->pathUrl ?>">
+            <div class="upload-object is-success" data-id="<?= $singleFile->id ?>" data-path="<?= e($singleFile->pathUrl) ?>">
                 <div class="icon-container">
                     <i class="icon-file"></i>
                 </div>

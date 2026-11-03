@@ -1,7 +1,9 @@
 <?php namespace System\Models;
 
-use App;
-use Cache;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Winter\Storm\Database\Model;
 
 /**
@@ -49,12 +51,7 @@ class Parameter extends Model
             return static::$cache[$key];
         }
 
-        if (App::hasDatabase()) {
-            $record = static::findRecord($key);
-        } else {
-            $record = null;
-        }
-
+        $record = static::findRecord($key);
         if (!$record) {
             return static::$cache[$key] = $default;
         }
@@ -64,9 +61,9 @@ class Parameter extends Model
 
     /**
      * Stores a setting value to the database.
-     * @param string $key Specifies the setting key value, for example 'system:updates.check'
+     * @param string|array $key Specifies the setting key value, for example 'system:updates.check'
      * @param mixed $value The setting value to store, serializable.
-     * @return bool
+     * @return true
      */
     public static function set($key, $value = null)
     {
@@ -86,8 +83,15 @@ class Parameter extends Model
             $record->item = $item;
         }
 
-        $record->value = $value;
-        $record->save();
+        try {
+            $record->value = $value;
+            $record->save();
+        } catch (QueryException $ex) {
+            // SQLSTATE[42S02]: Base table or view not found - migrations haven't run yet
+            if ($ex->getCode() !== '42S02') {
+                Log::error($ex, ['skipDatabaseLog' => true]);
+            }
+        }
 
         static::$cache[$key] = $value;
         return true;
@@ -113,18 +117,31 @@ class Parameter extends Model
 
     /**
      * Returns a record (cached)
-     * @return self
      */
-    public static function findRecord($key)
+    public static function findRecord($key): ?static
     {
+        if (!App::hasDatabase()) {
+            return null;
+        }
+
         $record = new static;
 
         list($namespace, $group, $item) = $record->parseKey($key);
 
-        return $record
-            ->applyKey($key)
-            ->remember(5, implode('-', [$record->getTable(), $namespace, $group, $item]))
-            ->first();
+        $result = null;
+        try {
+            $result = $record
+                ->applyKey($key)
+                ->remember(5, implode('-', [$record->getTable(), $namespace, $group, $item]))
+                ->first();
+        } catch (QueryException $ex) {
+            // SQLSTATE[42S02]: Base table or view not found - migrations haven't run yet
+            if ($ex->getCode() !== '42S02') {
+                Log::error($ex, ['skipDatabaseLog' => true]);
+            }
+        }
+
+        return $result;
     }
 
     /**

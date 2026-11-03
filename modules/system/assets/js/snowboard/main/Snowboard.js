@@ -336,7 +336,6 @@ export default class Snowboard {
         const listeners = this.listensToEvent(eventName);
         if (listeners.length === 0) {
             this.debug(`No listeners found for global event "${eventName}"`);
-            return true;
         }
         this.debug(`Listeners found for global event "${eventName}": ${listeners.join(', ')}`);
 
@@ -437,7 +436,6 @@ export default class Snowboard {
         const listeners = this.listensToEvent(eventName);
         if (listeners.length === 0) {
             this.debug(`No listeners found for global promise event "${eventName}"`);
-            return Promise.resolve();
         }
         this.debug(`Listeners found for global promise event "${eventName}": ${listeners.join(', ')}`);
 

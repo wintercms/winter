@@ -15,6 +15,7 @@
         //
 
         this.init()
+        this.widgets = Snowboard['backend.ui.widgetHandler']()
     }
 
     CmsPage.prototype = Object.create(BaseProto)
@@ -58,6 +59,9 @@
         $document.on('hiding.oc.inspector', '[data-inspectable]', this.proxy(this.onInspectorHiding))
         $document.on('click', '#cms-master-tabs > div.tab-content > .tab-pane.active .control-componentlist a.remove', this.proxy(this.onComponentRemove))
         $document.on('click', '#cms-component-list [data-component]', this.proxy(this.onComponentClick))
+
+        // Watch for PHP editors
+        window.Snowboard.on('backend.formwidget.codeeditor.create', this.proxy(this.onCodeEditorCreate));
     }
 
     // EVENT HANDLERS
@@ -242,7 +246,6 @@
         $componentListFormGroup.removeClass()
         $componentListFormGroup.addClass('layout-row min-size')
         this.updateComponentListClass(data.pane)
-        this.updateFormEditorMode(data.pane, true)
 
         var $form = $('form', data.pane),
             self = this
@@ -258,8 +261,75 @@
             $panel.trigger('unmodified.oc.tab')
             self.updateModifiedCounter()
         })
+    }
 
-        this.addTokenExpanderToEditor(data.pane, $form)
+    CmsPage.prototype.onCodeEditorCreate = function (widget, editor) {
+        const $form = $(widget.element.closest('form'));
+
+        if (widget.config.get('language') === 'php') {
+            let value = widget.getValue();
+
+            // If no PHP tag at the start, prepend one
+            if (!/^<\?php\s*/.test(value)) {
+                widget.setValue('<?php\n' + value);
+            }
+
+            // Verify the editor has at least 2 lines before hiding line 1
+            const lineCount = widget.getModel().getLineCount();
+            if (lineCount >= 2) {
+                // Only hide line 1 if it contains just the PHP open tag
+                const firstLine = widget.getModel().getLineContent(1);
+                if (/^<\?php\s*$/.test(firstLine)) {
+                    widget.fromLine(2);
+                }
+            }
+        }
+
+        // Add codelens and action to customise component templates
+        const templateCommand = editor.addCommand(
+            0,
+            function (command, range, name) {
+                $form.request('onExpandMarkupToken', {
+                    data: {
+                        tokenType: 'component',
+                        tokenName: name,
+                    },
+                    success: function (data) {
+                        if (data.result) {
+                            widget.replace(range, data.result)
+                        }
+                    },
+                });
+            },
+        );
+
+        widget.addCodeLens(
+            'twig',
+            function (model, token) {
+                // Find component tags
+                const lenses = [];
+                const matches = model.findMatches('\\{%\\scomponent\\s[\'"]([^\'"]+)[\'"][^%]*\\s%\\}', true, true, false, null, true);
+
+                matches.forEach((match) => {
+                    const name = match.matches[1] ?? 'unknown';
+                    lenses.push({
+                        range: match.range,
+                        id: 'component-' + name + '-lens',
+                        command: {
+                            title: 'Customize template',
+                            id: templateCommand,
+                            arguments: [match.range, name]
+                        },
+                    });
+                });
+
+                return {
+                    lenses: lenses,
+                    dispose: function () {
+                    }
+                }
+            }
+        );
     }
 
     CmsPage.prototype.onAfterAllTabsClosed = function(ev) {
@@ -312,8 +382,6 @@
             if (templateType == 'layout')
                 this.updateLayouts(element)
         }
-
-        this.updateFormEditorMode($(element).closest('.tab-pane'), false)
 
         if (context.handler == 'onSave' && (!data['X_WINTER_ERROR_FIELDS'] && !data['X_WINTER_ERROR_MESSAGE'])) {
             $(element).trigger('unchange.oc.changeMonitor')
@@ -437,11 +505,9 @@
         var editor = $('[data-control=codeeditor]', pane)
         if (editor.length) {
             var alias = $('input[name="component_aliases[]"]', component).val().replace(/^@/, ''),
-                codeEditor = editor.codeEditor('getEditorObject')
+                codeEditor = this.widgets.getWidget(editor.get(0))
 
-            codeEditor.replace('', {
-                needle: "{% component '" + alias + "' %}"
-            })
+            codeEditor.replace(new RegExp('\\{% +component +\'' + alias + '\'.*?%\\}'), '');
         }
 
         component.remove()
@@ -531,39 +597,6 @@
         $componentList.toggleClass('has-components', hasComponents)
     }
 
-    CmsPage.prototype.updateFormEditorMode = function(pane, initialization) {
-        var $contentTypeElement = $('[data-toolbar-type]', pane)
-        if ($contentTypeElement.length == 0)
-            return
-
-        if ($contentTypeElement.data('toolbar-type') != 'content')
-            return
-
-        var fileName = $('input[name=fileName]', pane).val(),
-            parts = fileName.split('.'),
-            extension = 'txt',
-            mode = 'plain_text',
-            modes = $.wn.codeEditorExtensionModes,
-            editor = $('[data-control=codeeditor]', pane)
-
-        if (parts.length >= 2)
-            extension = parts.pop().toLowerCase()
-
-        if (modes[extension] !== undefined)
-            mode = modes[extension];
-
-        var setEditorMode = function() {
-            window.setTimeout(function(){
-                editor.data('oc.codeEditor').editor.getSession().setMode({path: 'ace/mode/'+mode})
-            }, 200)
-        }
-
-        if (initialization)
-            editor.on('oc.codeEditorReady', setEditorMode)
-        else
-            setEditorMode()
-    }
-
     CmsPage.prototype.updateModifiedCounter = function() {
         var counters = {
             page: { menu: 'pages', count: 0 },
@@ -580,56 +613,6 @@
 
         $.each(counters, function(type, data){
             $.wn.sideNav.setCounter('cms/' + data.menu, data.count);
-        })
-    }
-
-    CmsPage.prototype.addTokenExpanderToEditor = function(pane, $form) {
-        var group = $('[data-field-name=markup]', pane),
-            editor = $('[data-control=codeeditor]', group),
-            canExpand = false,
-            self = this
-
-        if (!editor.length || editor.data('oc.tokenexpander'))
-            return
-
-        var toolbar = editor.codeEditor('getToolbar')
-
-        editor.tokenExpander()
-
-        var breakButton = $('<li />').prop({ 'class': 'tokenexpander-button' }).append(
-            $('<a />').prop({ 'href': 'javascript:; '}).append(
-                $('<i />').prop({ 'class': 'icon-code-fork' })
-            )
-        )
-
-        breakButton.hide().on('click', function(){
-            self.handleExpandToken(editor, $form)
-            return false
-        })
-
-        $('ul:first', toolbar).prepend(breakButton)
-
-        editor
-            .on('show.oc.tokenexpander', function(){
-                canExpand = true
-                breakButton.show()
-            })
-            .on('hide.oc.tokenexpander', function(){
-                canExpand = false
-                breakButton.hide()
-            })
-            .on('dblclick', function(ev){
-                if ((ev.metaKey || ev.ctrlKey) && canExpand) {
-                    self.handleExpandToken(editor, $form)
-                }
-            })
-    }
-
-    CmsPage.prototype.handleExpandToken = function(editor, $form) {
-        editor.tokenExpander('expandToken', function(token, value){
-            return $form.request('onExpandMarkupToken', {
-                data: { tokenType: token, tokenName: value }
-            })
         })
     }
 

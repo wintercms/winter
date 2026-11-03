@@ -9,3 +9,7 @@ fields:
         path: field_message
         containerAttributes:
             data-plugin: exception-beautifier
+
+    details:
+        type: partial
+        path: field_details

@@ -10,7 +10,16 @@ if ($this->previewMode || $field->readOnly) {
     data-control="recordfinder"
     data-refresh-handler="<?= $this->getEventHandler('onRefresh') ?>"
     data-data-locker="#<?= $field->getId() ?>">
-    <span class="form-control" <?= $previewMode ? 'disabled="disabled"' : '' ?>>
+    <span class="form-control"
+            <?= $previewMode ? 'disabled="disabled"' : '' ?>
+        <?php if (!$previewMode): ?>
+            style="cursor:pointer"
+            data-control="popup"
+            data-size="huge"
+            data-handler="<?= $this->getEventHandler('onFindRecord') ?>"
+            data-request-data="recordfinder_flag: 1"
+        <?php endif ?>
+    >
         <?php if ($value): ?>
             <span class="primary"><?= e($nameValue) ?: 'Undefined' ?></span>
             <?php if ($descriptionValue): ?>
@@ -25,7 +34,7 @@ if ($this->previewMode || $field->readOnly) {
         <?php if ($value): ?>
             <button
                 type="button"
-                class="btn clear-record"
+                class="btn btn-default clear-record"
                 data-request="<?= $this->getEventHandler('onClearRecord') ?>"
                 data-request-confirm="<?= e(trans('backend::lang.form.action_confirm')) ?>"
                 data-request-success="var $locker = $('#<?= $field->getId() ?>'); $locker.val(''); $locker.trigger('change')"

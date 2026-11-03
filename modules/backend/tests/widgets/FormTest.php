@@ -14,6 +14,11 @@ namespace Backend\Tests\Widgets
             return ['model', 'custom', 'options'];
         }
 
+        public function collectionOptions()
+        {
+            return collect(['collection', 'options']);
+        }
+
         public function getFieldNameOnModelOptionsMethodOptions()
         {
             return ['model', 'field name', 'options method'];
@@ -167,6 +172,11 @@ namespace Backend\Tests\Widgets
                         'type' => 'dropdown',
                         'options' => [\FormHelper::class, 'staticMethodOptions'],
                         'expect' => ['static', 'method'],
+                    ],
+                    'collection_options' => [
+                        'type' => 'dropdown',
+                        'options' => 'collectionOptions',
+                        'expect' => collect(['collection', 'options']),
                     ],
                     'model_method_options' => [
                         'type' => 'dropdown',

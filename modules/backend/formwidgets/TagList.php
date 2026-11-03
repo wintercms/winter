@@ -4,6 +4,8 @@ namespace Backend\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
 use Illuminate\Database\Eloquent\Relations\Relation as RelationBase;
+use Winter\Storm\Database\Relations\BelongsToMany;
+use Winter\Storm\Database\Relations\MorphToMany;
 
 /**
  * Tag List Form Widget
@@ -108,11 +110,17 @@ class TagList extends FormWidgetBase
      */
     public function getSaveValue($value)
     {
+        if (!is_array($value)) {
+            $value = [$value];
+        }
+
+        $value = array_values(array_filter($value));
+
         if ($this->mode === static::MODE_RELATION) {
             return $this->hydrateRelationSaveValue($value);
         }
 
-        if (is_array($value) && $this->mode === static::MODE_STRING) {
+        if ($this->mode === static::MODE_STRING) {
             return implode($this->getSeparatorCharacter(), $value);
         }
 
@@ -123,29 +131,40 @@ class TagList extends FormWidgetBase
      * Returns an array suitable for saving against a relation (array of keys).
      * This method also creates non-existent tags.
      */
-    protected function hydrateRelationSaveValue($names): ?array
+    protected function hydrateRelationSaveValue(array $names): ?array
     {
-        if (!$names) {
-            return $names;
-        }
-
-        if (!is_array($names)) {
-            $names = [$names];
-        }
-
+        $relation = $this->getRelationObject();
         $relationModel = $this->getRelationModel();
-        $existingTags = $relationModel
-            ->whereIn($this->nameFrom, $names)
-            ->lists($this->nameFrom, $relationModel->getKeyName())
-        ;
+
+        $keyName = $relationModel->getKeyName();
+        $pivot = in_array(get_class($relation), [BelongsToMany::class, MorphToMany::class]);
+
+        if ($pivot) {
+            $existingTags = $relationModel->whereIn($this->nameFrom, $names)->lists($this->nameFrom, $keyName);
+        } else {
+            $existingTags = $relation->lists($this->nameFrom, $keyName);
+        }
 
         $newTags = $this->customTags ? array_diff($names, $existingTags) : [];
+        $deletedTags = $this->customTags ? array_diff($existingTags, $names) : [];
 
         foreach ($newTags as $newTag) {
-            $newModel = new $relationModel;
-            $newModel->{$this->nameFrom} = $newTag;
-            $newModel->save();
+            if ($pivot) {
+                $newModel = new $relationModel;
+                $newModel->{$this->nameFrom} = $newTag;
+                $newModel->save();
+            } else {
+                $newModel = $relation->create([$this->nameFrom => $newTag]);
+            }
             $existingTags[$newModel->getKey()] = $newTag;
+        }
+
+        if (!$pivot && $deletedTags) {
+            $deletedKeys = array_keys($deletedTags);
+            $relation->whereIn($keyName, $deletedKeys)->delete();
+            foreach ($deletedTags as $id) {
+                unset($existingTags[$id]);
+            }
         }
 
         return array_keys($existingTags);

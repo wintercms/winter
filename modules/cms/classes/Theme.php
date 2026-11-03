@@ -1,22 +1,25 @@
-<?php namespace Cms\Classes;
+<?php
 
-use App;
-use ApplicationException;
-use Cache;
+namespace Cms\Classes;
+
 use Cms\Models\ThemeData;
-use Config;
 use DirectoryIterator;
-use Event;
 use Exception;
-use File;
-use Lang;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
 use System\Models\Parameter;
-use SystemException;
-use Url;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 use Winter\Storm\Halcyon\Datasource\DbDatasource;
 use Winter\Storm\Halcyon\Datasource\FileDatasource;
-use Yaml;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Url;
+use Winter\Storm\Support\Facades\Yaml;
+use Winter\Storm\Support\Str;
 
 /**
  * This class represents the CMS theme.
@@ -63,9 +66,8 @@ class Theme extends CmsObject
 
     /**
      * Loads the theme.
-     * @return self
      */
-    public static function load($dirName, $file = null): self
+    public static function load($dirName, $file = null): ?static
     {
         $theme = new static;
         $theme->setDirName($dirName);
@@ -91,9 +93,14 @@ class Theme extends CmsObject
 
     /**
      * Sets the theme directory name.
+     * @throws ApplicationException if the directory name is invalid.
      */
     public function setDirName(string $dirName): void
     {
+        if (!static::isValidDirName($dirName)) {
+            throw new ApplicationException(Lang::get('cms::lang.theme.dir_name_invalid'));
+        }
+
         $this->dirName = $dirName;
     }
 
@@ -103,6 +110,14 @@ class Theme extends CmsObject
     public function getDirName(): string
     {
         return $this->dirName;
+    }
+
+    /**
+     * Determines if the given directory name is valid.
+     */
+    public static function isValidDirName(string $dirName): bool
+    {
+        return (bool) preg_match('/^[a-z0-9\_\-]+$/i', $dirName);
     }
 
     /**
@@ -235,9 +250,14 @@ class Theme extends CmsObject
     /**
      * Sets the active theme in the database.
      * The active theme code is stored in the database and overrides the configuration cms.activeTheme parameter.
+     * @throws ApplicationException if the directory name is invalid.
      */
     public static function setActiveTheme(string $code): void
     {
+        if (!static::isValidDirName($code)) {
+            throw new ApplicationException(Lang::get('cms::lang.theme.dir_name_invalid'));
+        }
+
         self::resetCache();
 
         Parameter::set(self::ACTIVE_KEY, $code);
@@ -400,7 +420,7 @@ class Theme extends CmsObject
          *          array_set($config, 'tabs.fields.header_color', [
          *              'label'           => 'Header Colour',
          *              'type'            => 'colorpicker',
-         *              'availableColors' => [#34495e, #708598, #3498db],
+         *              'availableColors' => [#103141, #708598, #6cc551],
          *              'assetVar'        => 'header-bg',
          *              'tab'             => 'Global'
          *          ]);
@@ -543,6 +563,8 @@ class Theme extends CmsObject
         self::$activeThemeCache = false;
         self::$editThemeCache = false;
 
+        ThemeData::flushCache();
+
         // Sometimes it may be desired to only clear the local cache of the active / edit themes instead of the persistent cache
         if (!$memoryOnly) {
             Cache::forget(self::ACTIVE_KEY);
@@ -682,6 +704,11 @@ class Theme extends CmsObject
      */
     public function __get($name)
     {
+        if (in_array(strtolower($name), ['id', 'path', 'dirname', 'config', 'formconfig', 'previewimageurl'])) {
+            $method = 'get'. ucfirst($name);
+            return $this->$method();
+        }
+
         if ($this->hasCustomData()) {
             return $this->getCustomData()->{$name};
         }
@@ -694,6 +721,10 @@ class Theme extends CmsObject
      */
     public function __isset($key)
     {
+        if (in_array(strtolower($key), ['id', 'path', 'dirname', 'config', 'formconfig', 'previewimageurl'])) {
+            return true;
+        }
+
         if ($this->hasCustomData()) {
             $theme = $this->getCustomData();
             return $theme->offsetExists($key);

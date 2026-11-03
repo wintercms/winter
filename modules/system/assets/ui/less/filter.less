@@ -10,13 +10,13 @@
 // Filters
 // --------------------------------------------------
 
-@color-filter-bg:                            #ECF0F1;
+@color-filter-bg:                            var(--wn-surface-hover, #ECF0F1);
 @color-filter-bg-active:                     #6AAB55;
-@color-filter-border:                        #D7DBDD;
+@color-filter-border:                        var(--wn-border, #D7DBDD);
 @color-filter-text:                          rgba(0,0,0,.6);
-@color-filter-text-active:                   #000000;
-@color-filter-items-bg:                      #fafafa;
-@color-filter-items-bg-hover:                #4da7e8;
+@color-filter-text-active:                   var(--wn-text-strong, #000000);
+@color-filter-items-bg:                      var(--wn-surface-canvas, #fafafa);
+@color-filter-items-bg-hover:                @brand-secondary;
 
 //
 // Filters
@@ -85,7 +85,7 @@
             .filter-setting {
                 padding-left: 5px;
                 padding-right: 5px;
-                color: #FFF;
+                color: var(--wn-text-inverse, #FFF);
                 background-color: @color-filter-bg-active;
                 .border-radius(4px);
                 .transition(~'color 1s, background-color 1s');
@@ -132,6 +132,82 @@
             }
         }
 
+        &.button-group {
+            display: inline-flex;
+            border: 2px solid @brand-primary;
+            border-radius: 4px;
+            overflow: hidden;
+            padding: 0;
+            margin: 5px 0;
+            vertical-align: baseline;
+
+            &:after {
+                content: "";
+            }
+
+            button {
+                flex: 1;
+                margin: 0;
+                border: none;
+                border-right: 2px solid @brand-primary;
+                border-radius: 0;
+                background: @color-filter-bg;
+                color: @color-filter-text;
+                font-size: @font-size-base - 1;
+                font-weight: 600;
+                padding: 3px 10px;
+                line-height: 1.5;
+                transition: background-color 0.2s ease, color 0.2s ease;
+
+                &:last-child {
+                    border-right: none;
+                }
+
+                &.btn-primary {
+                    background: @brand-primary;
+                    color: var(--wn-text-inverse, #fff);
+                }
+
+                &:hover:not(.btn-primary) {
+                    background: lighten(@brand-primary, 5%);
+                    color: var(--wn-text-inverse, #fff);
+                }
+            }
+        }
+
+        &.dropdown {
+            padding: 0 0 0 10px;
+            vertical-align: middle;
+
+            &:after {
+                content: "";
+            }
+
+            .select2-container--default {
+                display: inline-block;
+                vertical-align: text-bottom;
+
+                .select2-selection__clear {
+                    float: none;
+                    margin-right: 3px;
+                }
+
+                .select2-selection--single {
+                    height: 1em;
+                    line-height: 1;
+                    box-sizing: content-box;
+
+                    .select2-selection__placeholder {
+                        margin-right: 5px;
+                    }
+
+                    .select2-selection__arrow {
+                        right: 10px;
+                    }
+                }
+            }
+        }
+
         &:hover, &.active {
             &, &.custom-checkbox label {
                 color: @color-filter-text-active;
@@ -165,7 +241,7 @@
             .filter-setting {
                 padding-left: 5px;
                 padding-right: 5px;
-                color: #FFF;
+                color: var(--wn-text-inverse, #FFF);
                 background-color: @color-filter-bg-active;
                 .border-radius(4px);
                 .transition(~'color 1s, background-color 1s');
@@ -173,7 +249,7 @@
         }
 
         &:hover {
-            color: #000;
+            color: var(--wn-text-strong, #000);
             .filter-label { color: @color-filter-text; }
             &.active .filter-setting { background-color: darken(@color-filter-bg-active, 5%); }
         }
@@ -228,7 +304,7 @@
 
             &:hover {
                 background-color: @color-filter-items-bg-hover;
-                color: #FFFFFF;
+                color: var(--wn-text-inverse, #FFFFFF);
             }
         }
     }

@@ -12,13 +12,13 @@
 // Inspector
 // --------------------------------------------------
 
-@color-inspector-bg:                         #f2f2f2;
-@color-inspector-value-bg:                   #ffffff;
-@color-inspector-active-bg:                  #ffffff;
-@color-inspector-text:                       #333333;
-@color-inspector-input-text:                 #385487;
-@color-inspector-grid:                       #c8cccd;
-@color-inspector-changed:                    #c03f31;
+@color-inspector-bg:                         var(--wn-surface-hover, #f2f2f2);
+@color-inspector-value-bg:                   var(--wn-surface-raised, #ffffff);
+@color-inspector-active-bg:                  var(--wn-surface-raised, #ffffff);
+@color-inspector-text:                       var(--wn-text-link, #333333);
+@color-inspector-input-text:                 var(--wn-inspector-input-text, #385487);
+@color-inspector-grid:                       var(--wn-text-faint, #c8cccd);
+@color-inspector-changed:                    var(--wn-inspector-changed, #c03f31);
 
 //
 // Inspector
@@ -73,14 +73,14 @@
         .user-select(none);
 
         th {
-            background: #e0e4e5;
+            background: var(--wn-surface-overlay, #e0e4e5);
             font-weight: 600;
             cursor: pointer;
         }
     }
 
     tr.invalid th {
-        color: #c03f31!important;
+        color: var(--wn-inspector-text, #c03f31)!important;
     }
 
     tr.control-group {
@@ -119,19 +119,19 @@
             input[type=text] {
                 &::-webkit-input-placeholder {
                     font-weight: normal!important;
-                    color: #b5babd;
+                    color: var(--wn-text-muted, #b5babd);
                 }
                 &:-moz-placeholder {
                     font-weight: normal!important;
-                    color: #b5babd;
+                    color: var(--wn-text-muted, #b5babd);
                 }
                 &::-moz-placeholder {
                     font-weight: normal!important;
-                    color: #b5babd;
+                    color: var(--wn-text-muted, #b5babd);
                 }
                 &:-ms-input-placeholder {
                     font-weight: normal!important;
-                    color: #b5babd;
+                    color: var(--wn-text-muted, #b5babd);
                 }
             }
 
@@ -177,7 +177,7 @@
                 text-decoration: none;
 
                 &.placeholder {
-                    color: #b5babd;
+                    color: var(--wn-text-muted, #b5babd);
                 }
 
                 .loading-indicator {
@@ -230,7 +230,7 @@
                         display: inline-block;
                         height: 100%;
                         width: 30px;
-                        color: #2b3e50;
+                        color: var(--wn-text-heading, #2b3e50);
                         outline: none;
 
                         i {
@@ -346,7 +346,7 @@
                         width: 12px;
                         height: 12px;
                         font-size: 13px;
-                        color: #333333;
+                        color: var(--wn-text-link, #333333);
                         text-indent: 0;
                     }
                 }
@@ -468,15 +468,15 @@ div.control-popover {
 .inspector-columns-editor {
     min-height: 400px;
     margin-bottom: 20px;
-    border-bottom: 1px solid #bdc3c7;
+    border-bottom: 1px solid var(--wn-border-input, #bdc3c7);
 
     .items-column {
         width: 250px;
     }
 
     .inspector-wrapper {
-        background: #f2f2f2; // Use @color-inspector-bg instead
-        border-left: 2px solid #bdc3c7;
+        background: var(--wn-surface-hover, #f2f2f2); // Use @color-inspector-bg instead
+        border-left: 2px solid var(--wn-border-input, #bdc3c7);
     }
 
     .toolbar {
@@ -491,12 +491,12 @@ html.gecko.mac {
 }
 
 .inspector-table-list {
-    border-top: 1px solid #e2e2e2;
+    border-top: 1px solid var(--wn-border-subtle, #e2e2e2);
     .user-select(none);
 }
 
 div.inspector-dictionary-container {
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--wn-border-focus, #e0e0e0);
 
     .values {
         height: 300px;
@@ -512,12 +512,12 @@ div.inspector-dictionary-container {
             font-size: 13px;
             text-transform: uppercase;
             font-weight: 600;
-            color: #333333;
+            color: var(--wn-text-link, #333333);
             background: white;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid var(--wn-border-focus, #e0e0e0);
 
             &:first-child {
-                border-right: 1px solid #e0e0e0;
+                border-right: 1px solid var(--wn-border-focus, #e0e0e0);
             }
         }
     }
@@ -530,14 +530,14 @@ div.inspector-dictionary-container {
             td {
                 width: 50%;
                 padding: 0!important;
-                border-bottom: 1px solid #e0e0e0;
+                border-bottom: 1px solid var(--wn-border-focus, #e0e0e0);
 
                 div {
-                    border: 1px solid #fff;
+                    border: 1px solid var(--wn-border-inverse, #fff);
                 }
 
                 &.active div {
-                    border-color: #5fb6f5;
+                    border-color: var(--wn-inspector-border, #5fb6f5);
                 }
 
                 input {
@@ -556,7 +556,7 @@ div.inspector-dictionary-container {
                 }
 
                 &:first-child {
-                    border-right: 1px solid #e0e0e0;
+                    border-right: 1px solid var(--wn-border-focus, #e0e0e0);
                 }
             }
 
@@ -666,14 +666,14 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete {
         .select2-search {
             min-height: 26px;
             position: relative;
-            border-bottom: 1px solid #b2b9be;
+            border-bottom: 1px solid var(--wn-border-input, #b2b9be);
 
             &:after {
                 position: absolute;
                 .icon(@search);
                 right: 10px;
                 top: 10px;
-                color: #95a5a6;
+                color: var(--wn-text-secondary, #95a5a6);
             }
 
             input.select2-search__field {

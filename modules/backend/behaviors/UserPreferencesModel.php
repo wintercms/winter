@@ -2,6 +2,7 @@
 
 use System\Behaviors\SettingsModel;
 use Backend\Models\UserPreference;
+use Winter\Storm\Database\Model;
 
 /**
  * User Preferences model extension, identical to System\Behaviors\SettingsModel
@@ -58,9 +59,8 @@ class UserPreferencesModel extends SettingsModel
 
     /**
      * Returns the raw Model record that stores the settings.
-     * @return Model
      */
-    public function getSettingsRecord()
+    public function getSettingsRecord(): ?Model
     {
         $item = UserPreference::forUser();
         $record = $item

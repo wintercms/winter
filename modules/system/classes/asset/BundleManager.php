@@ -40,6 +40,13 @@ class BundleManager
                 '@vitejs/plugin-vue' => '^5.0.5'
             ],
         ],
+        'react' => [
+            'react' => '^19.0.0',
+            'react-dom' => '^19.0.0',
+            'vite' => [
+                '@vitejs/plugin-react' => '^4.3.4',
+            ],
+        ],
     ];
 
     /**
@@ -65,6 +72,22 @@ class BundleManager
                 $this->writeFile(
                     $packagePath . '/postcss.config.mjs',
                     $this->getFixture('tailwind/postcss.config.js.fixture')
+                );
+            });
+
+            $manager->registerSetupHandler('react', function (string $packagePath, string $packageType) use ($manager) {
+                if ($this->option('no-stubs')) {
+                    return;
+                }
+
+                $this->writeFile(
+                    $packagePath . '/assets/src/js/components/App.jsx',
+                    $this->getFixture('react/App.jsx.fixture')
+                );
+
+                $this->writeFile(
+                    $packagePath . '/assets/src/js/' . strtolower($this->argument('packageName')) . '.jsx',
+                    $this->getFixture('react/package.jsx.fixture')
                 );
             });
 
@@ -119,6 +142,34 @@ class BundleManager
                         $contents
                     ),
                     'js' => $this->getFixture('js/vue.js.fixture'),
+                    default => $contents
+                };
+            });
+
+            $manager->registerScaffoldHandler('react', function (string $contents, string $contentType) {
+                return match ($contentType) {
+                    'vite' => str_replace(
+                        '}),',
+                        <<<JAVASCRIPT
+                        }),
+                                react(),
+                        JAVASCRIPT,
+                        str_replace(
+                            'import laravel from \'laravel-vite-plugin\';',
+                            'import laravel from \'laravel-vite-plugin\';' . PHP_EOL . 'import react from \'@vitejs/plugin-react\';',
+                            $contents
+                        )
+                    ),
+                    'mix' => str_replace(
+                        'mix.js(\'assets/src/js/{{packageName}}.js\', \'assets/dist/js/{{packageName}}.js\');',
+                        'mix.js(\'assets/src/js/{{packageName}}.js\', \'assets/dist/js/{{packageName}}.js\').react();',
+                        $contents
+                    ),
+                    'js' => str_replace(
+                        '{{packageName}}',
+                        strtolower($this->argument('packageName')),
+                        $this->getFixture('react/package.js.fixture')
+                    ),
                     default => $contents
                 };
             });

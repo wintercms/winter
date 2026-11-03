@@ -7,10 +7,11 @@
     var ExceptionBeautifier = $.fn.exceptionBeautifier.Constructor
 
     ExceptionBeautifier.EDITORS = {
+        vscode: {scheme: 'vscode://file/%file:%line', name: 'VS Code (vscode://)'},
+        phpstorm: {scheme: 'phpstorm://open?file=%file&line=%line', name: 'PhpStorm (phpstorm://)'},
         subl: {scheme: 'subl://open?url=file://%file&line=%line', name: 'Sublime (subl://)'},
         txmt: {scheme: 'txmt://open/?url=file://%file&line=%line', name: 'TextMate (txmt://)'},
         mvim: {scheme: 'mvim://open/?url=file://%file&line=%line', name: 'MacVim (mvim://)'},
-        phpstorm: {scheme: 'phpstorm://open?file=%file&line=%line', name: 'PhpStorm (phpstorm://)'},
         editor: {scheme: 'editor://open/?file=%file&line=%line', name: 'Custom (editor://)'}
     }
 

@@ -19,12 +19,6 @@ tabs:
             type: dropdown
             span: left
 
-        editor_preview:
-            type: partial
-            label: backend::lang.editor.preview
-            tab: backend::lang.backend_preferences.code_editor
-            path: field_editor_preview
-
         editor_theme:
             label: backend::lang.editor.theme
             tab: backend::lang.backend_preferences.code_editor
@@ -34,13 +28,8 @@ tabs:
         editor_word_wrap:
             label: backend::lang.editor.word_wrap
             tab: backend::lang.backend_preferences.code_editor
-            type: dropdown
+            type: balloon-selector
             span: auto
-            options:
-                off: backend::lang.editor.mode_off
-                40: backend::lang.editor.40_characters
-                80: backend::lang.editor.80_characters
-                fluid: backend::lang.editor.mode_fluid
 
         editor_font_size:
             label: backend::lang.editor.font_size
@@ -69,28 +58,26 @@ tabs:
                 7: 7
                 8: 8
 
-        editor_code_folding:
-            label: backend::lang.editor.code_folding
-            tab: backend::lang.backend_preferences.code_editor
-            type: dropdown
-            span: auto
-            options:
-                manual: backend::lang.editor.mode_off
-                markbegin: backend::lang.editor.code_folding_begin
-                markbeginend: backend::lang.editor.code_folding_begin_end
-
-        editor_autocompletion:
-            label: backend::lang.editor.autocompletion
-            tab: backend::lang.backend_preferences.code_editor
-            type: dropdown
-            span: auto
-            options:
-                manual: backend::lang.editor.mode_off
-                basic: backend::lang.editor.basic_autocompletion
-                live: backend::lang.editor.live_autocompletion
-
         editor_show_gutter:
             label: backend::lang.editor.show_gutter
+            tab: backend::lang.backend_preferences.code_editor
+            type: checkbox
+            span: auto
+
+        editor_show_minimap:
+            label: backend::lang.editor.show_minimap
+            tab: backend::lang.backend_preferences.code_editor
+            type: checkbox
+            span: auto
+
+        editor_bracket_colors:
+            label: backend::lang.editor.bracket_colors
+            tab: backend::lang.backend_preferences.code_editor
+            type: checkbox
+            span: auto
+
+        editor_enable_folding:
+            label: backend::lang.editor.enable_folding
             tab: backend::lang.backend_preferences.code_editor
             type: checkbox
             span: auto
@@ -119,6 +106,12 @@ tabs:
             type: checkbox
             span: auto
 
+        editor_show_colors:
+            label: backend::lang.editor.show_colors
+            tab: backend::lang.backend_preferences.code_editor
+            type: checkbox
+            span: auto
+
         editor_show_print_margin:
             label: backend::lang.editor.show_print_margin
             tab: backend::lang.backend_preferences.code_editor
@@ -131,8 +124,13 @@ tabs:
             type: checkbox
             span: auto
 
-        editor_enable_snippets:
-            label: backend::lang.editor.enable_snippets
+        _editor_preview_lang:
+            type: partial
             tab: backend::lang.backend_preferences.code_editor
-            type: checkbox
-            span: auto
+            path: field_editor_preview_lang
+
+        _editor_preview:
+            type: codeeditor
+            tab: backend::lang.backend_preferences.code_editor
+            size: giant
+            span: full

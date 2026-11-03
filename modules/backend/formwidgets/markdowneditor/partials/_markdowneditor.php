@@ -19,7 +19,7 @@
         <?php if ($useMediaManager): ?>
             data-use-media-manager="true"
         <?php endif ?>
-        data-vendor-path="<?= Url::asset('/modules/backend/formwidgets/codeeditor/assets/vendor/ace') ?>"
+        data-vendor-path="<?= Url::asset('/modules/backend/assets/vendor/ace') ?>"
         <?php if ($readOnly || $disabled): ?>
             data-disabled="true"
         <?php endif; ?>

@@ -815,14 +815,18 @@ export default class Request extends PluginBase {
      * @returns {void}
      */
     createFormData(formData, data, prefix = '') {
+        if (data === null || data === undefined) {
+            return;
+        }
+
         if (typeof data !== 'object') {
             formData.append(prefix, data);
             return;
         }
 
         if (Array.isArray(data) && prefix !== '') {
-            data.forEach((item) => {
-                this.createFormData(formData, item, `${prefix}[]`);
+            data.forEach((item, index) => {
+                this.createFormData(formData, item, `${prefix}[${index}]`);
             });
             return;
         }

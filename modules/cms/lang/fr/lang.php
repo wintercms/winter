@@ -93,6 +93,13 @@ return [
         'find_more_themes' => 'Trouver davantage de thèmes sur le site du CMS Winter.',
         'saving' => 'Enregistrement du thème en cours…',
         'return' => 'Retourner à la liste des thèmes',
+        'default_description' => 'Thème personnalisé généré pour :url',
+        'scaffold' => [
+            'label' => 'Ossature du thème',
+            'empty' => 'Vide',
+            'less' => 'Basique (LESS)',
+            'tailwind' => 'Tailwind CSS',
+        ],
     ],
     'maintenance' => [
         'settings_menu' => 'Maintenance',
@@ -263,16 +270,23 @@ return [
         'saved'=> 'Le modèle a été sauvegardé avec succès.',
         'no_list_records' => 'Aucun enregistrement trouvé',
         'delete_confirm' => 'Supprimer les modèles sélectionnés ?',
-        'order_by' =>'Trier par'
+        'order_by' =>'Trier par',
+        'type_not_permitted' => 'Vous devez disposer de l\'autorisation ":permission" pour gérer :type',
     ],
     'permissions' => [
         'name' => 'CMS',
         'manage_content' => 'Gérer le contenu du site web',
+        'manage_content_comment' => 'Cette autorisation ne doit être accordée qu\'à des utilisateurs de confiance, car elle permet un accès direct aux fichiers de contenu du thème.',
         'manage_assets' => 'Gérer les assets site web - images, fichiers JavaScript et CSS',
+        'manage_assets_comment' => 'Cette autorisation ne doit être accordée qu\'à des utilisateurs de confiance, car elle permet un accès direct aux fichiers assets du thème, qui sont combinés et servis publiquement.',
         'manage_pages' => 'Créer, modifier et supprimer des pages du site web',
+        'manage_pages_comment' => 'Cette autorisation ne doit être accordée qu\'à des utilisateurs de confiance, car elle permet un accès direct aux fichiers de contenu des pages du thème, y compris le code PHP si activé.',
         'manage_layouts' => 'Créer, modifier et supprimer des maquettes du CMS',
+        'manage_layouts_comment' => 'Cette autorisation ne doit être accordée qu\'à des utilisateurs de confiance, car elle permet un accès direct aux fichiers de maquette du thème, y compris le code PHP si activé.',
         'manage_partials' => 'Créer, modifier et supprimer des modèles partiels du CMS',
+        'manage_partials_comment' => 'Cette autorisation ne doit être accordée qu\'à des utilisateurs de confiance, car elle permet un accès direct aux fichiers partiels du thème, y compris le code PHP si activé.',
         'manage_themes' => 'Activer, désactiver et configurer les thèmes',
+        'manage_themes_comment' => 'Cette autorisation ne doit être accordée qu\'à des utilisateurs de confiance, car elle permet à l\'utilisateur d\'ajouter de nouveaux thèmes, de modifier le thème existant ou de supprimer complètement des thèmes.',
         'manage_theme_options' => 'Gérer les options de personnalisation du thème actif',
     ],
     'theme_log' => [

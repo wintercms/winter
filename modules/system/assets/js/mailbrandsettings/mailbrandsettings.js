@@ -19,6 +19,11 @@ function adjustPreviewHeight() {
 function createPreviewContainer(el, content) {
     previewIframe = document.createElement('iframe')
 
+    // Each token is load-bearing: allow-same-origin so adjustPreviewHeight() can read the
+    // document, and the two popup tokens so the sample message's target="_blank" button can
+    // open a tab that does not inherit this sandbox.
+    previewIframe.setAttribute('sandbox', 'allow-same-origin allow-popups allow-popups-to-escape-sandbox')
+
     updatePreviewContent(content)
 
     previewIframe.style.width = '100%'

@@ -6,6 +6,7 @@ use Request;
 use Form as FormHelper;
 use Backend\Classes\ControllerBehavior;
 use Winter\Storm\Database\Model;
+use Winter\Storm\Database\Models\DeferredBinding;
 use ApplicationException;
 
 /**
@@ -299,6 +300,16 @@ class RelationController extends ControllerBehavior
         $this->initialized = true;
     }
 
+    /**
+     * Abort the request with an access-denied code if the relation is read only
+     */
+    protected function abortIfReadOnly(): void
+    {
+        if ($this->readOnly) {
+            abort(403);
+        }
+    }
+
     //
     // Interface
     //
@@ -358,7 +369,7 @@ class RelationController extends ControllerBehavior
 
         $this->manageId = post('manage_id');
         $this->foreignId = post('foreign_id');
-        $this->readOnly = $this->getConfig('readOnly');
+        $this->readOnly = (bool) $this->getConfig('readOnly');
         $this->deferredBinding = $this->getConfig('deferredBinding') || !$this->model->exists;
         $this->viewMode = $this->evalViewMode();
         $this->manageMode = $this->evalManageMode();
@@ -562,6 +573,76 @@ class RelationController extends ControllerBehavior
         return $this->sessionKey = FormHelper::getSessionKey();
     }
 
+    /**
+     * Present a sortable relation's records in their stored order while operating in
+     * deferred mode.
+     *
+     * When the relation is deferred, withDeferred() builds the query in "orphan" mode and
+     * cannot order by (or even surface) the pivot sort column. The sort order therefore has
+     * to be resolved in PHP from the deferred_bindings pivot_data (which overrides any
+     * already-committed pivot rows), written onto each record's in-memory pivot, and the
+     * collection re-sorted. This keeps the Lists widget completely relation-agnostic - it
+     * just reads the pivot[sort_order] path as usual.
+     */
+    protected function applyDeferredRelationOrder($records)
+    {
+        if (!$this->deferredBinding || !$this->model->isSortableRelation($this->relationName)) {
+            return $records;
+        }
+
+        $column = $this->model->getRelationSortOrderColumn($this->relationName);
+        $sessionKey = $this->relationGetSessionKey();
+        $map = [];
+
+        /*
+         * Committed pivot rows (none when the parent record does not yet exist).
+         */
+        if ($this->model->exists) {
+            $relation = $this->model->{$this->relationName}();
+            $query = Db::table($relation->getTable())
+                ->where($relation->getForeignPivotKeyName(), $this->model->getKey());
+
+            // Constrain morphToMany pivots by the parent morph type.
+            if (method_exists($relation, 'getMorphType') && method_exists($relation, 'getMorphClass')) {
+                $query->where($relation->getMorphType(), $relation->getMorphClass());
+            }
+
+            $map = $query
+                ->pluck($column, $relation->getRelatedPivotKeyName())
+                ->map(function ($value) {
+                    return (int) $value;
+                })
+                ->all();
+        }
+
+        /*
+         * Deferred "bind" rows override the committed order.
+         */
+        $bindings = DeferredBinding::where('master_type', get_class($this->model))
+            ->where('master_field', $this->relationName)
+            ->where('session_key', $sessionKey)
+            ->where('is_bind', 1)
+            ->get();
+
+        foreach ($bindings as $binding) {
+            $pivotData = $binding->pivot_data ?: [];
+            if (array_key_exists($column, $pivotData)) {
+                $map[$binding->slave_id] = (int) $pivotData[$column];
+            }
+        }
+
+        foreach ($records as $record) {
+            if (array_key_exists($record->getKey(), $map)) {
+                $record->pivot->{$column} = $map[$record->getKey()];
+            }
+        }
+
+        return $records->sortBy(function ($record) use ($column) {
+            // Deferred records not yet assigned an order sort to the end.
+            return $record->pivot->{$column} ?? PHP_INT_MAX;
+        })->values();
+    }
+
     //
     // Widgets
     //
@@ -613,9 +694,7 @@ class RelationController extends ControllerBehavior
         $useSearch = $this->viewMode === 'multi' && $this->getConfig('view[showSearch]');
 
         if ($useSearch) {
-            $toolbarConfig->search = [
-                'prompt' => 'backend::lang.list.search_prompt'
-            ];
+            $toolbarConfig->search = $this->getSearchConfig('view[search]');
         }
 
         /*
@@ -631,16 +710,29 @@ class RelationController extends ControllerBehavior
         return $toolbarWidget;
     }
 
+    protected function getSearchConfig($key)
+    {
+        $config = $this->getConfig($key);
+        $searchConfig = $this->makeConfig();
+
+        $searchConfig->prompt = array_get($config, 'prompt', 'backend::lang.list.search_prompt');
+        $searchConfig->mode = array_get($config, 'mode', 'all');
+        $searchConfig->scope = array_get($config, 'scope');
+        $searchConfig->searchOnEnter = array_get($config, 'searchOnEnter', false);
+
+        return $searchConfig;
+    }
+
     protected function makeSearchWidget()
     {
         if (!$this->getConfig('manage[showSearch]')) {
             return null;
         }
 
-        $config = $this->makeConfig();
+        $config = $this->getSearchConfig('manage[search]');
         $config->alias = $this->alias . 'ManageSearch';
         $config->growable = false;
-        $config->prompt = 'backend::lang.list.search_prompt';
+
         $widget = $this->makeWidget('Backend\Widgets\Search', $config);
         $widget->cssClasses[] = 'recordfinder-search';
 
@@ -671,6 +763,13 @@ class RelationController extends ControllerBehavior
             $config->recordsPerPage = $this->getConfig('view[recordsPerPage]');
             $config->showPageNumbers = $this->getConfig('view[showPageNumbers]', true);
             $config->showCheckboxes = $this->getConfig('view[showCheckboxes]', !$this->readOnly);
+            /*
+             * Whole-query selection is not available on relation lists: the relation handlers
+             * resolve their records from post('checked'), and relationRefresh() replaces the
+             * element the selection state lives on, so the banner would promise records that
+             * no action would touch.
+             */
+            $config->selectAllMatching = false;
             $config->recordUrl = $this->getConfig('view[recordUrl]');
             $config->customViewPath = $this->getConfig('view[customViewPath]');
             $config->noRecordsMessage = $this->getConfig('view[noRecordsMessage]');
@@ -698,7 +797,69 @@ class RelationController extends ControllerBehavior
                 $config->noRecordsMessage = $emptyMessage;
             }
 
+            /*
+             * Drag-and-drop reordering - requires the parent model to use the
+             * HasSortableRelations trait and to declare this relation in $sortableRelations.
+             */
+            $sortable = $this->getConfig('view[sortable]', false);
+            if ($sortable) {
+                if (
+                    !in_array(\Winter\Storm\Database\Traits\HasSortableRelations::class, class_uses_recursive($this->model))
+                    || !$this->model->isSortableRelation($this->relationName)
+                ) {
+                    throw new ApplicationException(sprintf(
+                        'To use "sortable" on the "%s" relation, the model "%s" must use the %s trait and declare the relation in $sortableRelations.',
+                        $this->relationName,
+                        get_class($this->model),
+                        \Winter\Storm\Database\Traits\HasSortableRelations::class
+                    ));
+                }
+
+                /*
+                 * Drag-and-drop reordering presents every record in a single fixed order, so it
+                 * cannot coexist with features that show a partial or re-ordered view. Reject
+                 * those combinations up front rather than silently producing a wrong order.
+                 */
+                $conflicts = array_keys(array_filter([
+                    'showSearch'     => $this->getConfig('view[showSearch]'),
+                    'filter'         => $this->getConfig('view[filter]'),
+                    'recordsPerPage' => $this->getConfig('view[recordsPerPage]'),
+                    'defaultSort'    => $this->getConfig('view[defaultSort]'),
+                ]));
+                if ($conflicts) {
+                    throw new ApplicationException(sprintf(
+                        'The "%s" relation cannot combine "sortable" with: %s. Drag-and-drop reordering requires the whole relation in a fixed order. Remove these options, or use the ReorderController for a dedicated reordering page.',
+                        $this->relationName,
+                        implode(', ', $conflicts)
+                    ));
+                }
+
+                $config->sortable = true;
+            }
+
             $widget = $this->makeWidget('Backend\Widgets\Lists', $config);
+
+            /*
+             * Persist reordering and, in deferred mode, present records in their dragged order.
+             */
+            if ($sortable) {
+                $widget->bindEvent('list.reorder', function ($ids, $orders) {
+                    /*
+                     * Reordering writes to the relation, so it follows readOnly like every other
+                     * relation write. The refusal belongs here rather than on the list's
+                     * `sortable` flag, which also decides whether the list presents the records
+                     * in the relation's stored order or applies a sort order of its own.
+                     */
+                    $this->abortIfReadOnly();
+
+                    $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey() : null;
+                    $this->model->setRelationOrder($this->relationName, $ids, $orders, $sessionKey);
+                });
+
+                $widget->bindEvent('list.extendRecords', function ($records) {
+                    return $this->applyDeferredRelationOrder($records);
+                });
+            }
 
             /*
              * Apply defined constraints
@@ -745,6 +906,17 @@ class RelationController extends ControllerBehavior
                     || $this->relationType === 'morphedByMany'
                 ) {
                     $this->relationObject->setQuery($query->getQuery());
+
+                    /*
+                     * In deferred mode withDeferred() builds the query in "orphan" mode with no
+                     * pivot join, so the relation's pivot-based order clause is invalid SQL.
+                     * Sortable relations are ordered in PHP instead (applyDeferredRelationOrder()).
+                     */
+                    if ($sessionKey && $this->getConfig('view[sortable]', false)) {
+                        $query->reorder();
+                        $this->relationObject->reorder();
+                    }
+
                     return $this->relationObject;
                 }
             });
@@ -759,6 +931,11 @@ class RelationController extends ControllerBehavior
                     $widget->setSearchTerm($searchWidget->getActiveTerm());
                     return $widget->onRefresh();
                 });
+
+                $widget->setSearchOptions([
+                    'mode' => $searchWidget->mode,
+                    'scope' => $searchWidget->scope,
+                ]);
 
                 /*
                  * Persist the search term across AJAX requests only
@@ -818,6 +995,13 @@ class RelationController extends ControllerBehavior
             $config->alias = $this->alias . 'ManageList';
             $config->showSetup = $this->getConfig('manage[showSetup]', !$isPivot);
             $config->showCheckboxes = $this->getConfig('manage[showCheckboxes]', !$isPivot);
+            /*
+             * Whole-query selection is not available on relation lists: the relation handlers
+             * resolve their records from post('checked'), and relationRefresh() replaces the
+             * element the selection state lives on, so the banner would promise records that
+             * no action would touch.
+             */
+            $config->selectAllMatching = false;
             $config->showSorting = $this->getConfig('manage[showSorting]', !$isPivot);
             $config->defaultSort = $this->getConfig('manage[defaultSort]');
             $config->recordsPerPage = $this->getConfig('manage[recordsPerPage]');
@@ -878,6 +1062,11 @@ class RelationController extends ControllerBehavior
                     return $widget->onRefresh();
                 });
 
+                $widget->setSearchOptions([
+                    'mode' => $this->searchWidget->mode,
+                    'scope' => $this->searchWidget->scope,
+                ]);
+
                 /*
                  * Persist the search term across AJAX requests only
                  */
@@ -915,7 +1104,7 @@ class RelationController extends ControllerBehavior
              * Existing record
              */
             if ($this->manageId) {
-                $model = $config->model->find($this->manageId);
+                $model = $this->relationFindModel($this->manageId);
                 if ($model) {
                     $config->model = $model;
                 } else {
@@ -927,6 +1116,7 @@ class RelationController extends ControllerBehavior
             }
 
             $widget = $this->makeWidget('Backend\Widgets\Form', $config);
+            $widget->previewMode = $this->readOnly;
         }
 
         if (!$widget) {
@@ -981,21 +1171,27 @@ class RelationController extends ControllerBehavior
          */
         else {
             if ($this->foreignId) {
-                $foreignModel = $this->relationModel
-                    ->whereIn($foreignKeyName, (array) $this->foreignId)
-                    ->first();
+                $foreignModel = $this->relationFindAddableModels((array) $this->foreignId)->first();
 
-                if ($foreignModel) {
-                    $foreignModel->exists = false;
-                    $config->model = $foreignModel;
+                if (!$foreignModel) {
+                    throw new ApplicationException(Lang::get('backend::lang.model.not_found', [
+                        'class' => get_class($config->model),
+                        'id' => is_array($this->foreignId) ? implode(', ', $this->foreignId) : $this->foreignId,
+                    ]));
                 }
+
+                $foreignModel->exists = false;
+                $config->model = $foreignModel;
             }
 
             $pivotModel = $this->relationObject->newPivot();
             $config->model->setRelation('pivot', $pivotModel);
         }
 
-        return $this->makeWidget('Backend\Widgets\Form', $config);
+        $widget = $this->makeWidget('Backend\Widgets\Form', $config);
+        $widget->previewMode = $this->readOnly;
+
+        return $widget;
     }
 
     //
@@ -1098,6 +1294,7 @@ class RelationController extends ControllerBehavior
     {
         $this->forceManageMode = 'form';
         $this->beforeAjax();
+        $this->abortIfReadOnly();
         $saveData = $this->manageWidget->getSaveData();
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey(true) : null;
 
@@ -1187,6 +1384,7 @@ class RelationController extends ControllerBehavior
     {
         $this->forceManageMode = 'form';
         $this->beforeAjax();
+        $this->abortIfReadOnly();
         $saveData = $this->manageWidget->getSaveData();
 
         if ($this->viewMode === 'multi') {
@@ -1216,17 +1414,14 @@ class RelationController extends ControllerBehavior
     public function onRelationManageDelete()
     {
         $this->beforeAjax();
+        $this->abortIfReadOnly();
 
         /*
          * Multiple (has many, belongs to many)
          */
         if ($this->viewMode === 'multi') {
             if (($checkedIds = post('checked')) && is_array($checkedIds)) {
-                foreach ($checkedIds as $relationId) {
-                    if (!$obj = $this->relationModel->find($relationId)) {
-                        continue;
-                    }
-
+                foreach ($this->relationFindModels($checkedIds) as $obj) {
                     $obj->delete();
                 }
             }
@@ -1255,7 +1450,13 @@ class RelationController extends ControllerBehavior
      */
     public function onRelationManageAdd()
     {
+        /*
+         * The records are picked from the manage list, so the manage list is what decides
+         * which records may be added. Build it whatever mode the browser posted.
+         */
+        $this->forceManageMode = 'list';
         $this->beforeAjax();
+        $this->abortIfReadOnly();
 
         $recordId = post('record_id');
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey() : null;
@@ -1272,10 +1473,8 @@ class RelationController extends ControllerBehavior
                  */
                 $existingIds = $this->findExistingRelationIds($checkedIds);
                 $checkedIds = array_diff($checkedIds, $existingIds);
-                $foreignKeyName = $this->relationModel->getKeyName();
 
-                $models = $this->relationModel->whereIn($foreignKeyName, $checkedIds)->get();
-                foreach ($models as $model) {
+                foreach ($this->relationFindAddableModels($checkedIds) as $model) {
                     $this->relationObject->add($model, $sessionKey);
                 }
             }
@@ -1284,7 +1483,7 @@ class RelationController extends ControllerBehavior
          * Link
          */
         elseif ($this->viewMode === 'single') {
-            if ($recordId && ($model = $this->relationModel->find($recordId))) {
+            if ($recordId && ($model = $this->relationFindAddableModels([$recordId])->first())) {
                 if ($this->relationType === 'hasOne') {
                     // Unassign previous relation if one is already assigned
                     $relation = $this->relationObject->getParent()->{$this->relationName} ?? null;
@@ -1319,10 +1518,10 @@ class RelationController extends ControllerBehavior
     public function onRelationManageRemove()
     {
         $this->beforeAjax();
+        $this->abortIfReadOnly();
 
         $recordId = post('record_id');
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey() : null;
-        $relatedModel = $this->relationModel;
 
         /*
          * Remove
@@ -1331,10 +1530,7 @@ class RelationController extends ControllerBehavior
             $checkedIds = $recordId ? [$recordId] : post('checked');
 
             if (is_array($checkedIds)) {
-                $foreignKeyName = $relatedModel->getKeyName();
-
-                $models = $relatedModel->whereIn($foreignKeyName, $checkedIds)->get();
-                foreach ($models as $model) {
+                foreach ($this->relationFindModels($checkedIds) as $model) {
                     $this->relationObject->remove($model, $sessionKey);
                 }
             }
@@ -1354,7 +1550,7 @@ class RelationController extends ControllerBehavior
                 }
             }
             elseif ($this->relationType === 'hasOne' || $this->relationType === 'morphOne') {
-                if ($obj = $relatedModel->find($recordId)) {
+                if ($obj = $this->relationFindModel($recordId)) {
                     $this->relationObject->remove($obj, $sessionKey);
                 }
                 elseif ($this->viewModel->exists) {
@@ -1392,6 +1588,7 @@ class RelationController extends ControllerBehavior
     public function onRelationManagePivotCreate()
     {
         $this->beforeAjax();
+        $this->abortIfReadOnly();
 
         /*
          * If the pivot model fails for some reason, abort the sync
@@ -1402,7 +1599,7 @@ class RelationController extends ControllerBehavior
              */
             $foreignIds = (array) $this->foreignId;
             $saveData = $this->pivotWidget->getSaveData();
-            $foreignModels = $this->relationModel->whereIn($this->relationModel->getKeyName(), $foreignIds)->get();
+            $foreignModels = $this->relationFindAddableModels($foreignIds);
             $this->relationObject->syncWithPivotValues($foreignModels, $saveData['pivot'] ?? [], false);
 
             /*
@@ -1425,15 +1622,20 @@ class RelationController extends ControllerBehavior
     public function onRelationManagePivotUpdate()
     {
         $this->beforeAjax();
+        $this->abortIfReadOnly();
 
-        $foreignKeyName = $this->relationModel->getQualifiedKeyName();
         $hydratedModel = $this->pivotWidget->model;
         $saveData = $this->pivotWidget->getSaveData();
 
-        $modelsToSave = $this->prepareModelsToSave($hydratedModel, $saveData);
-        foreach ($modelsToSave as $modelToSave) {
-            $modelToSave->save(null, $this->pivotWidget->getSessionKey());
-        }
+        /*
+         * If any of the models fail to save, abort the whole update
+         */
+        Db::transaction(function () use ($hydratedModel, $saveData) {
+            $modelsToSave = $this->prepareModelsToSave($hydratedModel, $saveData);
+            foreach ($modelsToSave as $modelToSave) {
+                $modelToSave->save(null, $this->pivotWidget->getSessionKey());
+            }
+        });
 
         return ['#'.$this->relationGetId('view') => $this->relationRenderView()];
     }
@@ -1519,6 +1721,82 @@ class RelationController extends ControllerBehavior
     //
     // Helpers
     //
+
+    /**
+     * Returns a query constrained to the records the relation manager is currently showing:
+     * the relation's own records, or - while deferred - the records bound to the active
+     * session key. Mirrors the constraints applied to the view list widget.
+     */
+    protected function relationScopedQuery()
+    {
+        $query = $this->model->{$this->relationName}();
+
+        if ($this->deferredBinding) {
+            return $query->withDeferred($this->relationGetSessionKey());
+        }
+
+        return $query;
+    }
+
+    /**
+     * Finds a single record within the relation by its key, returning null when the key does
+     * not belong to the relation.
+     *
+     * Handlers that operate on an existing related record must resolve it through here: the
+     * key arrives from the request, so looking it up on the related model directly lets any
+     * record of that class be addressed. Handlers whose purpose is to attach a record that is
+     * not related yet (add / link / pivot create) cannot use the relation as their scope, and
+     * use relationFindAddableModels() instead.
+     */
+    protected function relationFindModel($recordId)
+    {
+        if (!$recordId) {
+            return null;
+        }
+
+        return $this->relationScopedQuery()->find($recordId);
+    }
+
+    /**
+     * Finds the records within the relation matching the supplied keys, dropping any key that
+     * does not belong to the relation.
+     * @see static::relationFindModel()
+     */
+    protected function relationFindModels(array $recordIds)
+    {
+        if (!count($recordIds)) {
+            return $this->relationModel->newCollection();
+        }
+
+        return $this->relationScopedQuery()
+            ->whereIn($this->relationModel->getQualifiedKeyName(), $recordIds)
+            ->get();
+    }
+
+    /**
+     * Finds the records that may be added to the relation from the supplied keys, dropping any
+     * key the relation manager does not offer.
+     *
+     * Attaching has to reach outside the relation - that is its purpose - so the relation
+     * cannot be its scope. The manage list is: `manage[conditions]`, `manage[scope]` (which
+     * receives the parent) and `relationExtendManageWidget()` narrow it, so resolving through
+     * it makes what the relation manager accepts the same as what it offers.
+     *
+     * Keys are validated against the list query, then loaded from the related model, since the
+     * list query selects the extra columns its display needs.
+     */
+    protected function relationFindAddableModels(array $recordIds)
+    {
+        $keyName = $this->relationModel->getQualifiedKeyName();
+
+        $addableIds = $this->manageWidget
+            ->prepareQuery()
+            ->whereIn($keyName, $recordIds)
+            ->get()
+            ->modelKeys();
+
+        return $this->relationModel->whereIn($keyName, $addableIds)->get();
+    }
 
     /**
      * Returns the existing record IDs for the relation.
@@ -1696,12 +1974,16 @@ class RelationController extends ControllerBehavior
      */
     protected function evalManageMode()
     {
-        if ($mode = post(self::PARAM_MODE)) {
-            return $mode;
-        }
-
+        /*
+         * A handler forces a mode because it can only operate in that mode; the posted mode is
+         * supplied by the browser and must not be able to override it.
+         */
         if ($this->forceManageMode) {
             return $this->forceManageMode;
+        }
+
+        if ($mode = post(self::PARAM_MODE)) {
+            return $mode;
         }
 
         switch ($this->eventTarget) {
@@ -1782,7 +2064,14 @@ class RelationController extends ControllerBehavior
             return;
         }
 
-        $parsedConfig = array_only($config, ['readOnly']);
+        /*
+         * The extra configuration round trips through the browser, which returns it with every
+         * relation AJAX request, so it cannot decide whether the relation is writable in either
+         * direction. readOnly is taken from the relation configuration alone, by initRelation(),
+         * and enforced server side by abortIfReadOnly(); a readOnly passed to relationRender()
+         * styles that one render and is not remembered.
+         */
+        $parsedConfig = [];
         $parsedConfig['view'] = array_only($config, ['recordUrl', 'recordOnClick']);
 
         $this->originalConfig->{$field} = array_replace_recursive(

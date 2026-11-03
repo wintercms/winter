@@ -45,7 +45,7 @@ class File extends FileBase
     /**
      * {@inheritDoc}
      */
-    public function getPath($fileName = null)
+    public function getPath(?string $fileName = null): string
     {
         $url = '';
         if (!$this->isPublic() && class_exists(Files::class)) {
@@ -60,7 +60,7 @@ class File extends FileBase
     /**
      * Define the public address for the storage path.
      */
-    public function getPublicPath()
+    public function getPublicPath(): string
     {
         $uploadsPath = Config::get('cms.storage.uploads.path', '/storage/app/uploads');
 
@@ -77,7 +77,7 @@ class File extends FileBase
     /**
      * Define the internal storage path.
      */
-    public function getStorageDirectory()
+    public function getStorageDirectory(): string
     {
         $uploadsFolder = Config::get('cms.storage.uploads.folder');
 
@@ -89,11 +89,10 @@ class File extends FileBase
     }
 
     /**
-     * Returns the storage disk the file is stored on
-     * @return FilesystemAdapter
+     * Returns the name of the storage disk the file is stored on
      */
-    public function getDisk()
+    public function getDiskName(): string
     {
-        return Storage::disk(Config::get('cms.storage.uploads.disk'));
+        return Config::get('cms.storage.uploads.disk');
     }
 }

@@ -24,15 +24,16 @@ foreach ($availableOptions as $key => $option) {
         <input
             type="hidden"
             name="<?= $field->getName() ?>[]"
-            value="<?= $option ?>">
+            value="<?= htmlspecialchars((string) $option, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
         <?php endforeach ?>
     <?php else: ?>
         <input
             type="hidden"
-            name="<?= $field->getName() ?>"
-            value="<?= $field->value ?>">
+            name="<?= $field->getName() ?>[]"
+            value="<?= htmlspecialchars((string) $field->value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
     <?php endif ?>
 <?php else: ?>
+    <input type="hidden" name="<?= $field->getName() ?>[]">
     <select
         id="<?= $field->getId() ?>"
         name="<?= $field->getName() ?>[]"

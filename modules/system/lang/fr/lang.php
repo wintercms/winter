@@ -5,7 +5,6 @@ return [
         'name' => 'Winter CMS',
         'tagline' => 'Retourner à l\'essentiel',
     ],
-
     'directory' => [
         'create_fail' => "Impossible de créer le répertoire : :name",
     ],
@@ -14,6 +13,7 @@ return [
     ],
     'combiner' => [
         'not_found' => "Le fichier combiné ':name' est introuvable.",
+        'error' => 'Impossible de générer le fichier combiné.',
     ],
     'system' => [
         'name' => 'Système',
@@ -28,9 +28,11 @@ return [
             'users' => 'Utilisateurs',
             'system' => 'Système',
             'social' => 'Social',
+            'backend' => 'Backend',
             'events' => 'Évènements',
             'customers' => 'Clients',
             'my_settings' => 'Mes réglages',
+            'notifications' => 'Notifications',
         ]
     ],
     'theme' => [
@@ -124,6 +126,9 @@ return [
         'search' => 'Rechercher'
     ],
     'mail' => [
+        'failover' => 'Services de secours',
+        'failover_mailers' => 'Services e-mail de secours à utiliser',
+        'failover_mailers_placeholer' => 'Choisir les services mails à utiliser en secours',
         'log_file' => 'Fichier journal',
         'menu_label' => 'Configuration des adresses e-mails',
         'menu_description' => 'Gérer la configuration des adresses e-mails.',
@@ -352,6 +357,28 @@ return [
         'message' => 'Message',
         'level' => 'Niveau',
         'preview_title' => 'Évènement',
+        'details' => [
+            'http_method' => 'Méthode HTTP',
+            'url' => 'URL',
+            'user_agent' => 'Agent utilisateur',
+            'client_ip' => 'IP du client',
+            'context' => 'Contexte',
+            'environment' => 'Environnement',
+            'backend' => 'Backend',
+            'testing' => 'Test',
+            'exception_context' => 'Contexte de l\'exception',
+            'exception_app_env' => 'Environnement de l\'exception',
+            'exception_encountered_backend' => 'Exception rencontrée dans le Backend',
+            'exception_encountered_unit_test' => 'Exception rencontrée lors du test unitaire',
+            'oldest_first' => 'Les plus anciens en premier',
+            'newest_first' => 'Les plus récents en premier',
+            'exception_index' => 'Index de l\'exception',
+            'exception' => 'Exception',
+            'exception_code' => 'Code de l\'exception',
+            'code' => 'Code',
+            'stack_trace' => 'Trace de la pile <small>(:count frames)</small>',
+            'in_app' => 'Dans l\'application',
+        ],
     ],
     'request_log' => [
         'hint' => 'Ce journal affiche une liste de requêtes potentiellement suspectes. Par exemple, si un visiteur ouvre une page introuvable du CMS, une ligne avec le code statut 404 est alors créée.',
@@ -377,13 +404,18 @@ return [
         'manage_mail_templates' => 'Gérer les modèles des e-mails',
         'manage_mail_settings' => 'Gérer les paramètres des e-mail',
         'manage_other_administrators' => 'Gérer les autres administrateurs',
+        'manage_other_administrators_comment' => 'Permet à l\'utilisateur de créer, mettre à jour et supprimer d\'autres comptes administrateurs. Cette autorisation ne doit être accordée qu\'à des utilisateurs de confiance.',
         'impersonate_users' => 'Usurper l\'identité des utilisateurs',
+        'impersonate_users_comment' => 'Permet à l\'utilisateur d\'usurper l\'identité d\'autres utilisateurs à leur niveau d\'accès. Cette autorisation ne doit être accordée qu\'à des utilisateurs de confiance.',
         'manage_preferences' => 'Gérer les préférences de l\'interface d\'administration',
         'manage_editor' => 'Gérer les préférences de l\'éditeur de code',
+        'manage_editor_comment' => 'Cette autorisation permet à l\'utilisateur de personnaliser les préférences globales de l\'éditeur de code, y compris le contenu CSS personnalisé qui est rendu dans le back-end. Cela peut représenter un risque de sécurité si accordé à un utilisateur non fiable.',
         'manage_own_editor' => 'Gérer les préférences personnelles de l\'éditeur de code',
         'view_the_dashboard' => 'Voir le tableau de bord',
         'manage_default_dashboard' => 'Gérer le tableau de bord par défaut',
-        'manage_branding' => 'Personnaliser l\'interface d\'administration'
+        'manage_default_dashboard_comment' => 'Cette autorisation permet à l\'utilisateur de modifier le tableau de bord par défaut, y compris la configuration des widgets de rapport, qui est affiché à tous les autres utilisateurs du back-end. Cela peut représenter un risque de sécurité si accordé à un utilisateur non fiable.',
+        'manage_branding' => 'Personnaliser l\'interface d\'administration',
+        'manage_branding_comment' => 'Cette autorisation permet à l\'utilisateur de personnaliser l\'apparence du back-end, y compris le contenu CSS personnalisé. Cela peut représenter un risque de sécurité si accordé à un utilisateur non fiable.'
     ],
     'log' => [
         'menu_label' => 'Paramètres du journal',
@@ -417,5 +449,11 @@ return [
     'pagination' => [
         'previous' => 'Précédente',
         'next' => 'Suivante',
+    ],
+    'datetime' => [
+        'today' => 'Aujourd\'hui',
+        'yesterday' => 'Hier',
+        'tomorrow' => 'Demain',
+        'at' => ':date à :time',
     ],
 ];

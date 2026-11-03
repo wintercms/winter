@@ -1,0 +1,60 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/debian
+{
+    "name": "Winter on PHP 8.4",
+    "image": "ghcr.io/wintercms/winter:latest",
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": true,
+            "configureZshAsDefaultShell": true,
+            "username": "winter",
+            "upgradePackages": false
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        // Comment the following feature if you wish to bootstrap and configure Winter manually (ie. you wish to use this for your own project)
+        "./local-features/bootstrap-winter": "latest"
+    },
+    "workspaceMount": "source=${localWorkspaceFolder},target=/winter,type=bind",
+    "workspaceFolder": "/winter",
+    "containerEnv": {
+        "APP_DEBUG": "true",
+        "XDEBUG_MODE": "debug",
+        "ROUTES_CACHE": "false",
+        "ASSET_CACHE": "false",
+        "DB_CONNECTION": "sqlite",
+        "DB_DATABASE": "${containerWorkspaceFolder}/storage/database.sqlite"
+    },
+    "forwardPorts": [8000],
+    "portsAttributes": {
+        "8000": {
+            "label": "Preview Winter installation",
+            "onAutoForward": "openPreview"
+        },
+        "9003": {
+            "label": "Xdebug",
+            "onAutoForward": "notify"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "php.validate.executablePath": "/usr/local/bin/php",
+                "phpcs.executablePath": "${containerWorkspaceFolder}/vendor/bin/phpcs"
+            },
+            "extensions": [
+                "xdebug.php-debug",
+                "bmewburn.vscode-intelephense-client",
+                "shevaua.phpcs",
+                "swordev.phpstan",
+                "wintercms.winter-cms"
+            ]
+        },
+        "codespaces": {
+            "openFiles": [
+                ".devcontainer/README.md"
+            ]
+        }
+    },
+    "postAttachCommand": "nohup ${containerWorkspaceFolder}/.devcontainer/run-frankenphp.sh > /dev/null 2>&1",
+    "remoteUser": "winter"
+}

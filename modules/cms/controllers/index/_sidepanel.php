@@ -64,7 +64,7 @@
                     <?= $this->widget->assetList->render() ?>
                 </form>
             <?php endif ?>
-            <?php if ($this->user->hasAccess(['cms.manage_pages', 'cms.manage_layouts', 'cms.manage_partials'])): ?>
+            <?php if ($this->user->hasAccess(['cms.manage_pages', 'cms.manage_layouts', 'cms.manage_partials'], false)): ?>
                 <!-- Components -->
                 <form
                     role="form"

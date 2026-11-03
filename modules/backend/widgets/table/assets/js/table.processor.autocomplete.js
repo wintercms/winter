@@ -61,8 +61,6 @@
      */
     AutocompleteProcessor.prototype.renderCell = function(value, cellContentContainer) {
         BaseProto.renderCell.call(this, value, cellContentContainer)
-
-        // this.fetchOptions(cellContentContainer.parentNode)
     }
 
     AutocompleteProcessor.prototype.buildEditor = function(cellElement, cellContentContainer, isClick) {

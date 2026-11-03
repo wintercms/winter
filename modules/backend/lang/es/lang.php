@@ -195,6 +195,7 @@ return [
         'not_found' => 'El registro del formulario con un ID de :id no se pudo encontrar.',
         'action_confirm' => '¿Está usted seguro?',
         'create' => 'Crear',
+        'create_and_new' => 'Crear y nuevo',
         'create_and_close' => 'Crear y cerrar',
         'creating' => 'Creando...',
         'creating_name' => 'Creando :name...',

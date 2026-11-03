@@ -125,7 +125,6 @@
     <file>config/</file>
     <file>modules/</file>
     <file>plugins/winter/demo/</file>
-    <file>tests/</file>
 
     <!-- Ignore vendor files -->
     <exclude-pattern>*/vendor/*</exclude-pattern>
@@ -134,5 +133,5 @@
     <!-- Ignore this view file as PHPCS wants line 8 to have 44 spaces instead of 12, clearly insane -->
     <exclude-pattern>modules/backend/widgets/mediamanager/partials/_item-icon.php</exclude-pattern>
     <!-- Ignore this test case completely as it's testing a parse error -->
-    <exclude-pattern>tests/fixtures/plugins/testvendor/goto/Plugin.php</exclude-pattern>
+    <exclude-pattern>modules/system/tests/fixtures/plugins/testvendor/goto/Plugin.php</exclude-pattern>
 </ruleset>

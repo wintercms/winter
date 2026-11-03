@@ -3,10 +3,10 @@
 // --------------------------------------------------
 
 // Dupe
-@body-bg:               #f9f9f9;
+@body-bg:               var(--wn-surface-canvas, #f9f9f9);
 
 @text-color:            @gray-dark;
-@link-color:            #0181b9;
+@link-color:            @brand-secondary;
 @link-hover-color:      darken(@link-color, 30%);
 
 @link-hover-decoration: underline;
@@ -98,20 +98,27 @@
 //
 // Colors
 // --------------------------------------------------
-@brand-primary:          #34495e;
-@brand-secondary:        #e67e22;
-@brand-accent:           #3498db;
-@brand-success:          #31ac5f;
-@brand-info:             #5bc0de;
-@brand-warning:          #f0ad4e;
-@brand-danger:           #ab2a1c;
+@brand-primary:          #103141;
+@brand-secondary:        #2da7c7;
+@brand-accent:           #6cc551;
+@brand-primary-lighter:  lighten(@brand-primary, 5%);
+@brand-secondary-lighter:lighten(@brand-secondary, 5%);
+@brand-accent-lighter:   lighten(@brand-accent, 5%);
+@brand-primary-darker:   darken(@brand-primary, 5%);
+@brand-secondary-darker: darken(@brand-secondary, 5%);
+@brand-accent-darker:    darken(@brand-accent, 5%);
 
-@color-text-title:       #405261;
-@color-text-description: #8f8f8f;
+@brand-success:          #52a838;
+@brand-info:             #48b9d5;
+@brand-warning:          #de8754;
+@brand-danger:           #e01346;
+
+@color-text-title:       var(--wn-text, #405261);
+@color-text-description: var(--wn-text-secondary, #8f8f8f);
 
 @color-focus:            @brand-primary;
-@color-border:           #cccccc;
-@color-border-light:     #e1e1e1;
+@color-border:           var(--wn-border, #cccccc);
+@color-border-light:     var(--wn-border-subtle, #e1e1e1);
 
 @gray-darker:            lighten(#000, 13.5%); // #222
 @gray-dark:              lighten(#000, 20%);   // #333
@@ -139,11 +146,11 @@
 // Highlights
 // --------------------------------------------------
 
-@highlight-hover-bg: mix(white, @brand-accent, 13%);
-@highlight-hover-text: #fff;
+@highlight-hover-bg: mix(white, @brand-secondary, 13%);
+@highlight-hover-text: var(--wn-highlight-hover-text, #fff);
 
 @highlight-active-bg: @brand-accent;
-@highlight-active-text: #fff;
+@highlight-active-text: var(--wn-highlight-active-text, #fff);
 
 //
 // General
@@ -169,7 +176,7 @@
 @border-radius-large:       6px;
 @border-radius-small:       3px;
 
-@component-active-color:    #fff;
+@component-active-color:    var(--wn-text-inverse, #fff);
 @component-active-bg:       @brand-primary;
 
 @caret-width-base:          4px;

@@ -164,13 +164,29 @@
 
     /*
      * Refresh a dependancy field
-     * Uses a throttle to prevent duplicate calls and click spamming
+     * Uses a throttle to prevent duplicate calls and click spamming.
+     *
+     * The event parameter is passed automatically by jQuery as the third
+     * argument (after the two preset arguments from $.proxy). It carries
+     * a cascadeChain array that tracks which fields have already been
+     * refreshed in the current cascade, preventing infinite loops when
+     * fields have circular dependsOn declarations.
      */
-    FormWidget.prototype.onRefreshDependants = function(fieldName, toRefresh) {
+    FormWidget.prototype.onRefreshDependants = function(fieldName, toRefresh, event) {
         var self = this,
             form = this.$el,
             formEl = this.$form,
-            fieldElements = this.getFieldElements()
+            fieldElements = this.getFieldElements(),
+            cascadeChain = (event && event.cascadeChain) || []
+
+        /*
+         * If this field already appears in the cascade chain, we have
+         * a circular dependency. Stop the cascade to prevent an
+         * infinite loop. See: https://github.com/wintercms/winter/issues/421
+         */
+        if (cascadeChain.indexOf(fieldName) !== -1) {
+            return
+        }
 
         if (this.dependantUpdateTimers[fieldName] !== undefined) {
             window.clearTimeout(this.dependantUpdateTimers[fieldName])
@@ -186,8 +202,12 @@
                 data: refreshData
             }).success(function() {
                 self.toggleEmptyTabs()
+
+                var newChain = cascadeChain.concat([fieldName])
                 $.each(toRefresh.fields, function(key, field) {
-                    $('[data-field-name="' + field + '"]').trigger('change')
+                    var cascadeEvent = $.Event('change')
+                    cascadeEvent.cascadeChain = newChain
+                    $('[data-field-name="' + field + '"]').trigger(cascadeEvent)
                 })
             })
         }, this.dependantUpdateInterval)

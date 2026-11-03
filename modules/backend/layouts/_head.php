@@ -1,7 +1,7 @@
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0, minimal-ui">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
 <meta name="robots" content="noindex">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="app-timezone" content="<?= e(Config::get('app.timezone')) ?>">
 <meta name="backend-base-path" content="<?= Backend::baseUrl() ?>">
 <meta name="backend-timezone" content="<?= e(Backend\Models\Preference::get('timezone')) ?>">
@@ -11,6 +11,7 @@
 <title data-title-template="<?= empty($this->pageTitleTemplate) ? '%s' : e($this->pageTitleTemplate) ?> | <?= e(Backend\Models\BrandSetting::get('app_name')) ?>">
     <?= e(trans($this->pageTitle)) ?> | <?= e(Backend\Models\BrandSetting::get('app_name')) ?>
 </title>
+<link rel="asset_url" href="<?=  e(Url::asset('')); ?>">
 <?php
 // Styles
 $styles = [

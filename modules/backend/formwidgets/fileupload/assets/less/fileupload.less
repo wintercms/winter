@@ -1,12 +1,12 @@
 @import "../../../../assets/less/core/boot.less";
 
 @fileupload-progress-bar-height: 5px;
-@fileupload-progress-bar-color:  #fff;
-@fileupload-progress-bar-bg:     #f5f5f5;
-@fileupload-inactive-icon:       #808b93;
-@fileupload-object-active-bg:    #4da7e8;
-@fileupload-list-accent-bg:      #f5f5f5;
-@fileupload-list-border-color:   #eeeeee;
+@fileupload-progress-bar-color:  var(--wn-fileupload-progress-bar-color, #fff);
+@fileupload-progress-bar-bg:     var(--wn-fileupload-progress-bar-bg, #f5f5f5);
+@fileupload-inactive-icon:       var(--wn-fileupload-inactive-icon, #808b93);
+@fileupload-object-active-bg:    var(--wn-fileupload-object-active-bg, #4da7e8);
+@fileupload-list-accent-bg:      var(--wn-surface-stripe, #f5f5f5);
+@fileupload-list-border-color:   var(--wn-border-subtle, #eeeeee);
 
 @import "fileupload.base.less";
 @import "fileupload.imagemulti.less";

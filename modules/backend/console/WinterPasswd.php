@@ -80,7 +80,7 @@ class WinterPasswd extends Command
 
         $this->info('Password successfully changed.');
         if ($this->generatedPassword) {
-            $this->output->writeLn('Password set to <info>' . $password . '</info>.');
+            $this->output->writeLn('Password set to <info>' . $password . '</info>');
         }
         return 0;
     }

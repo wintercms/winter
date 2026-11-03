@@ -1,22 +1,25 @@
-<?php namespace Cms\Widgets;
+<?php
 
-use Str;
-use Url;
-use File;
-use Lang;
-use Input;
-use Request;
-use Response;
-use Cms\Classes\Theme;
-use Cms\Classes\Asset;
+namespace Cms\Widgets;
+
 use Backend\Classes\WidgetBase;
-use ApplicationException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Winter\Storm\Filesystem\Definitions as FileDefinitions;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
+use Cms\Classes\Asset;
+use Cms\Classes\Theme;
 use DirectoryIterator;
 use Exception;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Input;
+use Winter\Storm\Support\Facades\Url;
+use Winter\Storm\Support\Str;
+use Winter\Storm\Support\Svg;
 
 /**
  * CMS asset list widget.
@@ -229,6 +232,13 @@ class AssetList extends WidgetBase
         $newFullPath = $this->getFullPath(dirname($originalPath).'/'.$newName);
         if (file_exists($newFullPath) && $newFullPath !== $originalFullPath) {
             throw new ApplicationException(Lang::get('cms::lang.asset.already_exists'));
+        }
+
+        // Sanitize content if the file is being renamed to an SVG extension
+        $newExt = strtolower(File::extension($newName));
+        $oldExt = strtolower(File::extension(basename($originalPath)));
+        if ($newExt === 'svg' && $oldExt !== $newExt) {
+            File::put($originalFullPath, Svg::sanitize(File::get($originalFullPath)));
         }
 
         if (!@rename($originalFullPath, $newFullPath)) {
@@ -639,10 +649,15 @@ class AssetList extends WidgetBase
      */
     public function onUpload()
     {
+        $this->validateRequestTheme();
+
         $fileName = null;
 
         try {
-            $uploadedFile = Input::file('file_data');
+            /**
+             * @var \Illuminate\Http\UploadedFile
+             */
+            $uploadedFile = Request::file('file_data');
 
             if (!is_object($uploadedFile)) {
                 return;
@@ -678,10 +693,14 @@ class AssetList extends WidgetBase
                 ));
             }
 
+            if (strtolower(File::extension($fileName)) === 'svg') {
+                File::put($uploadedFile->getRealPath(), Svg::extract($uploadedFile->getRealPath()));
+            }
+
             /*
              * Accept the uploaded file
              */
-            $uploadedFile = $uploadedFile->move($this->getCurrentPath(), $uploadedFile->getClientOriginalName());
+            $uploadedFile = $uploadedFile->move($this->getCurrentPath(), $fileName);
 
             File::chmod($uploadedFile->getRealPath());
 

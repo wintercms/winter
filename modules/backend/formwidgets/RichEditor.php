@@ -1,15 +1,17 @@
-<?php namespace Backend\FormWidgets;
+<?php
 
-use App;
-use File;
-use Lang;
-use Event;
-use Config;
-use Request;
-use Backend;
-use BackendAuth;
-use Backend\Models\EditorSetting;
+namespace Backend\FormWidgets;
+
 use Backend\Classes\FormWidgetBase;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Backend\Models\EditorSetting;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Rich Editor
@@ -152,7 +154,7 @@ class RichEditor extends FormWidgetBase
             $this->addJs('js/build-plugins-min.js', 'core');
         }
 
-        $this->addJs('/modules/backend/formwidgets/codeeditor/assets/js/build-min.js', 'core');
+        $this->addJs('/modules/backend/assets/vendor/ace-codeeditor/build-min.js', 'core');
 
         if ($lang = $this->getValidEditorLang()) {
             $this->addJs('vendor/froala/js/languages/'.$lang.'.js', 'core');
@@ -258,6 +260,21 @@ class RichEditor extends FormWidgetBase
     }
 
     /**
+     * Returns a page link title HTML encoded, or an empty string if it cannot be rendered as
+     * text. Scalars and stringifiable objects qualify; arrays and plain objects do not.
+     *
+     * @param mixed $linkTitle
+     */
+    protected function renderableLinkTitle($linkTitle): string
+    {
+        if (is_object($linkTitle) && method_exists($linkTitle, '__toString')) {
+            $linkTitle = (string) $linkTitle;
+        }
+
+        return is_scalar($linkTitle) ? e((string) $linkTitle) : '';
+    }
+
+    /**
      * Returns a single collection of available page links.
      * This implementation has room to place links under
      * different groups based on the link type.
@@ -289,8 +306,11 @@ class RichEditor extends FormWidgetBase
                     $linkUrl = '/';
                 }
 
+                // The indent is markup by design; the title it prefixes is not.
+                $linkTitle = is_array($link) ? array_get($link, 'title', '') : $link;
+
                 $linkName = str_repeat('&nbsp;', $level * 4);
-                $linkName .= is_array($link) ? array_get($link, 'title', '') : $link;
+                $linkName .= $this->renderableLinkTitle($linkTitle);
                 $result[] = ['name' => $linkName, 'url' => $linkUrl];
 
                 if (is_array($link)) {

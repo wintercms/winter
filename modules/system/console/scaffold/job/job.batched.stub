@@ -1,0 +1,46 @@
+<?php
+
+namespace {{ plugin_namespace }}\Jobs;
+
+use Illuminate\Bus\Batchable;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\SkipIfBatchCancelled;
+use Illuminate\Queue\SerializesModels;
+
+class {{studly_name}} implements ShouldQueue
+{
+    use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * Create a new job instance.
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Execute the job.
+     */
+    public function handle(): void
+    {
+        //
+    }
+
+    /**
+     * Get the middleware the job should pass through.
+     */
+    public function middleware()
+    {
+        return []; // Remove this line to activate
+
+        return [
+            // Instruct Laravel to not process the job if
+            // its corresponding batch has been cancelled
+            new SkipIfBatchCancelled()
+        ];
+    }
+}

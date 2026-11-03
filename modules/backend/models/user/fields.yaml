@@ -3,12 +3,19 @@
 # ===================================
 
 fields:
-    is_superuser:
-        context: [create, update]
-        tab: backend::lang.user.permissions
-        label: backend::lang.user.superuser
-        type: switch
-        comment: backend::lang.user.superuser_comment
+    first_name:
+        span: left
+        label: backend::lang.user.first_name
+    last_name:
+        span: right
+        label: backend::lang.user.last_name
+    login:
+        span: left
+        label: backend::lang.user.login
+    email:
+        span: right
+        type: email
+        label: backend::lang.user.email
 
 tabs:
     defaultTab: backend::lang.user.account
@@ -16,17 +23,9 @@ tabs:
         backend::lang.user.account: icon-user
         backend::lang.user.groups: icon-users
         backend::lang.user.permissions: icon-key
+        backend::lang.user.throttle_tab: icon-ban
 
     fields:
-        login:
-            span: left
-            label: backend::lang.user.login
-
-        email:
-            span: right
-            type: email
-            label: backend::lang.user.email
-
         send_invite:
             context: create
             type: checkbox
@@ -34,23 +33,34 @@ tabs:
             comment: backend::lang.user.send_invite_comment
             default: true
 
-        first_name:
-            span: left
-            label: backend::lang.user.first_name
-
-        last_name:
-            span: right
-            label: backend::lang.user.last_name
+        _auto_generate_password:
+            context: create
+            type: checkbox
+            label: backend::lang.user.auto_generate_password
+            comment: backend::lang.user.auto_generate_password_comment
+            default: true
+            trigger:
+                action: show
+                field: send_invite
+                condition: checked
 
         password:
             type: password
             span: left
             label: backend::lang.user.password
+            trigger:
+                action: disable
+                field: _auto_generate_password
+                condition: checked
 
         password_confirmation:
             type: password
             span: right
             label: backend::lang.user.password_confirmation
+            trigger:
+                action: disable
+                field: _auto_generate_password
+                condition: checked
 
         role:
             context: [create, update]
@@ -64,6 +74,13 @@ tabs:
             commentAbove: backend::lang.user.groups_comment
             type: checkboxlist
             tab: backend::lang.user.groups
+
+        throttle:
+            label: backend::lang.user.throttle_tab_label
+            type: relationmanager
+            tab: backend::lang.user.throttle_tab
+            context: [update]
+            commentAbove: backend::lang.user.throttle_comment
 
 secondaryTabs:
     fields:
@@ -85,3 +102,8 @@ secondaryTabs:
             mode: image
             imageHeight: 250
             imageWidth: 250
+        is_superuser:
+            context: [create, update]
+            label: backend::lang.user.superuser
+            type: switch
+            comment: backend::lang.user.superuser_comment

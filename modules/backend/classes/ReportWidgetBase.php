@@ -9,6 +9,25 @@
  */
 class ReportWidgetBase extends WidgetBase
 {
+    /**
+     * Returns this widget's configured title, translated.
+     *
+     * A key naming a translation group resolves to an array, which cannot be rendered, so fall
+     * back to the configured value rather than letting one stored title break the dashboard.
+     */
+    public function getTitle(): string
+    {
+        $title = $this->property('title');
+
+        if (!is_string($title)) {
+            return '';
+        }
+
+        $translated = trans($title);
+
+        return is_string($translated) ? $translated : $title;
+    }
+
     use \System\Traits\PropertyContainer;
 
     public function __construct($controller, $properties = [])

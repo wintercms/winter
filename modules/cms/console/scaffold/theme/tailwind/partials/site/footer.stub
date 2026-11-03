@@ -7,8 +7,8 @@
             '@framework.extras',
         ] | theme }}"></script>
 
-        {# Mix extracted assets #}
-        <script src="{{ 'assets/dist/js/theme.js' | theme }}"></script>
+        {# Vite extracted assets #}
+        {{ vite(['assets/src/js/theme-{{code}}.js'], 'theme-{{code}}') }}
 
         {% scripts %}
 

@@ -1,0 +1,31 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+throttle:
+    label: backend::lang.user.throttle_tab_label
+    view:
+        list:
+            columns:
+                ip_address:
+                    label: backend::lang.user.throttle_ip_address
+                    searchable: true
+                attempts:
+                    label: backend::lang.user.throttle_attempts
+                    width: 100px
+                    align: center
+                last_attempt_at:
+                    label: backend::lang.user.throttle_last_attempt
+                    type: datetime
+                    searchable: true
+                suspended_at:
+                    label: backend::lang.user.throttle_suspended_at
+                    type: datetime
+                    searchable: true
+        toolbarButtons: delete|refresh
+        showSearch: true
+        showSorting: true
+        recordsPerPage: 10
+        defaultSort:
+            column: last_attempt_at
+            direction: desc
