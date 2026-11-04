@@ -1301,7 +1301,7 @@ class RelationController extends ControllerBehavior
             abort(403);
         }
 
-      $saveData = $this->manageWidget->getSaveData();
+        $saveData = $this->manageWidget->getSaveData();
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey(true) : null;
 
         if ($this->viewMode === 'multi') {
