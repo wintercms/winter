@@ -48,13 +48,19 @@ class FieldSet extends FormWidgetBase
             $this->previewMode = true;
         }
 
+        $parentForm = $this->getParentForm();
+
         $config = $this->makeConfig(['fields' => $this->fields]);
         $config->model = $this->model;
         $config->data = $this->getLoadValue();
         $config->alias = $this->alias . $this->defaultAlias;
         // set arrayName from parent form to save fields to the model
-        $config->arrayName = $this->getParentForm()->arrayName;
+        $config->arrayName = $parentForm->arrayName;
         $config->isNested = true;
+        // the fields are grouped visually only, so they resolve wherever the parent
+        // form's own fields resolve - on the model, unless the parent is itself a
+        // nested form that brought its own data scope (ie. a repeater item)
+        $config->sharesModelScope = !$parentForm->isNested || $parentForm->sharesModelScope;
 
         $widget = $this->formWidget = $this->makeWidget(Form::class, $config);
         $widget->previewMode = $this->previewMode;
