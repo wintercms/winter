@@ -206,6 +206,11 @@ class BackendController extends ControllerBase
          */
         $module = $params[0] ?? 'backend';
         $controller = $params[1] ?? 'index';
+
+        if (!$this->isClassNameSegment($module) || !$this->isClassNameSegment($controller)) {
+            return null;
+        }
+
         self::$action = $action = isset($params[2]) ? $this->parseAction($params[2]) : 'index';
         self::$params = $controllerParams = array_slice($params, 3);
         $controllerClass = '\\'.$module.'\Controllers\\'.$controller;
@@ -233,6 +238,13 @@ class BackendController extends ControllerBase
             }
 
             $controller = $params[2] ?? 'index';
+
+            // $author and $plugin are the same two segments the module lookup above already
+            // checked, so only the controller segment is left to validate.
+            if (!$this->isClassNameSegment($controller)) {
+                return null;
+            }
+
             self::$action = $action = isset($params[3]) ? $this->parseAction($params[3]) : 'index';
             self::$params = $controllerParams = array_slice($params, 4);
             $controllerClass = '\\'.$author.'\\'.$plugin.'\Controllers\\'.$controller;
@@ -288,6 +300,23 @@ class BackendController extends ControllerBase
         }
 
         return $this->requestedController = null;
+    }
+
+    /**
+     * Determines whether a URL segment may be used as part of a controller class name.
+     *
+     * A backend URL names classes, so each segment that becomes part of one is a plain PHP
+     * identifier. A segment holding anything else -- a namespace separator (`%5C` decodes to
+     * one, and `RouterHelper::segmentizeUrl()` only splits on `/`), a dot, or a `..` traversal
+     * -- can never name a controller, yet `findController()` would still turn it into the path
+     * it passes to `include_once`, reaching any `.php` file outside the controller root.
+     *
+     * The check is deliberately case-insensitive: resolving a lowercase URL segment against a
+     * mixed-case class file is the workaround `findController()` exists to provide.
+     */
+    protected function isClassNameSegment(string $segment): bool
+    {
+        return (bool) preg_match('/^[a-z_][a-z0-9_]*\z/i', $segment);
     }
 
     /**
