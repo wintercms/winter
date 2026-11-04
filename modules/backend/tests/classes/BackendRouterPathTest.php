@@ -13,13 +13,7 @@ use Winter\Storm\Support\Str;
 /**
  * Path safety of the backend controller router.
  *
- * `getRequestedController()` builds a controller class name out of raw URL segments, and
- * `findController()` turns that name into a path it `include_once`es. `segmentizeUrl()` only
- * splits on `/`, so a segment could carry a backslash (`%5C` decodes to one) or a `..`, and the
- * resulting path walked out of `modules/` to any lowercase `.php` file on disk -- executed with
- * no authentication, since `BackendAuth` is not consulted until after the controller is found.
- *
- * Every segment that becomes part of a class name must therefore be a plain PHP identifier.
+ * Every segment that becomes part of a class name must be a plain PHP identifier.
  */
 class BackendRouterPathTest extends PluginTestCase
 {
