@@ -1659,6 +1659,10 @@ class RelationController extends ControllerBehavior
         $this->beforeAjax();
         $this->abortIfReadOnly();
 
+        if (!$this->relationUserHasAccess('update')) {
+            abort(403);
+        }
+
         $hydratedModel = $this->pivotWidget->model;
         $saveData = $this->pivotWidget->getSaveData();
 
