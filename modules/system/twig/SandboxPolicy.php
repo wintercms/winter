@@ -2,12 +2,14 @@
 
 namespace System\Twig;
 
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Database\Eloquent\Model as DbModel;
-use Illuminate\Database\Query\Builder as QueryBuilder;
 use InvalidArgumentException;
+use Twig\Sandbox\SecurityNotAllowedPropertyError;
 use Twig\Sandbox\SecurityPolicy as TwigSecurityPolicy;
 use Twig\Sandbox\SecurityPolicyInterface;
+use Winter\Storm\Database\Builder as DbBuilder;
+use Winter\Storm\Database\Model as DbModel;
+use Winter\Storm\Database\QueryBuilder as DbQueryBuilder;
+use Winter\Storm\Support\Str;
 
 /**
  * SandboxPolicy is the security policy used by sandboxed Twig environments.
@@ -23,6 +25,11 @@ use Twig\Sandbox\SecurityPolicyInterface;
  * (a `getFullName()` getter) both go through the method allowlist and are refused. That makes the
  * contract for a caller a single rule: **pass only the values you are willing to expose**, because
  * what is passed in is readable and nothing else is reachable.
+ *
+ * A model is the exception to "everything passed in is readable", because Winter's models declare
+ * `$attributes` public: `{{ user.attributes }}` would hand back the raw column bag, which is the
+ * one read that defeats the model's own `$hidden` list. On a model the policy therefore allows
+ * only what the model reports as data - see isModelData() below.
  *
  * @package winter\wn-system-module
  * @author Winter CMS
@@ -265,41 +272,90 @@ final class SandboxPolicy implements SecurityPolicyInterface
      * BadMethodCallException. Without it a mail template works while a column has a value and
      * throws once it does not, which is the worst way to find out.
      *
-     * It stays that one case. The name has to be one the model already carries as data, and may
-     * not be anything the builders behind Model::__call() would answer, so `{{ user.truncate }}`
-     * is refused even on a model with a column of that name.
+     * It stays that one case: the name has to be data the property check would have allowed, and
+     * nothing in Model::__call()'s dispatch chain may answer it, so the call provably ends at the
+     * BadMethodCallException that chain throws. `{{ user.truncate }}` is refused even on a model
+     * with a column of that name.
      *
      * @param object $obj
      * @param string $method
      */
     protected function isNullAttributeRead($obj, $method): bool
     {
-        if (!$obj instanceof DbModel) {
+        if (!$obj instanceof DbModel || !$this->isModelData($obj, (string) $method)) {
             return false;
         }
 
-        if (
-            method_exists($obj, $method)
-            || method_exists(EloquentBuilder::class, $method)
-            || method_exists(QueryBuilder::class, $method)
-        ) {
-            return false;
-        }
+        return !$this->isAnsweredByModel($obj, (string) $method);
+    }
 
-        return array_key_exists($method, $obj->getAttributes())
-            || $obj->hasGetMutator($method);
+    /**
+     * Whether anything in Model::__call()'s dispatch chain answers this name, in which case the
+     * null-attribute read above would not be a read at all - it would run that behaviour, with
+     * whatever arguments the template chose to pass.
+     *
+     * One arm per step of the chain, which is Winter's Model::__call() -> extendableCall() ->
+     * Eloquent\Model::__call() -> Builder::__call() -> QueryBuilder::__call(): Winter's `extend()`
+     * special case, the model's own methods and the ones its extensions add, a scope reached by
+     * its bare name, the two builders the model forwards to and their macros, and the query
+     * builder's dynamic `where<Column>()`.
+     */
+    protected function isAnsweredByModel(DbModel $obj, string $name): bool
+    {
+        return $name === 'extend'
+            || $obj->methodExists($name)
+            || $obj->methodExists('scope' . ucfirst($name))
+            || method_exists(DbBuilder::class, $name)
+            || DbBuilder::hasGlobalMacro($name)
+            || method_exists(DbQueryBuilder::class, $name)
+            || DbQueryBuilder::hasMacro($name)
+            || Str::startsWith($name, 'where');
     }
 
     /**
      * Reading a property, an array key or an Eloquent attribute off a value the caller passed in
-     * is always allowed: it returns data the caller chose to expose and has no side effect of its
-     * own. Behaviour stays shut, because Twig only reaches a getter or any other method after
-     * this check has passed (see the class docblock).
+     * is allowed: it returns data the caller chose to expose and has no side effect of its own.
+     * Behaviour stays shut, because Twig only reaches a getter or any other method after this
+     * check has passed (see the class docblock).
+     *
+     * A model is read through isModelData() instead, because not everything readable on one is
+     * data the caller meant to expose.
      *
      * @param object $obj
      * @param string $property
      */
     public function checkPropertyAllowed($obj, $property): void
     {
+        if ($obj instanceof DbModel && !$this->isModelData($obj, (string) $property)) {
+            throw new SecurityNotAllowedPropertyError(
+                sprintf('Reading "%s" on a "%s" object is not allowed.', $property, $obj::class),
+                $obj::class,
+                (string) $property
+            );
+        }
+    }
+
+    /**
+     * Whether a model carries this name as data, which on a model is narrower than "readable".
+     *
+     * Winter's models declare `$attributes`, the relation definitions, `$implement` and
+     * `$sessionKey` public, so all of them are property reads Twig would allow; `$attributes` in
+     * particular hands back every column, including the ones `$hidden` exists to keep out of
+     * output. So the question asked here is the model's own: is this an attribute, a cast, an
+     * accessor or a relation, and does `$hidden`/`$visible` allow it out?
+     */
+    protected function isModelData(DbModel $obj, string $name): bool
+    {
+        if (in_array($name, $obj->getHidden(), true)) {
+            return false;
+        }
+
+        if (($visible = $obj->getVisible()) && !in_array($name, $visible, true)) {
+            return false;
+        }
+
+        return $obj->hasAttribute($name)
+            || $obj->relationLoaded($name)
+            || $obj->hasRelation($name);
     }
 }

@@ -2,9 +2,15 @@
 
 namespace System\Tests\Twig;
 
+use Backend\Models\User;
+use Cms\Classes\Page;
+use Cms\Classes\Theme;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use InvalidArgumentException;
 use System\Classes\MarkupManager;
 use System\Tests\Bootstrap\TestCase;
+use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Extension\SandboxExtension;
 use Twig\Sandbox\SecurityError;
@@ -54,7 +60,8 @@ class SandboxPolicyTest extends TestCase
      * Theme templates are trusted code, so the things a theme legitimately does have to work.
      * Every case here was either refused or silently given the wrong answer while the sandbox
      * was unconditional: SafeCollection dropped the arguments of a Collection call, so
-     * `rows.where(...)` and `rows.filter(...)` returned the unfiltered set.
+     * `rows.where('date', 'a')` matched none of the rows and `rows.filter(...)` returned the
+     * unfiltered set.
      */
     public function testAThemeTemplateReachesWhatItNeeds(): void
     {
@@ -119,6 +126,7 @@ class SandboxPolicyTest extends TestCase
             'nickname' => null,
             'truncate' => null,
         ]);
+        $model->setRelation('loaded', collect(['a', 'b']));
         $data = ['m' => $model, 'rows' => $this->rows, 'when' => now()];
 
         $reads = [
@@ -126,7 +134,7 @@ class SandboxPolicyTest extends TestCase
             '[{{ m.nickname }}]' => '[]',
             '[{{ m.derived }}]' => '[]',
             '[{{ m.parent.title }}]' => '[]',
-            '{{ m.table }}' => 'sandbox_policy_test',
+            '{{ m.loaded.count }}' => '2',
             '{{ rows.count }}' => '2',
             "{{ rows|column('title')|join(',') }}" => 'B,A',
             '{{ when|date("Y") }}' => now()->format('Y'),
@@ -148,6 +156,11 @@ class SandboxPolicyTest extends TestCase
             '{{ m.truncate }}',
             '{{ m.getConnection() }}',
             "{{ rows.where('date', 'a').count }}",
+            // Winter's models declare these public, so Twig would read them as properties
+            '{{ m.table }}',
+            '{{ m.belongsTo|json_encode }}',
+            '{{ m.implement|json_encode }}',
+            '{{ m.sessionKey }}',
         ];
 
         foreach ($behaviour as $template) {
@@ -158,6 +171,110 @@ class SandboxPolicyTest extends TestCase
                 $this->assertTrue(true);
             }
         }
+    }
+
+    /**
+     * A model's raw attribute bag is a property read - `$attributes` is public on Winter's models
+     * - so without a check on it a sandboxed template reads every column of every model passed
+     * in, including the ones the model hides. The same read by name has to go too, or the bag
+     * check is cosmetic.
+     */
+    public function testASandboxedTemplateCannotReadAHiddenAttribute(): void
+    {
+        $twig = MarkupManager::makeSandboxedTwigEnvironment();
+        $user = new User();
+        $user->forceFill([
+            'login' => 'admin',
+            'email' => 'admin@example.com',
+            'password' => 'password-hash',
+            'persist_code' => 'persist-code',
+            'activation_code' => 'activation-code',
+            'reset_password_code' => 'reset-code',
+        ]);
+        $data = ['user' => $user, 'users' => collect([$user])];
+
+        $this->assertContains('password', $user->getHidden(), 'the fixture only means anything while the model hides these');
+
+        $refused = [
+            '{{ user.attributes|json_encode }}',
+            '{{ user.attributes.password }}',
+            '{{ user.password }}',
+            '{{ user.persist_code }}',
+            '{{ user.activation_code }}',
+            '{{ user.reset_password_code }}',
+            '{{ users.0.attributes.password }}',
+        ];
+
+        foreach ($refused as $template) {
+            try {
+                $twig->createTemplate($template)->render($data);
+                $this->fail('Sandbox allowed: ' . $template);
+            } catch (SecurityError $ex) {
+                $this->assertTrue(true);
+            }
+        }
+
+        // What the model does put in its output is still readable, and still leaves the rest out.
+        $this->assertSame('admin', trim($twig->createTemplate('{{ user.login }}')->render($data)));
+        $this->assertSame(
+            '{"login":"admin","email":"admin@example.com"}',
+            trim($twig->createTemplate('{{ user|json_encode|raw }}')->render($data))
+        );
+    }
+
+    /**
+     * The null-column read above is a real method call that Winter's Model::__call() is expected
+     * to refuse. Each of these is a name its dispatch chain answers instead - a scope, a macro on
+     * either builder, an extension's dynamic method, a dynamic `where<Column>()`, and Winter's
+     * own `extend()`, which invokes any callable the template names. A column holding null is all
+     * it takes to reach them, so the policy has to refuse the read rather than make the call.
+     */
+    public function testASandboxedTemplateCannotCallBehaviourNamedAfterANullColumn(): void
+    {
+        EloquentBuilder::macro('sandboxPolicyTestMacro', function () {
+            SandboxPolicyTestModel::$called[] = 'eloquent builder macro';
+            return 'macro';
+        });
+        QueryBuilder::macro('sandboxPolicyTestQueryMacro', function () {
+            SandboxPolicyTestModel::$called[] = 'query builder macro';
+            return 'macro';
+        });
+
+        $twig = MarkupManager::makeSandboxedTwigEnvironment();
+        $model = new SandboxPolicyTestModel([
+            'active' => null,
+            'dynamic' => null,
+            'extend' => null,
+            'sandboxPolicyTestMacro' => null,
+            'sandboxPolicyTestQueryMacro' => null,
+            'whereTitle' => null,
+        ]);
+        $model->addDynamicMethod('dynamic', function () {
+            SandboxPolicyTestModel::$called[] = 'dynamic method';
+            return 'dynamic';
+        });
+
+        $refused = [
+            '{{ m.active }}',
+            '{{ m.dynamic }}',
+            '{{ m.sandboxPolicyTestMacro }}',
+            '{{ m.sandboxPolicyTestQueryMacro }}',
+            '{{ m.whereTitle }}',
+            "{{ m.extend('getenv', 'HOME') }}",
+        ];
+
+        SandboxPolicyTestModel::$called = [];
+
+        foreach ($refused as $template) {
+            try {
+                $twig->createTemplate($template)->render(['m' => $model]);
+                $this->fail('Sandbox allowed: ' . $template);
+            } catch (SecurityError $ex) {
+                $this->assertTrue(true);
+            }
+        }
+
+        $this->assertSame([], SandboxPolicyTestModel::$called, 'nothing was allowed to run');
     }
 
     public function testTheAllowlistCanBeWidened(): void
@@ -188,9 +305,8 @@ class SandboxPolicyTest extends TestCase
 
     /**
      * The mailer is the one core environment rendering a template a backend user edits, so it is
-     * the one that has to keep refusing an escape. Each of these worked while the policy was a
-     * blocklist, either because the method was not on the list or because the wildcard markup
-     * extensions were never on it at all.
+     * the one that has to keep refusing an escape. Every one of these worked while the policy was
+     * a blocklist, because the wildcard markup extensions were never on that list at all.
      */
     public function testTheMailerEnvironmentRefusesAnEscape(): void
     {
@@ -201,22 +317,42 @@ class SandboxPolicyTest extends TestCase
             // Arbitrary static call on a facade, through a wildcard markup extension
             '{{ str_random(8) }}',
             "{{ url_to('/') }}",
-            // Arbitrary function call: Arr::first() invokes a callable argument, and a template
-            // can write the [class, method] array form
-            "{{ array_first(['/etc/passwd'], ['Winter\\\\Storm\\\\Support\\\\Facades\\\\File', 'get']) }}",
+            "{{ html_decode('x') }}",
+            '{{ form_open() }}',
+            "{{ array_pluck([{'a': 1}], 'a')|json_encode }}",
+            // Arbitrary PHP function call with template-supplied arguments: Str::macro() binds
+            // any callable under a name the next tag then invokes
+            "{{ str_macro('sx', 'getenv') }}{{ str_sx('HOME') }}",
+            "{{ form_macro('fm', 'getenv') }}",
             // Reading another template off disk
             "{{ source('.env') }}",
             "{% extends 'system::mail.layout-default' %}",
+            "{% include 'system::mail.layout-default' %}",
+            // Reflection and request surface
+            "{{ constant('PHP_VERSION') }}",
+            "{{ attribute(m, 'getConnection') }}",
+            "{{ input('x') }}",
             // The database layer, reached through a model the sending plugin passed in
             '{{ m.getConnection() }}',
             '{{ m.newQuery() }}',
+            '{{ m.attributes|json_encode }}',
+            // A PHP function name smuggled into a higher-order filter
+            "{{ ['b', 'a']|sort('strcmp')|join }}",
+            "{{ ['a']|map('getenv')|join }}",
+            // Writing a template through the datasource, if a plugin passes a Halcyon model in
+            "{{ p.insert({'fileName': 'x.htm'}) }}",
+            "{{ p.offsetSet('fileName', 'x.htm') }}",
+            "{{ attribute(p, '__set', ['fileName', 'x.htm']) }}",
+            '{{ p.newQuery() }}',
         ];
+
+        $data = ['m' => $model, 'p' => Page::inTheme(Theme::load('test'))];
 
         foreach ($escapes as $template) {
             try {
-                $twig->createTemplate($template)->render(['m' => $model]);
+                $twig->createTemplate($template)->render($data);
                 $this->fail('Mailer sandbox allowed: ' . $template);
-            } catch (SecurityError | SyntaxError $ex) {
+            } catch (SecurityError | SyntaxError | RuntimeError $ex) {
                 $this->assertTrue(true);
             }
         }
@@ -265,6 +401,11 @@ class SandboxPolicyTest extends TestCase
  */
 class SandboxPolicyTestModel extends Model
 {
+    /**
+     * @var string[] Behaviour the sandbox let run, which must stay empty.
+     */
+    public static $called = [];
+
     public $table = 'sandbox_policy_test';
 
     protected $guarded = [];
@@ -285,6 +426,7 @@ class SandboxPolicyTestModel extends Model
 
     public function scopeActive($query)
     {
+        static::$called[] = 'scope';
         return $query;
     }
 }
