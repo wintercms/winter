@@ -192,7 +192,15 @@ class MediaManager extends WidgetBase
         $thumbnailInfo['lastModified'] = $lastModified;
         $thumbnailInfo['id'] = 'sidebar-thumbnail';
 
-        return $this->generateThumbnail($thumbnailInfo, $thumbnailParams);
+        $result = $this->generateThumbnail($thumbnailInfo, $thumbnailParams);
+
+        try {
+            $result['metadata'] = MediaLibrary::instance()->getMetadata($path);
+        } catch (\Throwable $ex) {
+            traceLog($ex->getMessage());
+        }
+
+        return $result;
     }
 
     /**
