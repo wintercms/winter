@@ -87,11 +87,15 @@
                     if (!state.id) {
                         return state.text;
                     }
-                    var icon = state.newTag ? '<i class="icon-plus"></i> ' : '';
 
-                    return $(
-                        '<span>' + icon + state.text + '</span>'
-                    );
+                    // A brand-new (typed) tag: show the add affordance.
+                    if (state.newTag) {
+                        return $('<span><i class="icon-plus"></i> ' + $('<span>').text(state.text).html() + '</span>');
+                    }
+
+                    // An existing option keeps its icon/image (data-icon / data-image),
+                    // the same as a non-modifiable dropdown.
+                    return formatSelectOption(state);
                 }
             }
             if ($element.hasClass('select-no-dropdown')) {

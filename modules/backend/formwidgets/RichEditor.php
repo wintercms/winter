@@ -260,6 +260,21 @@ class RichEditor extends FormWidgetBase
     }
 
     /**
+     * Returns a page link title HTML encoded, or an empty string if it cannot be rendered as
+     * text. Scalars and stringifiable objects qualify; arrays and plain objects do not.
+     *
+     * @param mixed $linkTitle
+     */
+    protected function renderableLinkTitle($linkTitle): string
+    {
+        if (is_object($linkTitle) && method_exists($linkTitle, '__toString')) {
+            $linkTitle = (string) $linkTitle;
+        }
+
+        return is_scalar($linkTitle) ? e((string) $linkTitle) : '';
+    }
+
+    /**
      * Returns a single collection of available page links.
      * This implementation has room to place links under
      * different groups based on the link type.
@@ -291,8 +306,11 @@ class RichEditor extends FormWidgetBase
                     $linkUrl = '/';
                 }
 
+                // The indent is markup by design; the title it prefixes is not.
+                $linkTitle = is_array($link) ? array_get($link, 'title', '') : $link;
+
                 $linkName = str_repeat('&nbsp;', $level * 4);
-                $linkName .= is_array($link) ? array_get($link, 'title', '') : $link;
+                $linkName .= $this->renderableLinkTitle($linkTitle);
                 $result[] = ['name' => $linkName, 'url' => $linkUrl];
 
                 if (is_array($link)) {

@@ -320,7 +320,7 @@
 
             &.drop-target {
                 > div {
-                    background-color: #2581b8!important;
+                    background-color: var(--wn-treeview-bg, #2581b8)!important;
 
                     > a {
                         color: @color-treeview-hover-text;
@@ -429,8 +429,8 @@
         display: block;
         margin: 20px;
         padding: 13px 15px;
-        border: dotted 2px #ebebeb;
-        color: #bdc3c7;
+        border: dotted 2px var(--wn-border-subtle, #ebebeb);
+        color: var(--wn-text-muted, #bdc3c7);
         font-size: @font-size-base - 2;
         font-weight: 600;
         text-transform: uppercase;
@@ -556,7 +556,7 @@
 
 body.dragging .control-treeview {
     ol.dragging, ol.dragging ol {
-        background: #ccc;
+        background: var(--wn-surface-overlay, #ccc);
         padding-right: 0;
 
         > li {
@@ -575,7 +575,7 @@ body.dragging .control-treeview {
     &.treeview-light {
         ol.dragging, ol.dragging ol {
             > li > div  {
-                background-color: #f9f9f9;
+                background-color: var(--wn-surface-canvas, #f9f9f9);
             }
         }
     }

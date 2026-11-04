@@ -10,12 +10,12 @@
 // Filters
 // --------------------------------------------------
 
-@color-filter-bg:                            #ECF0F1;
+@color-filter-bg:                            var(--wn-surface-hover, #ECF0F1);
 @color-filter-bg-active:                     #6AAB55;
-@color-filter-border:                        #D7DBDD;
+@color-filter-border:                        var(--wn-border, #D7DBDD);
 @color-filter-text:                          rgba(0,0,0,.6);
-@color-filter-text-active:                   #000000;
-@color-filter-items-bg:                      #fafafa;
+@color-filter-text-active:                   var(--wn-text-strong, #000000);
+@color-filter-items-bg:                      var(--wn-surface-canvas, #fafafa);
 @color-filter-items-bg-hover:                @brand-secondary;
 
 //
@@ -85,7 +85,7 @@
             .filter-setting {
                 padding-left: 5px;
                 padding-right: 5px;
-                color: #FFF;
+                color: var(--wn-text-inverse, #FFF);
                 background-color: @color-filter-bg-active;
                 .border-radius(4px);
                 .transition(~'color 1s, background-color 1s');
@@ -165,12 +165,12 @@
 
                 &.btn-primary {
                     background: @brand-primary;
-                    color: #fff;
+                    color: var(--wn-text-inverse, #fff);
                 }
 
                 &:hover:not(.btn-primary) {
                     background: lighten(@brand-primary, 5%);
-                    color: #fff;
+                    color: var(--wn-text-inverse, #fff);
                 }
             }
         }
@@ -241,7 +241,7 @@
             .filter-setting {
                 padding-left: 5px;
                 padding-right: 5px;
-                color: #FFF;
+                color: var(--wn-text-inverse, #FFF);
                 background-color: @color-filter-bg-active;
                 .border-radius(4px);
                 .transition(~'color 1s, background-color 1s');
@@ -249,7 +249,7 @@
         }
 
         &:hover {
-            color: #000;
+            color: var(--wn-text-strong, #000);
             .filter-label { color: @color-filter-text; }
             &.active .filter-setting { background-color: darken(@color-filter-bg-active, 5%); }
         }
@@ -304,7 +304,7 @@
 
             &:hover {
                 background-color: @color-filter-items-bg-hover;
-                color: #FFFFFF;
+                color: var(--wn-text-inverse, #FFFFFF);
             }
         }
     }

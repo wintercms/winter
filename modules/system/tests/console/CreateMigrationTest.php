@@ -6,9 +6,12 @@ use File;
 use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 class CreateMigrationTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();

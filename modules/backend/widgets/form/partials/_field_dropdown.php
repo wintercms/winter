@@ -10,7 +10,7 @@ if ($fieldOptions instanceof Illuminate\Support\Collection) {
     <div class="form-control" <?= $field->readOnly ? 'disabled="disabled"' : ''; ?>>
         <?= (isset($fieldOptions[$field->value])) ? e(trans($fieldOptions[$field->value])) : '' ?>
     </div>
-    <input type="hidden" name="<?= $field->getName() ?>" value="<?= $field->value ?>">
+    <input type="hidden" name="<?= $field->getName() ?>" value="<?= htmlspecialchars((string) $field->value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
 <?php else:
     $emptyOption = $field->getConfig('emptyOption', $field->placeholder);
     $options = $field->getAttributes(htmlBuild:false);
@@ -22,15 +22,16 @@ if ($fieldOptions instanceof Illuminate\Support\Collection) {
     if ($field->getConfig('allowCustom', false)) {
         $options['class'] .= ' select-modifiable';
     }
+    // Form::select() escapes the option labels and the attributes itself
     if ($emptyOption) {
-        $options['emptyOption'] = e(trans($emptyOption));
+        $options['emptyOption'] = trans($emptyOption);
     }
     if ($field->placeholder) {
-        $options['data-placeholder'] = e(trans($field->placeholder));
+        $options['data-placeholder'] = trans($field->placeholder);
     }
     foreach ($fieldOptions as $key => &$value) {
         if (is_string($value) && str_contains($value, '::')) {
-            $value = e(trans($value));
+            $value = trans($value);
         }
     }
     ?>

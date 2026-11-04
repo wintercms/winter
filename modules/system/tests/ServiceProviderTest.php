@@ -5,9 +5,12 @@ namespace System\Tests;
 use Db;
 use Log;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 class ServiceProviderTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     /**
      * Test the registerLogging method
      *

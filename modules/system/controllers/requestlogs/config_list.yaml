@@ -10,6 +10,9 @@ noRecordsMessage: backend::lang.list.no_records
 recordsPerPage: 30
 showSetup: true
 showCheckboxes: true
+
+# Offer "select all records matching the current filters" past the first page
+selectAllMatching: true
 defaultSort:
     column: count
     direction: desc

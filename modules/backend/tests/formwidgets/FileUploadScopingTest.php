@@ -8,6 +8,7 @@ use Backend\FormWidgets\FileUpload;
 use Database\Tester\Models\User as TesterUser;
 use System\Models\File as FileModel;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Exception\ApplicationException;
 
@@ -20,6 +21,8 @@ use Winter\Storm\Exception\ApplicationException;
  */
 class FileUploadScopingTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected string $imagePath;
 
     public function setUp(): void

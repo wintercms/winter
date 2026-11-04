@@ -8,6 +8,7 @@ namespace Backend\Tests\Widgets
     use Backend\Classes\WidgetManager;
     use Backend\FormWidgets\FieldSet;
     use System\Tests\Bootstrap\PluginTestCase;
+    use System\Tests\Concerns\MigratesDatabaseOnce;
     use Winter\Storm\Database\Model;
     use Backend\Widgets\Form;
 
@@ -50,6 +51,8 @@ namespace Backend\Tests\Widgets
      */
     class FormFieldSetSaveTest extends PluginTestCase
     {
+        use MigratesDatabaseOnce;
+
         public function setUp(): void
         {
             parent::setUp();

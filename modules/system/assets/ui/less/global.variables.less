@@ -3,7 +3,7 @@
 // --------------------------------------------------
 
 // Dupe
-@body-bg:               #f9f9f9;
+@body-bg:               var(--wn-surface-canvas, #f9f9f9);
 
 @text-color:            @gray-dark;
 @link-color:            @brand-secondary;
@@ -113,12 +113,12 @@
 @brand-warning:          #de8754;
 @brand-danger:           #e01346;
 
-@color-text-title:       #405261;
-@color-text-description: #8f8f8f;
+@color-text-title:       var(--wn-text, #405261);
+@color-text-description: var(--wn-text-secondary, #8f8f8f);
 
 @color-focus:            @brand-primary;
-@color-border:           #cccccc;
-@color-border-light:     #e1e1e1;
+@color-border:           var(--wn-border, #cccccc);
+@color-border-light:     var(--wn-border-subtle, #e1e1e1);
 
 @gray-darker:            lighten(#000, 13.5%); // #222
 @gray-dark:              lighten(#000, 20%);   // #333
@@ -147,10 +147,10 @@
 // --------------------------------------------------
 
 @highlight-hover-bg: mix(white, @brand-secondary, 13%);
-@highlight-hover-text: #fff;
+@highlight-hover-text: var(--wn-highlight-hover-text, #fff);
 
 @highlight-active-bg: @brand-accent;
-@highlight-active-text: #fff;
+@highlight-active-text: var(--wn-highlight-active-text, #fff);
 
 //
 // General
@@ -176,7 +176,7 @@
 @border-radius-large:       6px;
 @border-radius-small:       3px;
 
-@component-active-color:    #fff;
+@component-active-color:    var(--wn-text-inverse, #fff);
 @component-active-bg:       @brand-primary;
 
 @caret-width-base:          4px;

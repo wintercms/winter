@@ -120,6 +120,10 @@ class Auth extends Controller
      */
     public function restore()
     {
+        if (BackendAuth::user()) {
+            return Backend::redirect('backend');
+        }
+
         $this->bodyClass = 'restore';
 
         try {
@@ -136,6 +140,10 @@ class Auth extends Controller
      */
     public function restore_onSubmit()
     {
+        if (BackendAuth::user()) {
+            return Backend::redirect('backend');
+        }
+
         // Force Trusted Host verification on password reset link generation
         // regardless of config to protect against host header poisoning
         $trustedHosts = Config::get('app.trustedHosts', false);

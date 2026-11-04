@@ -1,5 +1,5 @@
 div.panel {
-    @panel-border-color: #e8eaeb;
+    @panel-border-color: var(--wn-border-subtle, #e8eaeb);
 
     padding: 20px;
 
@@ -51,7 +51,7 @@ div.panel {
         }
 
         &:before {
-            .triangle(down, 17px, 9px, #e8eaeb);
+            .triangle(down, 17px, 9px, var(--wn-panels-misc, #e8eaeb));
             position: absolute;
             left: 14px;
             bottom: -9px;
@@ -65,7 +65,7 @@ div.panel {
 
     h3.section, > label {
         text-transform: uppercase;
-        color: #95a5a6;
+        color: var(--wn-text-secondary, #95a5a6);
         font-size: 13px;
         font-weight: 600;
         margin: 0 0 15px 0;

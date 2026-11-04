@@ -12,10 +12,10 @@
 
 @color-checkbox-checked:                        @brand-secondary;
 
-@color-checkbox-icon:                           #FFFFFF;
+@color-checkbox-icon:                           var(--wn-text-inverse, #FFFFFF);
 @color-checkbox-border:                         @input-border;
 
-@color-checkbox-switch-bg:                      #f6f6f6;
+@color-checkbox-switch-bg:                      var(--wn-surface-hover, #f6f6f6);
 @color-checkbox-switch-on:                      @brand-success;
 @color-checkbox-switch-off:                     @brand-danger;
 
@@ -73,7 +73,7 @@
             position: absolute;
             left: -3px;
             top: 0;
-            background-color: #FFFFFF;
+            background-color: var(--wn-surface-raised, #FFFFFF);
             border: 1px solid @color-checkbox-border;
             .box-shadow(@input-box-shadow);
         }
@@ -146,7 +146,7 @@
     }
 
     input:disabled + label:before {
-        background-color: #999 !important;
+        background-color: var(--wn-surface-mid, #999) !important;
         border: 1px solid @color-checkbox-border !important;
     }
 
@@ -282,17 +282,17 @@
             ~ span { background-color: @color-checkbox-switch-on; }
             ~ span span {
                 &:first-of-type {
-                    color: #FFFFFF;
+                    color: var(--wn-text-inverse, #FFFFFF);
                     display: block;
                 }
                 &:last-of-type {
-                    color: #666666;
+                    color: var(--wn-text, #666666);
                     display: none;
                 }
             }
         }
         &[disabled] {
-            ~ span { background-color: #666666 !important; }
+            ~ span { background-color: var(--wn-checkbox-misc, #666666) !important; }
         }
     }
 
@@ -317,13 +317,13 @@
             .box-sizing(border-box);
             &:last-child {
                 left: 28px;
-                color: #FFFFFF;
+                color: var(--wn-text-inverse, #FFFFFF);
                 display: block;
             }
             &:first-of-type {
                 padding-left: 13px;
                 display: none;
-                color: #666666;
+                color: var(--wn-text, #666666);
             }
         }
     }

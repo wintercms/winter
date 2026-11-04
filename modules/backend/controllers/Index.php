@@ -1,6 +1,9 @@
 <?php namespace Backend\Controllers;
 
+use Lang;
 use Backend;
+use Request;
+use Response;
 use Redirect;
 use BackendMenu;
 use Backend\Classes\Controller;
@@ -33,14 +36,21 @@ class Index extends Controller
         BackendMenu::setContextOwner('Winter.Backend');
 
         $this->addCss('/modules/backend/assets/css/dashboard/dashboard.css', 'core');
+
+        /*
+         * Custom redirect for unauthorized request.
+         *
+         * Bound to page.beforeDisplay rather than checked inside index() because AJAX
+         * handlers are dispatched before the page action runs, so a check living in the
+         * action alone would leave index_onInitReportContainer() reachable.
+         */
+        $this->bindEvent('page.beforeDisplay', function () {
+            return $this->checkPermissionRedirect();
+        });
     }
 
     public function index()
     {
-        if ($redirect = $this->checkPermissionRedirect()) {
-            return $redirect;
-        }
-
         $this->initReportContainer();
 
         $this->pageTitle = 'backend::lang.dashboard.menu_label';
@@ -71,11 +81,18 @@ class Index extends Controller
      */
     protected function checkPermissionRedirect()
     {
-        if (!$this->user->hasAccess('backend.access_dashboard')) {
-            if ($first = array_first(BackendMenu::listMainMenuItems())) {
-                return Redirect::intended($first->url);
-            }
-            return Backend::redirect('backend/myaccount');
+        if ($this->user->hasAccess('backend.access_dashboard')) {
+            return;
         }
+
+        if (Request::ajax()) {
+            return Response::make(Lang::get('backend::lang.page.access_denied.label'), 403);
+        }
+
+        if ($first = array_first(BackendMenu::listMainMenuItems())) {
+            return Redirect::intended($first->url);
+        }
+
+        return Backend::redirect('backend/myaccount');
     }
 }

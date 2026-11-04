@@ -58,6 +58,7 @@ return [
     ],
     'combiner' => [
         'not_found' => "The combiner file ':name' is not found.",
+        'error' => 'The combined file could not be generated.',
     ],
     'system' => [
         'name' => 'System',

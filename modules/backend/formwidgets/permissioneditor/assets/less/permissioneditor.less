@@ -1,7 +1,7 @@
 @import "../../../../assets/less/core/boot.less";
 
-@color-permissioneditor-section-border:         #DBE1E3;
-@color-permissioneditor-permission-border:      #ECF0F1;
+@color-permissioneditor-section-border:         var(--wn-border-focus, #DBE1E3);
+@color-permissioneditor-permission-border:      var(--wn-border-subtle, #ECF0F1);
 
 .permissioneditor {
     position: relative;
@@ -48,7 +48,7 @@
 
                 &:hover {
                     background-color: @color-list-hover-bg;
-                    color: #ffffff;
+                    color: var(--wn-text-inverse, #ffffff);
                 }
             }
         }
@@ -84,7 +84,7 @@
                 background: @color-list-hover-bg;
 
                 &.permission-name {
-                    color: #ffffff !important;
+                    color: var(--wn-text-inverse, #ffffff) !important;
                 }
             }
         }
@@ -135,7 +135,7 @@
 
         tr.disabled {
             td.permission-name {
-                color: #AAA;
+                color: var(--wn-text-muted, #AAA);
             }
         }
 

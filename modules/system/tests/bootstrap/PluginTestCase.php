@@ -7,8 +7,10 @@ use Config;
 use Artisan;
 use Exception;
 use ReflectionClass;
+use ReflectionProperty;
 use Backend\Classes\AuthManager;
 use Backend\Tests\Concerns\InteractsWithAuthentication;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Mockery\MockInterface;
 use System\Classes\PluginBase;
 use System\Classes\PluginManager;
@@ -31,6 +33,16 @@ abstract class PluginTestCase extends TestCase
      * @var array Cache for storing which plugins have been loaded.
      */
     protected $pluginTestCaseLoadedPlugins = [];
+
+    /**
+     * @var array<string, bool> Memoized `flushModelEventListeners()` verdicts, shared across the process.
+     */
+    protected static $flushableModelClasses = [];
+
+    /**
+     * @var ReflectionProperty|null Reader for Eloquent's register of booted models.
+     */
+    protected static $bootedModelsProperty = null;
 
     /**
      * Creates the application.
@@ -84,7 +96,7 @@ abstract class PluginTestCase extends TestCase
         $this->app['router']->setRoutes(new \Illuminate\Routing\RouteCollection);
 
         // Run all migrations
-        Artisan::call('winter:up');
+        $this->runTestMigrations();
 
         // Reset loaded plugins for this test
         $this->pluginTestCaseLoadedPlugins = [];
@@ -112,6 +124,18 @@ abstract class PluginTestCase extends TestCase
         $this->flushModelEventListeners();
         parent::tearDown();
         unset($this->app);
+    }
+
+    /**
+     * Builds the database schema the test will run against.
+     *
+     * Rebuilding every table from empty costs ~60ms per test. Classes that can tolerate a shared
+     * schema should `use System\Tests\Concerns\MigratesDatabaseOnce`, which overrides this to
+     * migrate once per process and wrap each test in a transaction instead.
+     */
+    protected function runTestMigrations(): void
+    {
+        Artisan::call('winter:up');
     }
 
     /**
@@ -206,28 +230,46 @@ abstract class PluginTestCase extends TestCase
      * targeted and reset, ready for a new test cycle.
      *
      * Pivot models are an exception since they are internally managed.
+     *
+     * Only booted models are considered: every route to `registerModelEvent()` — `boot()`,
+     * `bootTraits()` and `observe()` — boots the model first, so a model that never booted has no
+     * listeners to forget. Reflecting over every declared class and instantiating every model found
+     * costs ~35ms per test once a suite is warm, against ~4ms for the models a test actually used.
      */
     protected function flushModelEventListeners(): void
     {
-        foreach (get_declared_classes() as $class) {
-            if ($class === 'Winter\Storm\Database\Pivot' || strtolower($class) === 'october\rain\database\pivot') {
-                continue;
+        if (is_null(static::$bootedModelsProperty)) {
+            static::$bootedModelsProperty = new ReflectionProperty(EloquentModel::class, 'booted');
+        }
+
+        foreach (array_keys(static::$bootedModelsProperty->getValue()) as $class) {
+            if (!array_key_exists($class, static::$flushableModelClasses)) {
+                static::$flushableModelClasses[$class] = $this->isFlushableModel($class);
             }
 
-            $reflectClass = new ReflectionClass($class);
-            if (
-                !$reflectClass->isInstantiable() ||
-                !$reflectClass->isSubclassOf('Winter\Storm\Database\Model') ||
-                $reflectClass->isSubclassOf('Winter\Storm\Database\Pivot') ||
-                in_array(MockInterface::class, $reflectClass->getInterfaceNames())
-            ) {
-                continue;
+            if (static::$flushableModelClasses[$class]) {
+                $class::flushEventListeners();
             }
-
-            $class::flushEventListeners();
         }
 
         BaseModel::flushEventListeners();
+    }
+
+    /**
+     * Determines whether a booted model's event listeners should be flushed between tests.
+     */
+    protected function isFlushableModel(string $class): bool
+    {
+        if ($class === 'Winter\Storm\Database\Pivot' || strtolower($class) === 'october\rain\database\pivot') {
+            return false;
+        }
+
+        $reflectClass = new ReflectionClass($class);
+
+        return $reflectClass->isInstantiable()
+            && $reflectClass->isSubclassOf('Winter\Storm\Database\Model')
+            && !$reflectClass->isSubclassOf('Winter\Storm\Database\Pivot')
+            && !in_array(MockInterface::class, $reflectClass->getInterfaceNames());
     }
 
     /**

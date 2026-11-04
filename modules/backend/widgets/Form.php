@@ -1251,7 +1251,7 @@ class Form extends WidgetBase
         return $result;
     }
 
-    /*
+    /**
      * Allow the model to filter fields.
      */
     protected function applyFiltersFromModel()

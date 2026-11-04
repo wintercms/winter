@@ -49,6 +49,11 @@ class Relation extends FormWidgetBase
      */
     public $order;
 
+    /**
+     * @var bool Define if the widget must be rendered has a displayTree.
+     */
+    public $displayTree;
+
     //
     // Object properties
     //
@@ -73,6 +78,7 @@ class Relation extends FormWidgetBase
             'emptyOption',
             'scope',
             'order',
+            'displayTree',
         ]);
 
         if (isset($this->config->select)) {
@@ -95,6 +101,14 @@ class Relation extends FormWidgetBase
     public function prepareVars()
     {
         $this->vars['field'] = $this->makeRenderFormField();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function loadAssets()
+    {
+        $this->addJs('js/dist/relation.js', 'core');
     }
 
     /**
@@ -156,8 +170,7 @@ class Relation extends FormWidgetBase
                 $nameFrom = 'selection';
                 $selectColumn = $usesTree ? '*' : $relationModel->getKeyName();
                 $result = $query->select($selectColumn, Db::raw($this->sqlSelect . ' AS ' . $nameFrom));
-            }
-            else {
+            } else {
                 $nameFrom = $this->nameFrom;
                 $result = $query->getQuery()->get();
             }
@@ -168,9 +181,19 @@ class Relation extends FormWidgetBase
                 ? $relationObject->getOtherKey()
                 : $relationModel->getKeyName();
 
-            $field->options = $usesTree
-                ? $result->listsNested($nameFrom, $primaryKeyName)
-                : $result->lists($nameFrom, $primaryKeyName);
+            if ($usesTree) {
+                if ($this->displayTree) {
+                    if ($this->sqlSelect) {
+                        $result = $result->getQuery()->get();
+                    }
+
+                    $field->options = $result->toNestedArray($nameFrom, $primaryKeyName);
+                } else {
+                    $field->options = $result->listsNested($nameFrom, $primaryKeyName);
+                }
+            } else {
+                $field->options = $result->lists($nameFrom, $primaryKeyName);
+            }
 
             return $field;
         });
