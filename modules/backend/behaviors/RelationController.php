@@ -5,6 +5,7 @@ use Lang;
 use Request;
 use Form as FormHelper;
 use Backend\Classes\ControllerBehavior;
+use Backend\Facades\BackendAuth;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Database\Models\DeferredBinding;
 use ApplicationException;
@@ -1295,6 +1296,11 @@ class RelationController extends ControllerBehavior
         $this->forceManageMode = 'form';
         $this->beforeAjax();
         $this->abortIfReadOnly();
+
+        if (!$this->relationUserHasAccess('create')) {
+            abort(403);
+        }
+
         $saveData = $this->manageWidget->getSaveData();
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey(true) : null;
 
@@ -1385,6 +1391,11 @@ class RelationController extends ControllerBehavior
         $this->forceManageMode = 'form';
         $this->beforeAjax();
         $this->abortIfReadOnly();
+
+        if (!$this->relationUserHasAccess('update')) {
+            abort(403);
+        }
+
         $saveData = $this->manageWidget->getSaveData();
 
         if ($this->viewMode === 'multi') {
@@ -1415,6 +1426,10 @@ class RelationController extends ControllerBehavior
     {
         $this->beforeAjax();
         $this->abortIfReadOnly();
+
+        if (!$this->relationUserHasAccess('delete')) {
+            abort(403);
+        }
 
         /*
          * Multiple (has many, belongs to many)
@@ -1465,6 +1480,10 @@ class RelationController extends ControllerBehavior
          * Add
          */
         if ($this->viewMode === 'multi') {
+            if (!$this->relationUserHasAccess('add')) {
+                abort(403);
+            }
+
             $checkedIds = $recordId ? [$recordId] : post('checked');
 
             if (is_array($checkedIds)) {
@@ -1483,6 +1502,10 @@ class RelationController extends ControllerBehavior
          * Link
          */
         elseif ($this->viewMode === 'single') {
+            if (!$this->relationUserHasAccess('link')) {
+                abort(403);
+            }
+
             if ($recordId && ($model = $this->relationFindAddableModels([$recordId])->first())) {
                 if ($this->relationType === 'hasOne') {
                     // Unassign previous relation if one is already assigned
@@ -1527,6 +1550,10 @@ class RelationController extends ControllerBehavior
          * Remove
          */
         if ($this->viewMode === 'multi') {
+            if (!$this->relationUserHasAccess('remove')) {
+                abort(403);
+            }
+
             $checkedIds = $recordId ? [$recordId] : post('checked');
 
             if (is_array($checkedIds)) {
@@ -1539,6 +1566,10 @@ class RelationController extends ControllerBehavior
          * Unlink
          */
         elseif ($this->viewMode === 'single') {
+            if (!$this->relationUserHasAccess('unlink')) {
+                abort(403);
+            }
+
             if ($this->relationType === 'belongsTo') {
                 $this->relationObject->dissociate();
                 $this->relationObject->getParent()->save();
@@ -1590,6 +1621,10 @@ class RelationController extends ControllerBehavior
         $this->beforeAjax();
         $this->abortIfReadOnly();
 
+        if (!$this->relationUserHasAccess('add')) {
+            abort(403);
+        }
+
         /*
          * If the pivot model fails for some reason, abort the sync
          */
@@ -1623,6 +1658,10 @@ class RelationController extends ControllerBehavior
     {
         $this->beforeAjax();
         $this->abortIfReadOnly();
+
+        if (!$this->relationUserHasAccess('update')) {
+            abort(403);
+        }
 
         $hydratedModel = $this->pivotWidget->model;
         $saveData = $this->pivotWidget->getSaveData();
@@ -1853,50 +1892,44 @@ class RelationController extends ControllerBehavior
         $buttonText = [];
 
         foreach ($buttons as $type => $text) {
-            if (is_numeric($type) || !$text) {
-                if (is_numeric($type) && $text) {
-                    $type = $text;
-                }
-
-                switch ($type) {
-                    case 'create':
-                        $text = 'backend::lang.relation.create_name';
-                        break;
-
-                    case 'update':
-                        $text = 'backend::lang.relation.update_name';
-                        break;
-
-                    case 'delete':
-                        $text = 'backend::lang.relation.delete';
-                        break;
-
-                    case 'add':
-                        $text = 'backend::lang.relation.add_name';
-                        break;
-
-                    case 'refresh':
-                        $text = 'backend::lang.relation.refresh';
-                        break;
-
-                    case 'remove':
-                        $text = 'backend::lang.relation.remove';
-                        break;
-
-                    case 'link':
-                        $text = 'backend::lang.relation.link_name';
-                        break;
-
-                    case 'unlink':
-                        $text = 'backend::lang.relation.unlink';
-                        break;
-                }
+            if (is_array($text)) {
+                $text = $text['label'] ?? null;
             }
 
-            $buttonText[$type] = $text;
+            if (is_numeric($type) && $text) {
+                $type = $text;
+                $text = null;
+            }
+
+            if (!$this->relationUserHasAccess($type)) {
+                continue;
+            }
+
+            $buttonText[$type] = $text ?: match ($type) {
+                'create' => 'backend::lang.relation.create_name',
+                'update' => 'backend::lang.relation.update_name',
+                'delete' => 'backend::lang.relation.delete',
+                'add' => 'backend::lang.relation.add_name',
+                'refresh' => 'backend::lang.relation.refresh',
+                'remove' => 'backend::lang.relation.remove',
+                'link' => 'backend::lang.relation.link_name',
+                'unlink' => 'backend::lang.relation.unlink',
+                default => $type,
+            };
         }
 
         return $buttonText;
+    }
+
+    /**
+     * Check if the current user has the permissions configured on the given toolbar button,
+     * e.g. `toolbarButtons: { delete: { permissions: [acme.blog.delete_comments] } }`
+     */
+    protected function relationUserHasAccess(string $type): bool
+    {
+        $permissions = $this->getConfig("view[toolbarButtons][{$type}][permissions]");
+
+        return empty($permissions) || BackendAuth::getUser()->hasAccess($permissions, false);
     }
 
     /**
