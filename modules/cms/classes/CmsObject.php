@@ -306,7 +306,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      */
     public function getTwigCacheKey()
     {
-        $key = $this->getFilePath();
+        $key = $this->getFilePath() . '?' . hash('xxh128', (string) $this->getTwigContent());
 
         if ($event = $this->fireEvent('cmsObject.getTwigCacheKey', compact('key'), true)) {
             $key = $event;
