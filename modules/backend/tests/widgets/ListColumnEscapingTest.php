@@ -6,6 +6,7 @@ use Backend\Models\User;
 use Backend\Widgets\Lists;
 use DOMDocument;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 /**
  * The list body partial renders column values raw (`<?= $this->getColumnValue(...) ?>`), so
@@ -16,6 +17,8 @@ use System\Tests\Bootstrap\PluginTestCase;
  */
 class ListColumnEscapingTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     /**
      * Breaks out of a single-quoted attribute without needing whitespace: `/` is legal in a
      * URL path and is also legal after a quoted attribute value, so this survives

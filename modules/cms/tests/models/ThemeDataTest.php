@@ -7,11 +7,14 @@ use Cms\Models\ThemeData;
 use Config;
 use Event;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Database\MemoryCache;
 use Winter\Storm\Support\Facades\DB;
 
 class ThemeDataTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     /**
      * @var Theme A theme fixture that declares customization fields
      */

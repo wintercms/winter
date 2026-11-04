@@ -9,6 +9,7 @@ use Backend\Widgets\Lists;
 use Illuminate\Http\Request as HttpRequest;
 use Winter\Storm\Support\Facades\DB;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Exception\ApplicationException;
 
 /**
@@ -26,6 +27,8 @@ use Winter\Storm\Exception\ApplicationException;
  */
 class ListsSelectionTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -188,6 +191,20 @@ class ListsSelectionTest extends PluginTestCase
             'checked_all' => 1,
             'checked_fingerprint' => $list->getSelectionFingerprint(),
         ]);
+
+        $this->expectException(ApplicationException::class);
+        $list->getSelectedKeys();
+    }
+
+    /**
+     * The same rule on the explicit-ids branch: a list that renders no checkboxes offers no
+     * selection, so `index_onDelete` cannot be handed ids for one.
+     */
+    public function testPageModeRejectedWithoutCheckboxes(): void
+    {
+        $list = $this->makeList(['showCheckboxes' => false]);
+
+        $this->postRequest(['checked' => [1, 2, 3]]);
 
         $this->expectException(ApplicationException::class);
         $list->getSelectedKeys();

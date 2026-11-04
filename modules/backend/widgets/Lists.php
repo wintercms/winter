@@ -839,6 +839,12 @@ class Lists extends WidgetBase
      */
     public function getSelectionQuery()
     {
+        // A list that renders no checkboxes offers no selection, so a request to act on one is
+        // refused however the ids arrive. The checked_all branch below already said as much.
+        if (!$this->showCheckboxes) {
+            throw new ApplicationException(Lang::get('backend::lang.list.selection_not_supported'));
+        }
+
         $query = $this->prepareQuery()->reorder();
 
         if (!post('checked_all')) {
@@ -856,7 +862,7 @@ class Lists extends WidgetBase
          * checked_all is a client-supplied flag and the fingerprint is not a secret, so the
          * list's own configuration is what decides whether this mode is available at all.
          */
-        if (!$this->selectAllMatching || !$this->showCheckboxes || $this->showTree) {
+        if (!$this->selectAllMatching || $this->showTree) {
             throw new ApplicationException(Lang::get('backend::lang.list.selection_all_not_supported'));
         }
 

@@ -45,6 +45,10 @@ mix
         './formwidgets/iconpicker/assets/js/dist/iconpicker.js',
     )
     .js(
+        './formwidgets/relation/assets/js/src/Relation.js',
+        './formwidgets/relation/assets/js/dist/relation.js',
+    )
+    .js(
         './formwidgets/sensitive/assets/js/src/Sensitive.js',
         './formwidgets/sensitive/assets/js/dist/sensitive.js',
     )

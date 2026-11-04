@@ -164,34 +164,92 @@ class EditorSetting extends Model
 
     /**
      * Same as getConfigured but uses a special structure for styles.
+     *
+     * The editor concatenates the class and label into its dropdown markup unencoded, so both
+     * are encoded here. Encoding rather than validating keeps class names that work today
+     * (`md:text-lg`, `w-1/2`), since the editor reads the attribute back through the DOM.
+     * Encoding on read also covers values already stored.
+     *
      * @return mixed
      */
     public static function getConfiguredStyles($key, $default = null)
     {
         return static::getConfiguredArray($key, $default, function ($key, $value) {
             if (array_has($value, ['class_name', 'class_label'])) {
-                return [
-                    array_get($value, 'class_name'),
-                    array_get($value, 'class_label')
-                ];
+                $className = static::renderableEditorValue(array_get($value, 'class_name'));
+                $classLabel = static::renderableEditorValue(array_get($value, 'class_label'));
+
+                if ($className === null || $classLabel === null) {
+                    // Left out by the array_filter() in getConfiguredArray()
+                    return ['', null];
+                }
+
+                return [e($className), e($classLabel)];
             }
         });
     }
 
     /**
      * Same as getConfigured but uses a special structure for paragraph formats.
+     *
+     * The editor uses the tag as a literal element name and the label as attribute value and
+     * element content, neither encoded. The tag must therefore be a bare name, and one that is
+     * not is dropped rather than rewritten; the label is encoded.
+     *
      * @return mixed
      */
     public static function getConfiguredFormats($key, $default = null)
     {
         return static::getConfiguredArray($key, $default, function ($key, $value) {
             if (array_has($value, ['format_tag', 'format_label'])) {
-                return [
-                    array_get($value, 'format_tag'),
-                    array_get($value, 'format_label')
-                ];
+                $formatTag = static::renderableEditorValue(array_get($value, 'format_tag'));
+                $formatLabel = static::renderableEditorValue(array_get($value, 'format_label'));
+
+                // An element name, so surrounding whitespace is never meaningful. Class names
+                // are left as written, where two names differing by whitespace are two names.
+                if ($formatTag !== null) {
+                    $formatTag = trim($formatTag);
+                }
+
+                if ($formatTag === null || $formatLabel === null || !static::isValidFormatTag($formatTag)) {
+                    // Left out by the array_filter() in getConfiguredArray()
+                    return ['', null];
+                }
+
+                return [$formatTag, e($formatLabel)];
             }
         });
+    }
+
+    /**
+     * Returns a configured value as a string, or null if the editor cannot be handed it at all.
+     * Scalars and stringifiable objects qualify (a translated label arrives as either); arrays
+     * and plain objects do not.
+     *
+     * @param mixed $value
+     */
+    protected static function renderableEditorValue($value): ?string
+    {
+        if (is_scalar($value)) {
+            return (string) $value;
+        }
+
+        if (is_object($value) && method_exists($value, '__toString')) {
+            return (string) $value;
+        }
+
+        return null;
+    }
+
+    /**
+     * Is this paragraph format tag safe to hand to the editor as written?
+     *
+     * It is emitted as a literal element name, so it must be a bare one. Hyphens are allowed
+     * for custom elements, and a single letter for `N`, the editor's default-tag sentinel.
+     */
+    protected static function isValidFormatTag(string $formatTag): bool
+    {
+        return (bool) preg_match('/^[A-Za-z][A-Za-z0-9_-]*$/D', $formatTag);
     }
 
     protected static function getConfiguredArray($key, $default = null, $callback = null)

@@ -6,9 +6,12 @@ use Backend\Controllers\MyAccount;
 use Backend\Controllers\Users;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 class MyAccountTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function testMyAccountRequiresNoSpecificPermission(): void
     {
         $user = new UserFixture;

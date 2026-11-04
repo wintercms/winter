@@ -301,6 +301,16 @@ class RelationController extends ControllerBehavior
         $this->initialized = true;
     }
 
+    /**
+     * Abort the request with an access-denied code if the relation is read only
+     */
+    protected function abortIfReadOnly(): void
+    {
+        if ($this->readOnly) {
+            abort(403);
+        }
+    }
+
     //
     // Interface
     //
@@ -360,7 +370,7 @@ class RelationController extends ControllerBehavior
 
         $this->manageId = post('manage_id');
         $this->foreignId = post('foreign_id');
-        $this->readOnly = $this->getConfig('readOnly');
+        $this->readOnly = (bool) $this->getConfig('readOnly');
         $this->deferredBinding = $this->getConfig('deferredBinding') || !$this->model->exists;
         $this->viewMode = $this->evalViewMode();
         $this->manageMode = $this->evalManageMode();
@@ -835,6 +845,14 @@ class RelationController extends ControllerBehavior
              */
             if ($sortable) {
                 $widget->bindEvent('list.reorder', function ($ids, $orders) {
+                    /*
+                     * Reordering writes to the relation, so it follows readOnly like every other
+                     * relation write. The refusal belongs here rather than on the list's
+                     * `sortable` flag, which also decides whether the list presents the records
+                     * in the relation's stored order or applies a sort order of its own.
+                     */
+                    $this->abortIfReadOnly();
+
                     $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey() : null;
                     $this->model->setRelationOrder($this->relationName, $ids, $orders, $sessionKey);
                 });
@@ -1087,7 +1105,7 @@ class RelationController extends ControllerBehavior
              * Existing record
              */
             if ($this->manageId) {
-                $model = $config->model->find($this->manageId);
+                $model = $this->relationFindModel($this->manageId);
                 if ($model) {
                     $config->model = $model;
                 } else {
@@ -1099,6 +1117,7 @@ class RelationController extends ControllerBehavior
             }
 
             $widget = $this->makeWidget('Backend\Widgets\Form', $config);
+            $widget->previewMode = $this->readOnly;
         }
 
         if (!$widget) {
@@ -1153,21 +1172,27 @@ class RelationController extends ControllerBehavior
          */
         else {
             if ($this->foreignId) {
-                $foreignModel = $this->relationModel
-                    ->whereIn($foreignKeyName, (array) $this->foreignId)
-                    ->first();
+                $foreignModel = $this->relationFindAddableModels((array) $this->foreignId)->first();
 
-                if ($foreignModel) {
-                    $foreignModel->exists = false;
-                    $config->model = $foreignModel;
+                if (!$foreignModel) {
+                    throw new ApplicationException(Lang::get('backend::lang.model.not_found', [
+                        'class' => get_class($config->model),
+                        'id' => is_array($this->foreignId) ? implode(', ', $this->foreignId) : $this->foreignId,
+                    ]));
                 }
+
+                $foreignModel->exists = false;
+                $config->model = $foreignModel;
             }
 
             $pivotModel = $this->relationObject->newPivot();
             $config->model->setRelation('pivot', $pivotModel);
         }
 
-        return $this->makeWidget('Backend\Widgets\Form', $config);
+        $widget = $this->makeWidget('Backend\Widgets\Form', $config);
+        $widget->previewMode = $this->readOnly;
+
+        return $widget;
     }
 
     //
@@ -1270,12 +1295,13 @@ class RelationController extends ControllerBehavior
     {
         $this->forceManageMode = 'form';
         $this->beforeAjax();
+        $this->abortIfReadOnly();
 
         if (!$this->relationUserHasAccess('create')) {
             abort(403);
         }
 
-        $saveData = $this->manageWidget->getSaveData();
+      $saveData = $this->manageWidget->getSaveData();
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey(true) : null;
 
         if ($this->viewMode === 'multi') {
@@ -1364,6 +1390,7 @@ class RelationController extends ControllerBehavior
     {
         $this->forceManageMode = 'form';
         $this->beforeAjax();
+        $this->abortIfReadOnly();
 
         if (!$this->relationUserHasAccess('update')) {
             abort(403);
@@ -1398,6 +1425,7 @@ class RelationController extends ControllerBehavior
     public function onRelationManageDelete()
     {
         $this->beforeAjax();
+        $this->abortIfReadOnly();
 
         if (!$this->relationUserHasAccess('delete')) {
             abort(403);
@@ -1408,11 +1436,7 @@ class RelationController extends ControllerBehavior
          */
         if ($this->viewMode === 'multi') {
             if (($checkedIds = post('checked')) && is_array($checkedIds)) {
-                foreach ($checkedIds as $relationId) {
-                    if (!$obj = $this->relationModel->find($relationId)) {
-                        continue;
-                    }
-
+                foreach ($this->relationFindModels($checkedIds) as $obj) {
                     $obj->delete();
                 }
             }
@@ -1441,7 +1465,13 @@ class RelationController extends ControllerBehavior
      */
     public function onRelationManageAdd()
     {
+        /*
+         * The records are picked from the manage list, so the manage list is what decides
+         * which records may be added. Build it whatever mode the browser posted.
+         */
+        $this->forceManageMode = 'list';
         $this->beforeAjax();
+        $this->abortIfReadOnly();
 
         $recordId = post('record_id');
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey() : null;
@@ -1462,10 +1492,8 @@ class RelationController extends ControllerBehavior
                  */
                 $existingIds = $this->findExistingRelationIds($checkedIds);
                 $checkedIds = array_diff($checkedIds, $existingIds);
-                $foreignKeyName = $this->relationModel->getKeyName();
 
-                $models = $this->relationModel->whereIn($foreignKeyName, $checkedIds)->get();
-                foreach ($models as $model) {
+                foreach ($this->relationFindAddableModels($checkedIds) as $model) {
                     $this->relationObject->add($model, $sessionKey);
                 }
             }
@@ -1478,7 +1506,7 @@ class RelationController extends ControllerBehavior
                 abort(403);
             }
 
-            if ($recordId && ($model = $this->relationModel->find($recordId))) {
+            if ($recordId && ($model = $this->relationFindAddableModels([$recordId])->first())) {
                 if ($this->relationType === 'hasOne') {
                     // Unassign previous relation if one is already assigned
                     $relation = $this->relationObject->getParent()->{$this->relationName} ?? null;
@@ -1513,10 +1541,10 @@ class RelationController extends ControllerBehavior
     public function onRelationManageRemove()
     {
         $this->beforeAjax();
+        $this->abortIfReadOnly();
 
         $recordId = post('record_id');
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey() : null;
-        $relatedModel = $this->relationModel;
 
         /*
          * Remove
@@ -1529,10 +1557,7 @@ class RelationController extends ControllerBehavior
             $checkedIds = $recordId ? [$recordId] : post('checked');
 
             if (is_array($checkedIds)) {
-                $foreignKeyName = $relatedModel->getKeyName();
-
-                $models = $relatedModel->whereIn($foreignKeyName, $checkedIds)->get();
-                foreach ($models as $model) {
+                foreach ($this->relationFindModels($checkedIds) as $model) {
                     $this->relationObject->remove($model, $sessionKey);
                 }
             }
@@ -1556,7 +1581,7 @@ class RelationController extends ControllerBehavior
                 }
             }
             elseif ($this->relationType === 'hasOne' || $this->relationType === 'morphOne') {
-                if ($obj = $relatedModel->find($recordId)) {
+                if ($obj = $this->relationFindModel($recordId)) {
                     $this->relationObject->remove($obj, $sessionKey);
                 }
                 elseif ($this->viewModel->exists) {
@@ -1594,6 +1619,7 @@ class RelationController extends ControllerBehavior
     public function onRelationManagePivotCreate()
     {
         $this->beforeAjax();
+        $this->abortIfReadOnly();
 
         if (!$this->relationUserHasAccess('add')) {
             abort(403);
@@ -1608,7 +1634,7 @@ class RelationController extends ControllerBehavior
              */
             $foreignIds = (array) $this->foreignId;
             $saveData = $this->pivotWidget->getSaveData();
-            $foreignModels = $this->relationModel->whereIn($this->relationModel->getKeyName(), $foreignIds)->get();
+            $foreignModels = $this->relationFindAddableModels($foreignIds);
             $this->relationObject->syncWithPivotValues($foreignModels, $saveData['pivot'] ?? [], false);
 
             /*
@@ -1631,6 +1657,7 @@ class RelationController extends ControllerBehavior
     public function onRelationManagePivotUpdate()
     {
         $this->beforeAjax();
+        $this->abortIfReadOnly();
 
         $hydratedModel = $this->pivotWidget->model;
         $saveData = $this->pivotWidget->getSaveData();
@@ -1729,6 +1756,82 @@ class RelationController extends ControllerBehavior
     //
     // Helpers
     //
+
+    /**
+     * Returns a query constrained to the records the relation manager is currently showing:
+     * the relation's own records, or - while deferred - the records bound to the active
+     * session key. Mirrors the constraints applied to the view list widget.
+     */
+    protected function relationScopedQuery()
+    {
+        $query = $this->model->{$this->relationName}();
+
+        if ($this->deferredBinding) {
+            return $query->withDeferred($this->relationGetSessionKey());
+        }
+
+        return $query;
+    }
+
+    /**
+     * Finds a single record within the relation by its key, returning null when the key does
+     * not belong to the relation.
+     *
+     * Handlers that operate on an existing related record must resolve it through here: the
+     * key arrives from the request, so looking it up on the related model directly lets any
+     * record of that class be addressed. Handlers whose purpose is to attach a record that is
+     * not related yet (add / link / pivot create) cannot use the relation as their scope, and
+     * use relationFindAddableModels() instead.
+     */
+    protected function relationFindModel($recordId)
+    {
+        if (!$recordId) {
+            return null;
+        }
+
+        return $this->relationScopedQuery()->find($recordId);
+    }
+
+    /**
+     * Finds the records within the relation matching the supplied keys, dropping any key that
+     * does not belong to the relation.
+     * @see static::relationFindModel()
+     */
+    protected function relationFindModels(array $recordIds)
+    {
+        if (!count($recordIds)) {
+            return $this->relationModel->newCollection();
+        }
+
+        return $this->relationScopedQuery()
+            ->whereIn($this->relationModel->getQualifiedKeyName(), $recordIds)
+            ->get();
+    }
+
+    /**
+     * Finds the records that may be added to the relation from the supplied keys, dropping any
+     * key the relation manager does not offer.
+     *
+     * Attaching has to reach outside the relation - that is its purpose - so the relation
+     * cannot be its scope. The manage list is: `manage[conditions]`, `manage[scope]` (which
+     * receives the parent) and `relationExtendManageWidget()` narrow it, so resolving through
+     * it makes what the relation manager accepts the same as what it offers.
+     *
+     * Keys are validated against the list query, then loaded from the related model, since the
+     * list query selects the extra columns its display needs.
+     */
+    protected function relationFindAddableModels(array $recordIds)
+    {
+        $keyName = $this->relationModel->getQualifiedKeyName();
+
+        $addableIds = $this->manageWidget
+            ->prepareQuery()
+            ->whereIn($keyName, $recordIds)
+            ->get()
+            ->modelKeys();
+
+        return $this->relationModel->whereIn($keyName, $addableIds)->get();
+    }
 
     /**
      * Returns the existing record IDs for the relation.
@@ -1900,12 +2003,16 @@ class RelationController extends ControllerBehavior
      */
     protected function evalManageMode()
     {
-        if ($mode = post(self::PARAM_MODE)) {
-            return $mode;
-        }
-
+        /*
+         * A handler forces a mode because it can only operate in that mode; the posted mode is
+         * supplied by the browser and must not be able to override it.
+         */
         if ($this->forceManageMode) {
             return $this->forceManageMode;
+        }
+
+        if ($mode = post(self::PARAM_MODE)) {
+            return $mode;
         }
 
         switch ($this->eventTarget) {
@@ -1986,7 +2093,14 @@ class RelationController extends ControllerBehavior
             return;
         }
 
-        $parsedConfig = array_only($config, ['readOnly']);
+        /*
+         * The extra configuration round trips through the browser, which returns it with every
+         * relation AJAX request, so it cannot decide whether the relation is writable in either
+         * direction. readOnly is taken from the relation configuration alone, by initRelation(),
+         * and enforced server side by abortIfReadOnly(); a readOnly passed to relationRender()
+         * styles that one render and is not remembered.
+         */
+        $parsedConfig = [];
         $parsedConfig['view'] = array_only($config, ['recordUrl', 'recordOnClick']);
 
         $this->originalConfig->{$field} = array_replace_recursive(

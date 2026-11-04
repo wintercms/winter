@@ -7,10 +7,13 @@ use Backend\Facades\BackendAuth;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Request;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Exception\ApplicationException;
 
 class AuthResetTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     /**
      * A reset submission for a user id that matches nobody must produce the generic reset
      * error, not a fatal null dereference.

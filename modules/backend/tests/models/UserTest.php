@@ -5,11 +5,14 @@ namespace Backend\Tests\Models;
 use Backend\Models\User;
 use Backend\Models\UserRole;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Auth\AuthorizationException;
 use Winter\Storm\Database\Model as Eloquent;
 
 class UserTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected User $superuser;
     protected User $admin;
     protected User $lowPriv;
