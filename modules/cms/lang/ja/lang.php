@@ -11,7 +11,6 @@ return [
         'error_deleting' => '":name"一時ファイル削除エラー',
         'delete_success' => ':count個のテンプレートを削除しました。',
         'file_name_required' => 'ファイル名フィールドが必要です。',
-        'safe_mode_enabled' => '現在、セーフモードが有効になっています。CMS テンプレートの PHP コードの編集はできません。セーフモードを無効にするには、`cms.enableSafeMode`設定値を`false`に設定します。',
     ],
     'dashboard' => [
         'active_theme' => [

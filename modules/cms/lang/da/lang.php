@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Fejl under sletning af skabelonfil ':name'. Kontroller venligst skriverettigheder.",
         'delete_success' => 'Slettede skabeloner: :count.',
         'file_name_required' => 'Filnavnet er påkrævet.',
-        'safe_mode_enabled' => 'sikkerhedstilstand er aktiveret.',
     ],
     'dashboard' => [
         'active_theme' => [

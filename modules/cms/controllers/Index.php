@@ -16,7 +16,6 @@ use Cms\Classes\Page;
 use Cms\Classes\Partial;
 use Cms\Classes\Router;
 use Cms\Classes\Theme;
-use Cms\Helpers\Cms as CmsHelpers;
 use Cms\Widgets\AssetList;
 use Cms\Widgets\ComponentList;
 use Cms\Widgets\TemplateList;
@@ -65,24 +64,6 @@ class Index extends Controller
     public function __construct()
     {
         parent::__construct();
-
-        Event::listen('backend.form.extendFieldsBefore', function ($widget) {
-            if (!$widget->getController() instanceof Index) {
-                return;
-            }
-            if (!$widget->model instanceof CmsCompoundObject) {
-                return;
-            }
-
-            if (empty($widget->secondaryTabs['fields'])) {
-                return;
-            }
-
-            if (array_key_exists('code', $widget->secondaryTabs['fields']) && CmsHelpers::safeModeEnabled()) {
-                $widget->secondaryTabs['fields']['safemode_notice']['hidden'] = false;
-                $widget->secondaryTabs['fields']['code']['readOnly'] = true;
-            };
-        });
 
         BackendMenu::setContext('Winter.Cms', 'cms', true);
 

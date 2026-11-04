@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Памылка падчас выдалення файла шаблону \":name\". Калі ласка, праверце дазволы на запіс",
         'delete_success' => "Выдалена шаблонаў: :count",
         'file_name_required' => "Патрабуецца імя файла",
-        'safe_mode_enabled' => "Бяспечны рэжым ужо уключаны",
     ],
     'dashboard' => [
         'active_theme' => [

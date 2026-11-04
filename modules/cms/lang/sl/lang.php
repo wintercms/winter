@@ -11,7 +11,6 @@ return [
         'error_deleting'           => "Napaka pri brisanju predloge ':name'. Prosimo, preverite vaša uporabniška dovoljenja.",
         'delete_success'           => 'Izbrisanih predlog: :count.',
         'file_name_required'       => 'Obvezno polje: Ime datoteke',
-        'safe_mode_enabled'        => 'Varnostni način je trenutno vključen.',
     ],
     'dashboard'    => [
         'active_theme' => [

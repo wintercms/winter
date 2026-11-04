@@ -11,7 +11,6 @@ return [
         'error_deleting' => 'Erro ao excluir o arquivo de modelo ":name". Verifique as permissões de escrita.',
         'delete_success' => 'Modelos excluídos com sucesso: :count.',
         'file_name_required' => 'O campo de Nome do Arquivo é necessário.',
-        'safe_mode_enabled' => 'Modo de segurança está ativado.',
     ],
     'dashboard' => [
         'active_theme' => [

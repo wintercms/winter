@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Error eliminant l'arxiu de plantilla ':name'. Si us plau revisa els permisos d'escriptura.",
         'delete_success' => 'Plantilles eliminades: :count.',
         'file_name_required' => "El camp 'Nom d'arxiu' és obligatori.",
-        'safe_mode_enabled' => 'El mode segur està activat.'
     ],
     'dashboard' => [
         'active_theme' => [

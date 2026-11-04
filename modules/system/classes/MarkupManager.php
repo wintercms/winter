@@ -1,9 +1,8 @@
 <?php namespace System\Classes;
 
 use System\Twig\Extension as SystemTwigExtension;
-use System\Twig\GetAttrAdjuster;
 use System\Twig\Loader as SystemTwigLoader;
-use System\Twig\SecurityPolicy as TwigSecurityPolicy;
+use System\Twig\SandboxPolicy;
 use Twig\Environment as TwigEnvironment;
 use Twig\Extension\SandboxExtension;
 use Twig\Loader\LoaderInterface;
@@ -51,7 +50,11 @@ class MarkupManager
     }
 
     /**
-     * Make an instance of the base TwigEnvironment to extend further
+     * Make an instance of the base TwigEnvironment to extend further.
+     *
+     * The environment is not sandboxed. Use it for templates your own code ships: module and
+     * plugin views, and theme templates, which only a `cms.manage_themes`-level role can edit.
+     * For a template someone else may have written, use makeSandboxedTwigEnvironment() instead.
      */
     public static function makeBaseTwigEnvironment(?LoaderInterface $loader = null, array $options = []): TwigEnvironment
     {
@@ -65,8 +68,39 @@ class MarkupManager
 
         $twig = new TwigEnvironment($loader, $options);
         $twig->addExtension(new SystemTwigExtension);
-        $twig->addExtension(new SandboxExtension(new TwigSecurityPolicy, true));
-        $twig->addNodeVisitor(new GetAttrAdjuster);
+        return $twig;
+    }
+
+    /**
+     * Make an instance of a sandboxed TwigEnvironment, for rendering a template that was not
+     * written by a developer - one a backend user edits in a `codeeditor` field, for instance.
+     *
+     * The sandbox is an allowlist (see System\Twig\SandboxPolicy): the template may read the
+     * values passed to render() and format them, and nothing else. So the one rule to follow is
+     * to pass only the values you are willing to expose:
+     *
+     *     $twig = MarkupManager::makeSandboxedTwigEnvironment();
+     *     $html = $twig->createTemplate($userEditedTemplate)->render([
+     *         'order' => $order,
+     *     ]);
+     *
+     * Widen the allowlist when your own templates need more than the baseline:
+     *
+     *     $twig = MarkupManager::makeSandboxedTwigEnvironment([
+     *         'filters' => ['my_plugin_filter'],
+     *         'methods' => [\Winter\Mall\Models\Order::class => ['subtotal']],
+     *     ]);
+     *
+     * @param array $allow Allowances added to the baseline, keyed by `tags`, `filters`,
+     * `functions`, `tests` or `methods`.
+     */
+    public static function makeSandboxedTwigEnvironment(
+        array $allow = [],
+        ?LoaderInterface $loader = null,
+        array $options = []
+    ): TwigEnvironment {
+        $twig = static::makeBaseTwigEnvironment($loader, $options);
+        $twig->addExtension(new SandboxExtension(new SandboxPolicy($allow), true));
         return $twig;
     }
 

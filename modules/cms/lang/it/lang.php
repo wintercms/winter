@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Errore nella cancellazione del file ':name'. Verifica le autorizzazioni di scrittura.",
         'delete_success' => 'Template eliminati correttamente: :count.',
         'file_name_required' => 'Il campo Nome file è obbligatorio.',
-        'safe_mode_enabled' => 'La modalità sicura è attualmente abilitata.',
     ],
     'dashboard' => [
         'active_theme' => [
