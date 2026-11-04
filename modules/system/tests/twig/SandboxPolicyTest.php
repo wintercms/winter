@@ -8,10 +8,7 @@ use Cms\Classes\Theme;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 use InvalidArgumentException;
-use System\Classes\MailManager;
 use System\Classes\MarkupManager;
-use System\Models\MailLayout;
-use System\Models\MailTemplate;
 use System\Tests\Bootstrap\TestCase;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -21,8 +18,9 @@ use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Facades\Config;
 
 /**
- * Covers the 1.2.15 sandbox posture: only a template that a developer did not write is
- * sandboxed, and the sandbox that applies to one is an allowlist.
+ * Covers the 1.2.15 sandbox posture: nothing core renders is sandboxed, because every template
+ * core renders is managed by a developer-level role, and the sandbox a plugin can opt into for a
+ * template its own users wrote is an allowlist.
  */
 class SandboxPolicyTest extends TestCase
 {
@@ -41,25 +39,26 @@ class SandboxPolicyTest extends TestCase
         ]);
     }
 
-    public function testOnlyTheSandboxedMailerEnvironmentIsSandboxed(): void
+    public function testNoCoreTwigEnvironmentIsSandboxed(): void
     {
         Config::set('cms.twigNoCache', true);
 
-        $this->assertFalse(
-            $this->app->make('twig.environment')->hasExtension(SandboxExtension::class),
-            'twig.environment backs the .htm view engine, which renders module and plugin views'
-        );
-        $this->assertFalse(
-            $this->app->make('twig.environment.cms')->hasExtension(SandboxExtension::class),
-            'twig.environment.cms renders theme templates, which only a code-level role can edit'
-        );
-        $this->assertFalse(
-            $this->app->make('twig.environment.mailer')->hasExtension(SandboxExtension::class),
-            'twig.environment.mailer renders mail views, which are files in a repository'
-        );
+        $environments = [
+            'twig.environment' => 'backs the .htm view engine, which renders module and plugin views',
+            'twig.environment.cms' => 'renders theme templates, which only a code-level role can edit',
+            'twig.environment.mailer' => 'renders mail content, which only a code-level role can write',
+        ];
+
+        foreach ($environments as $environment => $why) {
+            $this->assertFalse(
+                $this->app->make($environment)->hasExtension(SandboxExtension::class),
+                $environment . ' ' . $why
+            );
+        }
+
         $this->assertTrue(
-            $this->app->make('twig.environment.mailer.sandboxed')->hasExtension(SandboxExtension::class),
-            'twig.environment.mailer.sandboxed renders mail content a non-developer edits in the backend'
+            MarkupManager::makeSandboxedTwigEnvironment()->hasExtension(SandboxExtension::class),
+            'the factory is the only sandboxed environment, and a plugin has to ask for it'
         );
     }
 
@@ -311,14 +310,13 @@ class SandboxPolicyTest extends TestCase
     }
 
     /**
-     * Mail content stored in the database is the one thing core renders that a backend user wrote,
-     * so this is the environment that has to keep refusing an escape. Every one of these worked
-     * while the policy was a blocklist, because the wildcard markup extensions were never on that
-     * list at all.
+     * The factory's environment is the only sandbox left anywhere, so it is the one that has to
+     * refuse an escape. Every one of these worked while the policy was a blocklist, because the
+     * wildcard markup extensions were never on that list at all.
      */
-    public function testTheSandboxedMailerEnvironmentRefusesAnEscape(): void
+    public function testTheSandboxedEnvironmentRefusesAnEscape(): void
     {
-        $twig = $this->app->make('twig.environment.mailer.sandboxed');
+        $twig = MarkupManager::makeSandboxedTwigEnvironment();
         $model = new SandboxPolicyTestModel(['title' => 'Alice']);
 
         $escapes = [
@@ -359,7 +357,7 @@ class SandboxPolicyTest extends TestCase
         foreach ($escapes as $template) {
             try {
                 $twig->createTemplate($template)->render($data);
-                $this->fail('Mailer sandbox allowed: ' . $template);
+                $this->fail('Sandbox allowed: ' . $template);
             } catch (SecurityError | SyntaxError | RuntimeError $ex) {
                 $this->assertTrue(true);
             }
@@ -367,10 +365,12 @@ class SandboxPolicyTest extends TestCase
     }
 
     /**
-     * ... while every mail view the modules ship still renders, in the plain environment, which is
-     * where a file in a repository belongs.
+     * ... while mail renders outside one. Every mail view the modules ship goes through the plain
+     * mailer environment, and these would be the first things to break if it were ever sandboxed
+     * again: between them they use the wildcard markup families, the `{% partial %}` tag and the
+     * filters a message needs.
      */
-    public function testTheMailerEnvironmentStillRendersTheCoreMailViews(): void
+    public function testTheMailerEnvironmentIsNotSandboxedAndRendersTheCoreMailViews(): void
     {
         $twig = $this->app->make('twig.environment.mailer');
 
@@ -378,97 +378,18 @@ class SandboxPolicyTest extends TestCase
             $this->assertIsString($twig->createTemplate($content)->render($this->mailViewData()), $name);
         }
 
-        // The partial tag, which only the two mailer environments register. Resolving the partial
+        // The partial tag, which only the mailer environment registers. Resolving the partial
         // itself needs the database, so all this asserts is that the tag was not refused.
         $this->assertIsString(
             $twig->createTemplate("{% partial 'button' url=link body %}Sign in{% endpartial %}")
                 ->render($this->mailViewData())
         );
-    }
 
-    /**
-     * A mail layout is the exception among the three record types: its row is written once from
-     * the view file and edited in place from then on, with nothing left to say whether it still
-     * matches, so MailManager treats every layout as backend-written. Both layouts core ships
-     * therefore have to render inside the sandbox as well as outside it.
-     */
-    public function testTheCoreMailLayoutsRenderInsideTheSandboxToo(): void
-    {
-        $twig = $this->app->make('twig.environment.mailer.sandboxed');
-
-        foreach (glob(base_path('modules/system/views/mail/layout-*.php')) as $view) {
-            $this->assertIsString(
-                $twig->createTemplate(file_get_contents($view))->render($this->mailViewData()),
-                basename($view)
-            );
-        }
-    }
-
-    /**
-     * The template's own origin decides the template's environment. Same markup, same layout, and
-     * the only difference is which side of `is_custom` the content came from.
-     */
-    public function testAMailTemplateIsJudgedOnItsOwnOrigin(): void
-    {
-        $markup = "{{ str_limit('abcdefgh', 4) }}";
-
+        // And the markup extensions a mail template is free to use, which a sandbox would refuse.
         $this->assertSame(
-            '[abcd...]',
-            trim(MailManager::instance()->renderTextTemplate($this->mailTemplate($markup, false)))
+            'abcd...',
+            trim($twig->createTemplate("{{ str_limit('abcdefgh', 4) }}")->render())
         );
-
-        $this->expectException(SecurityError::class);
-        MailManager::instance()->renderTextTemplate($this->mailTemplate($markup, true));
-    }
-
-    /**
-     * ... and the layout's own origin decides the layout's, so a view-file template does not carry
-     * its own trust into a layout. Core's layouts are the only ones whose markup we control, and
-     * every layout is treated as backend-written, so this is the direction that matters: the
-     * template renders and the layout is still refused.
-     */
-    public function testALayoutIsSandboxedEvenBehindAViewFileTemplate(): void
-    {
-        $this->expectException(SecurityError::class);
-
-        MailManager::instance()->renderTextTemplate(
-            $this->mailTemplate('fine', false, "{{ str_random(8) }}")
-        );
-    }
-
-    /**
-     * And what a backend-written template produces reaches its layout as text, not as Twig, which
-     * is why the layout rendering outside the sandbox cannot be used to escape it.
-     */
-    public function testWhatASandboxedTemplateProducesIsNotReEvaluated(): void
-    {
-        $output = MailManager::instance()->renderTextTemplate(
-            $this->mailTemplate("{{ '{{ str_random(8) }}' }}", true, '[{{ content }}]')
-        );
-
-        $this->assertSame('[{{ str_random(8) }}]', trim($output));
-    }
-
-    /**
-     * An unsaved template and layout pair, so the composition tests exercise MailManager's real
-     * decision without needing the records in a database.
-     */
-    protected function mailTemplate(
-        string $content,
-        bool $isCustom,
-        string $layoutContent = '[{{ content }}]'
-    ): MailTemplate {
-        $layout = new MailLayout();
-        $layout->code = 'sandbox-policy-test';
-        $layout->content_text = $layoutContent;
-
-        $template = new MailTemplate();
-        $template->code = 'sandbox-policy-test';
-        $template->content_text = $content;
-        $template->is_custom = $isCustom ? 1 : 0;
-        $template->setRelation('layout', $layout);
-
-        return $template;
     }
 
     protected function coreMailViews(): array
