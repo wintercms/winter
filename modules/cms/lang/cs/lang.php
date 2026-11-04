@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Chyba mazání souboru s šablonou ':name'. Zkontrolujte práva k zápisu.",
         'delete_success' => 'Šablony úspěšně smazány: :count.',
         'file_name_required' => 'Je nutno vyplnit Název souboru.',
-        'safe_mode_enabled' => 'Bezpěčný režim (safe mode) je aktivní.'
 
     ],
     'dashboard' => [

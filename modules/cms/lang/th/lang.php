@@ -11,7 +11,6 @@ return [
         'error_deleting' => "การลบไฟล์แม่แบบผิดพลาด ':name' กรุณาตรวจสอบสิทธิ์การเขียนไฟล์",
         'delete_success' => 'ลบแม่แบบจำนวน: :count แม่แบบ',
         'file_name_required' => 'ต้องใส่ช่องชื่อไฟล์',
-        'safe_mode_enabled' => 'โหมดความปลอดภัยกำลังถูกใช้งาน',
     ],
     'dashboard' => [
         'active_theme' => [

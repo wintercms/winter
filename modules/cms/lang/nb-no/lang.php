@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Kunne ikke slette filen ':name'. Vennligst sjekk skriverettigheter på serveren.",
         'delete_success' => 'Templates som ble slettet: :count.',
         'file_name_required' => 'Filnavnfeltet er obligatorisk.',
-        'safe_mode_enabled' => 'Sikkert modus er aktivert.',
     ],
     'dashboard' => [
         'active_theme' => [

@@ -2,14 +2,11 @@
 
 use App;
 use Ini;
-use Lang;
 use Cache;
 use Config;
 use Cms\Components\ViewBag;
-use Cms\Helpers\Cms as CmsHelpers;
 use Winter\Storm\Halcyon\Processors\SectionParser;
 use Twig\Source as TwigSource;
-use ApplicationException;
 
 /**
  * This is a base class for CMS objects that have multiple sections - pages, partials and layouts.
@@ -95,7 +92,7 @@ class CmsCompoundObject extends CmsObject
      */
     public function beforeSave()
     {
-        // Ignore line-ending only changes to the code property to avoid triggering safe mode
+        // Ignore line-ending only changes to the code property, so the file is not rewritten
         // when no changes actually occurred, it was just the browser reformatting line endings
         if ($this->isDirty('code')) {
             $oldCode = str_replace("\n", "\r\n", str_replace("\r", '', $this->getOriginal('code')));
@@ -104,8 +101,6 @@ class CmsCompoundObject extends CmsObject
                 $this->code = $this->getOriginal('code');
             }
         }
-
-        $this->checkSafeMode();
     }
 
     /**
@@ -142,18 +137,6 @@ class CmsCompoundObject extends CmsObject
     protected function parseSettings()
     {
         $this->fillViewBagArray();
-    }
-
-    /**
-     * This method checks if safe mode is enabled by config, and the code
-     * attribute is modified and populated. If so an exception is thrown.
-     * @return void
-     */
-    protected function checkSafeMode()
-    {
-        if (CmsHelpers::safeModeEnabled() && $this->isDirty('code') && strlen(trim($this->code))) {
-            throw new ApplicationException(Lang::get('cms::lang.cms_object.safe_mode_enabled'));
-        }
     }
 
     //

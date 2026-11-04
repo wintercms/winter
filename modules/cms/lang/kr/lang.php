@@ -11,7 +11,6 @@ return [
         'error_deleting' => '":name" 파일 삭제 오류',
         'delete_success' => ':count 개의 템플릿을 삭제했습니다.',
         'file_name_required' => '파일명 필드가 필요합니다.',
-        'safe_mode_enabled' => '안전모드가 활성화 되었습니다.'
     ],
     'dashboard' => [
         'active_theme' => [

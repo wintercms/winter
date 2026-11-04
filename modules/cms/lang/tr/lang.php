@@ -11,7 +11,6 @@ return [
         'error_deleting' => '":name" şablon dosyası silinirken hatayla karşılaşıldı.',
         'delete_success' => ':count şablon başarıyla silindi.',
         'file_name_required' => 'Dosya adı alanı gereklidir.',
-        'safe_mode_enabled' => 'Güvenli mod şuan aktif.',
     ],
     'dashboard' => [
         'active_theme' => [

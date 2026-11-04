@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Greška pri brisanju šablonskog fajla ':name'. Proveri dozvole na sistemu.",
         'delete_success' => 'Izbrisani šabloni: :count.',
         'file_name_required' => 'Polje za naziv fajla je obavezno.',
-        'safe_mode_enabled' => 'Signurni režim je trenutno omogućen. Izmena PHP koda u CMS šablonima je trenutno onemogućena. Da isključiš siguran režim rada, izmeni vrednost konfiguracione promenljive `cms.enableSafeMode` u `false`.',
     ],
     'dashboard' => [
         'active_theme' => [

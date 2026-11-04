@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Błąd przy usuwaniu pliku szablonu ':name'. Proszę sprawdzić uprawnienia zapisu/modyfikacji.",
         'delete_success' => 'Szablony zostały prawidłowo usunięte: :count.',
         'file_name_required' => 'Pole Nazwa Pliku jest wymagane.',
-        'safe_mode_enabled' => 'Safe mode jest obecnie włączony.',
     ],
     'dashboard' => [
         'active_theme' => [
