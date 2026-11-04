@@ -1209,6 +1209,13 @@ class Form extends WidgetBase
                     $value = !strlen(trim($value)) ? null : (float) $value;
                 }
 
+                /*
+                 * A checkboxlist with nothing checked only posts its hidden "0"
+                 */
+                if ($field->type === 'checkboxlist' && !is_array($value)) {
+                    $value = null;
+                }
+
                 $this->dataArraySet($result, $parts, $value);
             }
         }
