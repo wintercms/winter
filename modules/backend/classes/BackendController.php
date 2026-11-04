@@ -305,11 +305,11 @@ class BackendController extends ControllerBase
     /**
      * Determines whether a URL segment may be used as part of a controller class name.
      *
-     * A backend URL names classes, so each segment that becomes part of one is a plain PHP
-     * identifier. A segment holding anything else -- a namespace separator (`%5C` decodes to
-     * one, and `RouterHelper::segmentizeUrl()` only splits on `/`), a dot, or a `..` traversal
-     * -- can never name a controller, yet `findController()` would still turn it into the path
-     * it passes to `include_once`, reaching any `.php` file outside the controller root.
+     * A backend URL names classes, so each segment that becomes part of one has to be a plain
+     * PHP identifier -- the only shape a class name can take. `RouterHelper::segmentizeUrl()`
+     * splits only on `/`, so a segment may hold characters that are not identifier characters,
+     * and `findController()` would otherwise go on to build a file path out of such a name and
+     * look that path up somewhere other than a controller directory.
      *
      * The check is deliberately case-insensitive: resolving a lowercase URL segment against a
      * mixed-case class file is the workaround `findController()` exists to provide.
