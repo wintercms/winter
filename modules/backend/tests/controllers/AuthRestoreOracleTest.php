@@ -7,6 +7,7 @@ use Backend\Models\User;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Request;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\Flash;
@@ -23,6 +24,8 @@ use Winter\Storm\Support\Facades\Mail;
  */
 class AuthRestoreOracleTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected User $alice;
 
     public function setUp(): void

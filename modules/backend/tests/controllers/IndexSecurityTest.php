@@ -6,6 +6,7 @@ use Backend\Classes\WidgetManager;
 use Backend\Models\User;
 use Backend\Models\UserRole;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Facades\Config;
 
@@ -20,6 +21,8 @@ use Winter\Storm\Support\Facades\Config;
  */
 class IndexSecurityTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected User $denied;
     protected User $allowed;
 

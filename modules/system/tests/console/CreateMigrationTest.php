@@ -3,11 +3,14 @@
 namespace System\Tests\Console;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Schema;
 
 class CreateMigrationTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected ?string $versionFile = null;
     protected ?string $versionFolder = null;
     protected ?string $table = null;

@@ -367,6 +367,8 @@ class Repeater extends FormWidgetBase
 
     public function onAddItem()
     {
+        $this->abortIfPreviewMode();
+
         $groupCode = post('_repeater_group');
 
         $index = $this->getNextIndex();
@@ -386,6 +388,8 @@ class Repeater extends FormWidgetBase
 
     public function onRemoveItem()
     {
+        $this->abortIfPreviewMode();
+
         // Useful for deleting relations
     }
 

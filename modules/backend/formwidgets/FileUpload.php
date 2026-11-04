@@ -347,6 +347,8 @@ class FileUpload extends FormWidgetBase
      */
     public function onRemoveAttachment(): void
     {
+        $this->abortIfPreviewMode();
+
         if ($file = $this->getFileRecord()) {
             $this->getRelationObject()->remove($file, $this->sessionKey);
         }
@@ -359,6 +361,8 @@ class FileUpload extends FormWidgetBase
      */
     public function onSortAttachments(): void
     {
+        $this->abortIfPreviewMode();
+
         if ($sortData = post('sortOrder')) {
             // Only reorder files that actually belong to this widget's relation
             // (including the current deferred-binding session), never arbitrary
@@ -408,6 +412,9 @@ class FileUpload extends FormWidgetBase
      */
     public function onSaveAttachmentConfig()
     {
+        // Ahead of the try, whose catch would turn the abort into a JSON error string
+        $this->abortIfPreviewMode();
+
         try {
             $formWidget = $this->getConfigFormWidget();
             if ($file = $formWidget->model) {
@@ -450,6 +457,9 @@ class FileUpload extends FormWidgetBase
      */
     public function onUpload()
     {
+        // Ahead of the try, whose catch would turn the abort into a JSON error string
+        $this->abortIfPreviewMode();
+
         try {
             $file = $this->getRelationModel();
             $fileRelation = $this->getRelationObject();

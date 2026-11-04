@@ -5,9 +5,12 @@ namespace System\Tests;
 use Illuminate\Support\Facades\Log;
 use System\Tests\Bootstrap\PluginTestCase;
 use Winter\Storm\Support\Facades\DB;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 class ServiceProviderTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     /**
      * Test the registerLogging method
      *

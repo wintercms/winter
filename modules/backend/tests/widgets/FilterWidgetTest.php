@@ -8,9 +8,12 @@ use Backend\Tests\Fixtures\Models\UserFixture;
 use Backend\Widgets\Filter;
 use Carbon\Carbon;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 class FilterWidgetTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     //
     // Permission / scope restriction tests (existing)
     //

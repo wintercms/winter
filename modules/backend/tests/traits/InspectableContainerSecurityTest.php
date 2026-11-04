@@ -10,6 +10,7 @@ use Cms\Classes\ComponentBase;
 use Cms\Classes\ComponentManager;
 use System\Classes\SettingsManager;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Facades\Config;
 
@@ -90,6 +91,8 @@ class ExtraInspectableController extends InspectableController
  */
 class InspectableContainerSecurityTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected User $dashboardOnly;
     protected User $cmsEditor;
 

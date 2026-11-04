@@ -3,12 +3,15 @@
 namespace System\Tests\Plugins\Database;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use System\Models\File as FileModel;
 use Database\Tester\Models\User;
 use Model;
 
 class AttachManyModelTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp() : void
     {
         parent::setUp();

@@ -6,11 +6,14 @@ use Backend\Controllers\Auth;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use Illuminate\Support\Facades\Request;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Support\Facades\Config;
 
 class ControllerPostbackTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     /**
      * Builds a mock Request that simulates an AJAX POST with the given handler.
      */

@@ -127,14 +127,34 @@ class ReorderController extends ControllerBehavior
                 return;
             }
 
-            $model->setSortableOrder($ids, $orders);
+            $offered = $this->reorderScopedQuery()
+                ->whereIn($model->getQualifiedKeyName(), (array) $ids)
+                ->pluck($model->getQualifiedKeyName())
+                ->all();
+
+            $sortable = [];
+            foreach ((array) $ids as $index => $id) {
+                if (in_array($id, $offered) && isset($orders[$index])) {
+                    $sortable[$id] = $orders[$index];
+                }
+            }
+
+            if (!$sortable) {
+                return;
+            }
+
+            $model->setSortableOrder(array_keys($sortable), array_values($sortable));
         }
         /*
          * Nested set
          */
         elseif ($this->sortMode == 'nested') {
-            $sourceNode = $model->find(post('sourceNode'));
-            $targetNode = post('targetNode') ? $model->find(post('targetNode')) : null;
+            $sourceNode = $this->reorderScopedQuery()->find(post('sourceNode'));
+            $targetNode = post('targetNode') ? $this->reorderScopedQuery()->find(post('targetNode')) : null;
+
+            if (!$sourceNode) {
+                return;
+            }
 
             if ($sourceNode == $targetNode) {
                 return;
@@ -237,6 +257,22 @@ class ReorderController extends ControllerBehavior
     }
 
     /**
+     * The records this controller offers for reordering, which `reorderExtendQuery()` narrows.
+     * The write path resolves through it too, so it cannot reach past what the page lists.
+     */
+    protected function reorderScopedQuery()
+    {
+        $model = $this->controller->reorderGetModel();
+        $query = $model->newQuery();
+
+        $this->controller->reorderExtendQuery($query);
+
+        // Only this model's columns: a scope may join a table carrying its own `id`, and PDO
+        // keeps the last of a duplicated column name, so the row would hydrate with the wrong key.
+        return $query->select($model->getTable() . '.*');
+    }
+
+    /**
      * Returns all the records from the supplied model.
      * @return Collection
      */
@@ -244,9 +280,7 @@ class ReorderController extends ControllerBehavior
     {
         $records = null;
         $model = $this->controller->reorderGetModel();
-        $query = $model->newQuery();
-
-        $this->controller->reorderExtendQuery($query);
+        $query = $this->reorderScopedQuery();
 
         if ($this->sortMode == 'simple') {
             $records = $query

@@ -3,6 +3,7 @@
 namespace System\Tests\Plugins\Database;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Database\Tester\Models\Category;
 use Database\Tester\Models\Post as PostModel;
 use Database\Tester\Models\Role;
@@ -12,6 +13,8 @@ use DB;
 
 class BelongsToManyModelTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp() : void
     {
         parent::setUp();

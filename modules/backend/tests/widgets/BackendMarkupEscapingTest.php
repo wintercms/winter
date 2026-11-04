@@ -14,6 +14,7 @@ use Event;
 use Winter\Storm\Filesystem\PathResolver;
 use System\Behaviors\SettingsModel;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use System\Traits\ViewMaker;
 
 /**
@@ -34,6 +35,8 @@ class PartialRenderer
  */
 class BackendMarkupEscapingTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected const PAYLOAD = '"><img src=x onerror="window.pwned=1';
 
     public function tearDown(): void
