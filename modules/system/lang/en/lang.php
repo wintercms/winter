@@ -447,6 +447,7 @@ return [
         'manage_software_updates' => 'Manage software updates',
         'access_logs' => 'View system logs',
         'manage_mail_templates' => 'Manage mail templates',
+        'manage_mail_templates_comment' => 'Allows the user to edit the content of the mail templates, layouts and partials the site sends. Unlike the CMS template permissions it grants no access to files and no ability to author PHP, which is why these templates are rendered in a sandbox.',
         'manage_mail_settings' => 'Manage mail settings',
         'manage_other_administrators' => 'Manage other administrators',
         'manage_other_administrators_comment' => 'Allows the user to create, update, and delete other administrator accounts. This permission should only be given to trusted users.',

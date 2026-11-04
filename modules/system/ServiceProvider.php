@@ -531,6 +531,7 @@ class ServiceProvider extends ModuleServiceProvider
                 ],
                 'system.manage_mail_templates' => [
                     'label' => 'system::lang.permissions.manage_mail_templates',
+                    'comment' => 'system::lang.permissions.manage_mail_templates_comment',
                     'tab' => 'system::lang.permissions.name',
                     'roles' => [UserRole::CODE_DEVELOPER],
                 ],
