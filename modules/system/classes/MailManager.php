@@ -2,6 +2,7 @@
 
 use App;
 use Markdown;
+use System\Models\MailLayout;
 use System\Models\MailPartial;
 use System\Models\MailTemplate;
 use System\Models\MailBrandSetting;
@@ -122,7 +123,7 @@ class MailManager
         $symfonyMessage = $message->getSymfonyMessage();
 
         if (empty($symfonyMessage->getSubject())) {
-            $message->subject($this->renderTwig($template->subject, $data));
+            $message->subject($this->renderTwig($template->subject, $data, $this->isUserEdited($template)));
         }
 
         $data += [
@@ -155,15 +156,17 @@ class MailManager
      *
      * @param  string  $content
      * @param  array  $data
+     * @param  bool  $sandboxed Render in the sandboxed mailer environment, for content a backend
+     * user wrote rather than content that came from a view file.
      * @return string
      */
-    public function render($content, $data = [])
+    public function render($content, $data = [], $sandboxed = false)
     {
         if (!$content) {
             return '';
         }
 
-        $html = $this->renderTwig($content, $data);
+        $html = $this->renderTwig($content, $data, $sandboxed);
 
         $html = Markdown::parseSafe($html);
 
@@ -174,7 +177,7 @@ class MailManager
     {
         $this->isHtmlRenderMode = true;
 
-        $html = $this->render($template->content_html, $data);
+        $html = $this->render($template->content_html, $data, $this->isUserEdited($template));
 
         $css = MailBrandSetting::renderCss();
 
@@ -183,11 +186,14 @@ class MailManager
         if ($template->layout) {
             $disableAutoInlineCss = array_get($template->layout->options, 'disable_auto_inline_css', $disableAutoInlineCss);
 
+            // The layout is judged on its own origin, not the template's. The content it is handed
+            // has already finished rendering and arrives as a string, so a user-edited template
+            // inside a layout that came from a view file stays contained.
             $html = $this->renderTwig($template->layout->content_html, [
                 'content' => $html,
                 'css' => $template->layout->content_css,
                 'brandCss' => $css,
-            ] + (array) $data);
+            ] + (array) $data, $this->isUserEdited($template->layout));
 
             $css .= PHP_EOL . $template->layout->content_css;
         }
@@ -203,15 +209,17 @@ class MailManager
      * Render the Markdown template into text.
      * @param $content
      * @param array $data
+     * @param bool $sandboxed Render in the sandboxed mailer environment, for content a backend
+     * user wrote rather than content that came from a view file.
      * @return string
      */
-    public function renderText($content, $data = [])
+    public function renderText($content, $data = [], $sandboxed = false)
     {
         if (!$content) {
             return '';
         }
 
-        $text = $this->renderTwig($content, $data);
+        $text = $this->renderTwig($content, $data, $sandboxed);
 
         $text = html_entity_decode(preg_replace("/[\r\n]{2,}/", "\n\n", $text), ENT_QUOTES, 'UTF-8');
 
@@ -228,12 +236,13 @@ class MailManager
             $templateText = $template->content_html;
         }
 
-        $text = $this->renderText($templateText, $data);
+        $text = $this->renderText($templateText, $data, $this->isUserEdited($template));
 
         if ($template->layout) {
+            // Per record, as in renderTemplate() above.
             $text = $this->renderTwig($template->layout->content_text, [
                 'content' => $text
-            ] + (array) $data);
+            ] + (array) $data, $this->isUserEdited($template->layout));
         }
 
         return $text;
@@ -256,15 +265,52 @@ class MailManager
             return '';
         }
 
-        return $this->renderTwig($content, $params);
+        return $this->renderTwig($content, $params, $this->isUserEdited($partial));
     }
 
     /**
-     * Internal helper for rendering Twig using the mailer Twig environment
+     * Whether this record's content was written in the backend rather than coming from the view
+     * file the record was registered from.
+     *
+     * For a template or a partial, `is_custom` is the authority rather than a convenience: a
+     * record with it falsy has its content replaced from that view file every time it is read
+     * (MailTemplate::afterFetch(), MailPartial::afterFetch()), and the backend sets it on every
+     * save (MailTemplates::formBeforeSave(), MailPartials::formBeforeSave()). So falsy means the
+     * content in hand is the file's, whoever the record belongs to.
+     *
+     * A layout has no such flag and no such refill. MailLayout::createLayouts() copies the view
+     * file into a row once, and from then on the row is the only copy and the backend edits it in
+     * place - so there is nothing that can show a layout's content still matches the file it came
+     * from, and it is treated as written in the backend. That costs a layout the markup functions,
+     * which is what a layout had before this release anyway; the alternative is a new column whose
+     * backfill would have to guess the same answer for every row that already exists.
+     *
+     * @param \System\Models\MailTemplate|\System\Models\MailLayout|\System\Models\MailPartial $record
      */
-    protected function renderTwig(string $content, array $data = []): string
+    protected function isUserEdited($record): bool
     {
-        return App::make('twig.environment.mailer')
+        if ($record instanceof MailLayout) {
+            return true;
+        }
+
+        return (bool) $record->is_custom;
+    }
+
+    /**
+     * Internal helper for rendering one piece of mail content.
+     *
+     * Mail content reaches here from one of two places, and they are not equally trusted. A mail
+     * view is a file in a repository, written by whoever wrote the plugin, so it renders in the
+     * plain mailer environment. A mail template, layout or partial stored in the database was
+     * written in the backend by someone holding only `system.manage_mail_templates`, which grants
+     * no file access and no ability to author PHP, so it renders in the sandboxed one.
+     *
+     * The choice is made per record, never inherited: see renderTemplate() for a layout, and
+     * renderPartial() for a `{% partial %}`.
+     */
+    protected function renderTwig(string $content, array $data = [], bool $sandboxed = false): string
+    {
+        return App::make($sandboxed ? 'twig.environment.mailer.sandboxed' : 'twig.environment.mailer')
                 ->createTemplate($content)
                 ->render($data);
     }

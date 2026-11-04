@@ -394,19 +394,38 @@ class ServiceProvider extends ModuleServiceProvider
             return MarkupManager::makeBaseTwigEnvironment();
         });
 
-        // Register Mailer Twig environment. Mail templates and layouts are edited through the
-        // backend by users who hold no code permission, which makes this the one core environment
-        // that is sandboxed.
+        // Register the two Mailer Twig environments. Mail content arrives from one of two places
+        // and they are not equally trusted: a mail view is a file in a repository, so it renders
+        // in the plain environment like any other view, while a mail template, layout or partial
+        // stored in the database was written in the backend by someone holding only
+        // `system.manage_mail_templates`, so it renders in the sandboxed one. MailManager picks
+        // between them per record; see its renderTwig().
         $this->app->singleton('twig.environment.mailer', function ($app) {
-            $twig = MarkupManager::makeSandboxedTwigEnvironment(['tags' => ['partial']]);
-            $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
-            return $twig;
+            return $this->addMailerTwigTokenParsers(MarkupManager::makeBaseTwigEnvironment());
+        });
+
+        $this->app->singleton('twig.environment.mailer.sandboxed', function ($app) {
+            return $this->addMailerTwigTokenParsers(
+                MarkupManager::makeSandboxedTwigEnvironment(['tags' => ['partial']])
+            );
         });
 
         // Register .htm extension for Twig views
         $this->app->make('view')->addExtension('htm', 'twig', function () {
             return new TwigEngine($this->app->make('twig.environment'));
         });
+    }
+
+    /**
+     * Adds the token parsers both mailer environments need. Mail content composes with
+     * `{% partial %}` whichever side of the sandbox it came from, so neither environment can be
+     * the one that forgets it.
+     */
+    protected function addMailerTwigTokenParsers(Environment $twig): Environment
+    {
+        $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
+
+        return $twig;
     }
 
     /**
