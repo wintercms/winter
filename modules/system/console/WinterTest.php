@@ -198,6 +198,9 @@ class WinterTest extends Command
                 'APP_ENV' => 'testing',
                 'CACHE_DRIVER' => 'array',
                 'SESSION_DRIVER' => 'array',
+                // Password hashing is deliberately slow; at the default cost a test suite spends
+                // more time hashing fixture passwords than running assertions.
+                'BCRYPT_ROUNDS' => '4',
             ],
             null
         );

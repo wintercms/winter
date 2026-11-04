@@ -3,6 +3,7 @@
 namespace System\Tests\Plugins\Database;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Database\Tester\Models\Author;
 use Database\Tester\Models\Country;
 use Database\Tester\Models\Post;
@@ -11,6 +12,8 @@ use Model;
 
 class HasManyThroughModelTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp() : void
     {
         parent::setUp();

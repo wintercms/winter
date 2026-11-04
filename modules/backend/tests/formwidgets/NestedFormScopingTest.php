@@ -7,6 +7,7 @@ namespace Backend\Tests\FormWidgets
     use Backend\FormWidgets\NestedForm;
     use Backend\Widgets\Form;
     use System\Tests\Bootstrap\PluginTestCase;
+    use System\Tests\Concerns\MigratesDatabaseOnce;
     use Winter\Storm\Database\Model;
 
     class NestedFormScopingTestModel extends Model
@@ -31,6 +32,8 @@ namespace Backend\Tests\FormWidgets
      */
     class NestedFormScopingTest extends PluginTestCase
     {
+        use MigratesDatabaseOnce;
+
         public function setUp(): void
         {
             parent::setUp();

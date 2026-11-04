@@ -56,6 +56,26 @@ php artisan plugin:refresh Acme.Blog
 [php artisan plugin:refresh <dependency>, ...]
 ```
 
+#### Migrating the database once instead of once per test
+
+Rebuilding the whole schema in every `setUp` is the largest fixed cost in a plugin's test suite — each test builds a new application, and with it a new in-memory database, so `winter:up` starts from empty every time. Add the `System\Tests\Concerns\MigratesDatabaseOnce` trait to migrate on the first test instead, keep that connection for the rest of the process, and wrap each test in a transaction that is rolled back afterwards:
+
+```php
+namespace Acme\Blog\Tests\Models;
+
+use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
+
+class PostTest extends PluginTestCase
+{
+    use MigratesDatabaseOnce;
+}
+```
+
+Each test still starts from the freshly migrated schema with no rows of its own, and the rollback covers DDL as well, so a test that creates its own tables still gets a clean schema. Leave the trait off if a test commits its own transaction, reconnects the database, or issues DDL against a driver that commits implicitly — MySQL does, SQLite does not — since those escape the wrapping transaction and leak state into the tests that follow.
+
+You do not have to work out in advance which of your tests do that. After every test the trait checks that its transaction is still open, and if it is not, raises an error naming the class responsible instead of letting the next test read rows it never wrote. If you point the suite at MySQL by adding `config/testing/database.php`, that is the check that will tell you which classes need the trait removed.
+
 > **Note:** If your plugin uses [configuration files](../plugin/settings#file-configuration), then you will need to run `System\Classes\PluginManager::instance()->registerAll(true);` in the `setUp` method of your tests. Below is an example of a base test case class that should be used if you need to test your plugin working with other plugins instead of in isolation.
 
 ```php

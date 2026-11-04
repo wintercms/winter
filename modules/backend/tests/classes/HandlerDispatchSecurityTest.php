@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Request;
 use System\Models\EventLog;
 use System\Models\MailLayout;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\File;
 
@@ -21,6 +22,8 @@ use Winter\Storm\Support\Facades\File;
  */
 class HandlerDispatchSecurityTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected $canaryPaths = [];
 
     public function setUp(): void

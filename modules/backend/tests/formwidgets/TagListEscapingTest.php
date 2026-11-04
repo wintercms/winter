@@ -9,6 +9,7 @@ use Backend\Models\User;
 use Backend\Models\UserGroup;
 use DOMDocument;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 /**
  * In preview mode, and on a read-only or disabled field, the partial swaps the editable <select> for a display list
@@ -19,6 +20,8 @@ use System\Tests\Bootstrap\PluginTestCase;
  */
 class TagListEscapingTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     /** Comma free so it survives the string mode separator, and `&` free so the round-trip value is unambiguous. */
     protected const PAYLOAD = '"><script>window.pwned=1</script>';
 

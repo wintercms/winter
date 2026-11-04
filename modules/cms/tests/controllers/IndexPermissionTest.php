@@ -5,10 +5,13 @@ namespace Cms\Tests\Controllers;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use Cms\Controllers\Index;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Auth\AuthorizationException;
 
 class IndexPermissionTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected Index $controller;
 
     protected static array $allTypes = ['page', 'partial', 'layout', 'content', 'asset'];

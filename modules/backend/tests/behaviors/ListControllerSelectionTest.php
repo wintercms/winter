@@ -7,6 +7,7 @@ use Backend\Tests\Fixtures\Models\ListSelectionFixture;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use Illuminate\Http\Request as HttpRequest;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Support\Facades\Flash;
 
@@ -113,6 +114,8 @@ class SelectionJoinedController extends SelectionController
 
 class ListControllerSelectionTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();

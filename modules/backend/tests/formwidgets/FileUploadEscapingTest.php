@@ -11,6 +11,7 @@ use DOMXPath;
 use Illuminate\Http\UploadedFile;
 use System\Models\File as FileModel;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 
 /**
  * `file_name` is stored verbatim from the client supplied upload name, and its extension reaches both URLs the widget
@@ -18,6 +19,8 @@ use System\Tests\Bootstrap\PluginTestCase;
  */
 class FileUploadEscapingTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     /** Slash free so UploadedFile's base name reduction does not truncate it, and a valid extension so upload validation passes. */
     protected const UNSAFE_NAME = '<img src=x onerror=window.pwned=1>.pdf';
 

@@ -10,6 +10,7 @@ use File;
 use Request;
 use System\Classes\ImageResizer;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Exception\SystemException;
 
 /**
@@ -21,6 +22,8 @@ use Winter\Storm\Exception\SystemException;
  */
 class MediaManagerThumbnailPathTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp(): void
     {
         parent::setUp();
