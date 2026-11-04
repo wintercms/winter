@@ -491,6 +491,7 @@ class MediaLibrary
          */
         $regexWhitelist = [
             '\w', // any word character
+            '\p{M}', // combining mark, e.g. decomposed (NFD) accents
             preg_quote('@', '/'),
             preg_quote('.', '/'),
             '\s', // whitespace character

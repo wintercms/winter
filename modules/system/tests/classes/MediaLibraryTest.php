@@ -58,6 +58,10 @@ class MediaLibraryTest extends TestCase
             @see: https://github.com/octobercms/october/pull/4564
             */
             ['BG中国通讯期刊(Blend\'r)创刊号.pdf'],
+            /*
+            Decomposed (NFD) accents, as stored by macOS
+            */
+            ["Poigne\u{0301}es/Delwaide re\u{0301}alisation.jpg"],
         ];
     }
 
