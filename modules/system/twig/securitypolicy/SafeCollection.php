@@ -7,7 +7,6 @@ use Traversable;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Enumerable;
-use Illuminate\Support\Traits\ForwardsCalls;
 
 /**
  * SafeCollection is a collection proxy that is safe to use in a Twig sandbox.
@@ -19,46 +18,16 @@ use Illuminate\Support\Traits\ForwardsCalls;
  * and every callable argument is nulled out before being forwarded. Callables are unusable
  * in Twig anyway, so nothing legitimate is lost.
  *
+ * The forwarding guard itself lives on SafeProxy, shared with SafePaginator.
+ *
  * @package winter\wn-system-module
  */
-class SafeCollection implements ArrayAccess, Countable, IteratorAggregate, Arrayable, Jsonable
+class SafeCollection extends SafeProxy implements ArrayAccess, Countable, IteratorAggregate, Arrayable, Jsonable
 {
-    use ForwardsCalls;
-
     /**
      * @var Enumerable The wrapped collection (Collection or LazyCollection).
      */
     protected $collection;
-
-    /**
-     * @var string[] Methods where a string argument is an attribute/key name (not a callback).
-     * For these, string values are preserved; non-string callables are still stripped.
-     * Safe because Laravel's useAsCallable() never treats a string as a callback.
-     */
-    protected $hybridCallableArgs = [
-        'contains',
-        'containsstrict',
-        'doesntcontain',
-        'groupby',
-        'keyby',
-        'implode',
-        'search',
-        'sortby',
-        'sortbydesc',
-        'unique',
-        'duplicates',
-        'partition',
-    ];
-
-    /**
-     * @var string[] Methods that instantiate arbitrary classes or dispatch statically from a
-     * string argument (not caught by is_callable stripping), so they are blocked outright.
-     */
-    protected $blockedMethods = [
-        'mapinto',
-        'pipeinto',
-        'toresourcecollection',
-    ];
 
     /**
      * Constructor
@@ -69,44 +38,11 @@ class SafeCollection implements ArrayAccess, Countable, IteratorAggregate, Array
     }
 
     /**
-     * Forward all other calls to the collection, stripping callable arguments first.
+     * @inheritDoc
      */
-    public function __call($method, $parameters)
+    protected function getProxiedObject()
     {
-        if (in_array(strtolower($method), $this->blockedMethods)) {
-            return $this;
-        }
-
-        $normalized = strtolower($method);
-        foreach ($parameters as &$param) {
-            $param = $this->stripCallables($param, $normalized);
-        }
-        unset($param);
-
-        return $this->forwardCallTo($this->collection, $method, $parameters);
-    }
-
-    /**
-     * Recursively null out any callable value at any depth. Hybrid methods keep string
-     * values (used as attribute names) but still drop non-string callables.
-     */
-    protected function stripCallables($value, string $method)
-    {
-        if (is_array($value)) {
-            foreach ($value as $key => $item) {
-                $value[$key] = $this->stripCallables($item, $method);
-            }
-            return $value;
-        }
-
-        if (
-            is_callable($value) &&
-            (!in_array($method, $this->hybridCallableArgs) || !is_string($value))
-        ) {
-            return null;
-        }
-
-        return $value;
+        return $this->collection;
     }
 
     public function getIterator(): Traversable
