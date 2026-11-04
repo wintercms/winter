@@ -17,7 +17,8 @@ class ViteCompile extends AssetCompile
      */
     protected $signature = 'vite:compile
         {viteArgs?* : Arguments to pass through to the Vite CLI}
-        {--f|production : Runs compilation in "production" mode}
+        {--f|production : Runs compilation in "production" mode (deprecated, Vite defaults to production, this flag is ignored)}
+        {--mode= : Defines the mode to use for compilation (e.g. production, development)}
         {--s|silent : Enables silent mode, no output will be shown.}
         {--d|disable-tty : Disable tty mode}
         {--e|stop-on-error : Exit once an error is encountered}
@@ -57,12 +58,20 @@ class ViteCompile extends AssetCompile
     {
         $basePath = base_path();
         $command = $this->argument('viteArgs') ?? [];
-        array_unshift(
-            $command,
+        $args = [
             $basePath . sprintf('%1$snode_modules%1$s.bin%1$svite', DIRECTORY_SEPARATOR),
             'build',
-            $this->option('silent') ? '--logLevel=silent' : '',
-        );
+        ];
+
+        if ($this->option('mode')) {
+            $args[] = '--mode=' . $this->option('mode');
+        }
+
+        if ($this->option('silent')) {
+            $args[] = '--logLevel=silent';
+        }
+
+        array_unshift($command, ...$args);
 
         return $command;
     }
