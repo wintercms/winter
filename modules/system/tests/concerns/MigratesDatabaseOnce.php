@@ -3,6 +3,7 @@
 namespace System\Tests\Concerns;
 
 use Artisan;
+use RuntimeException;
 
 /**
  * Migrates the test database once per process instead of once per test.
@@ -47,8 +48,36 @@ trait MigratesDatabaseOnce
         $this->withoutConnectionEvents($connection, fn () => $connection->beginTransaction());
 
         $this->beforeApplicationDestroyed(function () use ($connection) {
+            $this->assertWrappingTransactionSurvived($connection);
             $this->withoutConnectionEvents($connection, fn () => $connection->rollBack());
         });
+    }
+
+    /**
+     * Blames the test that lost the wrapping transaction instead of the innocent one after it.
+     *
+     * Committing it, disconnecting, or issuing DDL on a driver that commits implicitly (MySQL does,
+     * SQLite does not) all leave the shared database dirty for every test that follows. Laravel's
+     * `rollBack()` returns silently once the level is gone, so without this the damage first shows
+     * up as some later test reading a row it never wrote.
+     */
+    protected function assertWrappingTransactionSurvived($connection): void
+    {
+        if ($connection->transactionLevel() === 1 && $connection->getPdo()?->inTransaction()) {
+            return;
+        }
+
+        // Let the next test migrate a clean database rather than inherit this dirty one.
+        TestDatabaseState::$pdo = null;
+
+        throw new RuntimeException(sprintf(
+            '%s left the database outside the transaction %s wraps each test in, so anything it '
+            . 'wrote is now visible to every test after it. Either drop the trait from this class, '
+            . 'or stop the test committing, disconnecting, or issuing DDL on a driver that commits '
+            . 'implicitly.',
+            static::class,
+            MigratesDatabaseOnce::class
+        ));
     }
 
     /**

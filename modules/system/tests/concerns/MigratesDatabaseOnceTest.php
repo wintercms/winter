@@ -4,14 +4,17 @@ namespace System\Tests\Concerns;
 
 use Db;
 use Illuminate\Database\Schema\Blueprint;
+use PDO;
+use RuntimeException;
 use Schema;
 use System\Tests\Bootstrap\PluginTestCase;
 
 /**
  * The trait's contract is that a test sees the migrated schema and nothing another test left behind.
  *
- * The pairs below each assert their table or rows are absent before adding them, so whichever of
- * the pair runs second is the one that catches a failed rollback.
+ * Reusing a connection and rolling a test back are both claims about two consecutive tests, so the
+ * tests that make them declare `@depends` on the test that sets them up. PHPUnit then enforces the
+ * order and skips rather than failing when only one of a pair is selected.
  *
  * @package winter/wn-system-module
  */
@@ -19,12 +22,7 @@ class MigratesDatabaseOnceTest extends PluginTestCase
 {
     use MigratesDatabaseOnce;
 
-    /**
-     * @var \PDO|null The connection the first test in this class ran on.
-     */
-    protected static $firstSeenPdo = null;
-
-    public function testTheTestRunsOnTheProcessWideConnectionInsideATransaction(): void
+    public function testTheTestRunsOnTheProcessWideConnectionInsideATransaction(): PDO
     {
         $connection = $this->app['db']->connection();
 
@@ -32,16 +30,41 @@ class MigratesDatabaseOnceTest extends PluginTestCase
         $this->assertSame(TestDatabaseState::$pdo, $connection->getPdo());
         $this->assertSame(1, $connection->transactionLevel());
 
-        static::$firstSeenPdo = $connection->getPdo();
+        return $connection->getPdo();
     }
 
-    public function testTheTestAfterThatReusesTheSameConnection(): void
+    /**
+     * @depends testTheTestRunsOnTheProcessWideConnectionInsideATransaction
+     */
+    public function testTheTestAfterThatReusesTheSameConnection(PDO $connectionTheTestBeforeRanOn): void
     {
         $this->assertSame(
-            static::$firstSeenPdo,
+            $connectionTheTestBeforeRanOn,
             $this->app['db']->connection()->getPdo(),
-            'the database was migrated again instead of the first test\'s connection being reused'
+            'the database was migrated again instead of the previous test\'s connection being reused'
         );
+    }
+
+    public function testLosingTheWrappingTransactionIsReportedLoudly(): void
+    {
+        // A second connection, so the one this test will be rolled back on stays untouched.
+        config(['database.connections.migrates_once_probe' => ['driver' => 'sqlite', 'database' => ':memory:']]);
+        $untransacted = $this->app['db']->connection('migrates_once_probe');
+
+        $shared = TestDatabaseState::$pdo;
+        $reported = null;
+
+        try {
+            $this->assertWrappingTransactionSurvived($untransacted);
+        } catch (RuntimeException $exception) {
+            $reported = $exception->getMessage();
+        } finally {
+            TestDatabaseState::$pdo = $shared;
+        }
+
+        $this->assertNotNull($reported, 'a connection with no wrapping transaction was accepted');
+        $this->assertStringContainsString('left the database outside the transaction', $reported);
+        $this->assertStringContainsString(static::class, $reported);
     }
 
     public function testTheMigratedSchemaIsPresent(): void
@@ -60,6 +83,9 @@ class MigratesDatabaseOnceTest extends PluginTestCase
         $this->assertSame(1, Db::table('system_request_logs')->count());
     }
 
+    /**
+     * @depends testRowsAddedByATestDoNotOutliveIt
+     */
     public function testRowsAddedByTheTestBeforeThisOneAreGone(): void
     {
         $this->assertSame(0, Db::table('system_request_logs')->count());
@@ -81,6 +107,9 @@ class MigratesDatabaseOnceTest extends PluginTestCase
         $this->assertTrue(Schema::hasTable('migrates_once_scratch'));
     }
 
+    /**
+     * @depends testTablesCreatedByATestDoNotOutliveIt
+     */
     public function testTheTableTheTestBeforeThisOneCreatedIsGone(): void
     {
         $this->assertFalse(Schema::hasTable('migrates_once_scratch'));
