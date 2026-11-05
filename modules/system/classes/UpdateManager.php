@@ -655,7 +655,7 @@ class UpdateManager
      * @param string $name Plugin name.
      * @param string $hash Expected file hash.
      * @param boolean $installation Indicates whether this is a plugin installation request.
-     * @return self
+     * @return void
      */
     public function downloadPlugin($name, $hash, $installation = false)
     {
@@ -699,7 +699,7 @@ class UpdateManager
      * Downloads a theme from the update server.
      * @param string $name Theme name.
      * @param string $hash Expected file hash.
-     * @return self
+     * @return void
      */
     public function downloadTheme($name, $hash)
     {
@@ -896,7 +896,7 @@ class UpdateManager
     protected function write($component, ...$arguments)
     {
         if ($this->notesOutput !== null) {
-            with(new $component($this->notesOutput))->render(...$arguments);
+            (new $component($this->notesOutput))->render(...$arguments);
         }
 
         return $this;
