@@ -368,9 +368,10 @@ final class SecurityPolicy implements SecurityPolicyInterface
      * @param array $tags Array of tags to be checked against the policy ['tag', 'tag2', 'etc']
      * @param array $filters Array of filters to be checked against the policy ['filter', 'filter2', 'etc']
      * @param array $functions Array of funtions to be checked against the policy ['function', 'function2', 'etc']
+     * @param array $tests Array of tests to be checked against the policy ['test', 'test2', 'etc']
      * @throws SecurityNotAllowedFunctionError if a given function is not allowed
      */
-    public function checkSecurity($tags, $filters, $functions): void
+    public function checkSecurity($tags, $filters, $functions, array $tests = []): void
     {
         foreach ($functions as $function) {
             if (in_array(strtolower($function), $this->blockedFunctions)) {
