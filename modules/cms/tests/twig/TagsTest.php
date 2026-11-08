@@ -81,8 +81,11 @@ class TagsTest extends TestCase
             'items' => ['a', 'b'],
         ]);
 
-        // The cache-busting build number depends on what earlier tests stored.
-        return preg_replace('/\?v=[^"]*"/', '?v=BUILD"', $output);
+        // The cache-busting build number depends on what earlier tests stored, and the asset tags
+        // end lines with PHP_EOL (and Windows checkouts give the fixture CRLF), so compare on LF.
+        $output = preg_replace('/\?v=[^"]*"/', '?v=BUILD"', $output);
+
+        return str_replace("\r\n", "\n", $output);
     }
 
     protected function expectedOutput(): string
