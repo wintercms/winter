@@ -4,6 +4,7 @@ use Twig\Node\Node as TwigNode;
 use Twig\Token as TwigToken;
 use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
 use Twig\Error\SyntaxError as TwigErrorSyntax;
+use System\Twig\ParserCompatibility;
 
 /**
  * Parser for the `{% partial %}` Twig tag.
@@ -19,6 +20,8 @@ use Twig\Error\SyntaxError as TwigErrorSyntax;
  */
 class PartialTokenParser extends TwigTokenParser
 {
+    use ParserCompatibility;
+
     /**
      * Parses a token and returns a node.
      *
@@ -30,7 +33,7 @@ class PartialTokenParser extends TwigTokenParser
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
 
-        $name = $this->parser->getExpressionParser()->parseExpression();
+        $name = $this->parseTagExpression();
         $paramNames = [];
         $nodes = [$name];
 
@@ -38,28 +41,24 @@ class PartialTokenParser extends TwigTokenParser
         while (!$end) {
             $current = $stream->next();
 
-            switch ($current->getType()) {
-                case TwigToken::NAME_TYPE:
-                    $paramNames[] = $current->getValue();
-                    $stream->expect(TwigToken::OPERATOR_TYPE, '=');
-                    $nodes[] = $this->parser->getExpressionParser()->parseExpression();
-                    break;
-
-                case TwigToken::BLOCK_END_TYPE:
-                    $end = true;
-                    break;
-
-                default:
-                    throw new TwigErrorSyntax(
-                        sprintf('Invalid syntax in the partial tag. Line %s', $lineno),
-                        $stream->getCurrent()->getLine(),
-                        $stream->getSourceContext()
-                    );
-                    break;
+            if ($current->test(TwigToken::NAME_TYPE)) {
+                $paramNames[] = $current->getValue();
+                $stream->expect(TwigToken::OPERATOR_TYPE, '=');
+                $nodes[] = $this->parseTagExpression();
+            }
+            elseif ($current->test(TwigToken::BLOCK_END_TYPE)) {
+                $end = true;
+            }
+            else {
+                throw new TwigErrorSyntax(
+                    sprintf('Invalid syntax in the partial tag. Line %s', $lineno),
+                    $stream->getCurrent()->getLine(),
+                    $stream->getSourceContext()
+                );
             }
         }
 
-        return new PartialNode(new TwigNode($nodes), $paramNames, $token->getLine(), $this->getTag());
+        return new PartialNode($this->makeNodeList($nodes), $paramNames, $token->getLine());
     }
 
     /**

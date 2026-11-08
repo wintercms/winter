@@ -35,7 +35,7 @@ class FlashTokenParser extends TwigTokenParser
         $body = $this->parser->subparse([$this, 'decideIfEnd'], true);
         $stream->expect(TwigToken::BLOCK_END_TYPE);
 
-        return new FlashNode($name, $body, $lineno, $this->getTag());
+        return new FlashNode($name, $body, $lineno);
     }
 
     public function decideIfEnd(TwigToken $token)

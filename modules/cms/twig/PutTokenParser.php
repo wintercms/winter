@@ -43,7 +43,7 @@ class PutTokenParser extends TwigTokenParser
 
         $stream->expect(TwigToken::BLOCK_END_TYPE);
 
-        return new PutNode($body, $name, $endType, $lineno, $this->getTag());
+        return new PutNode($body, $name, $endType, $lineno);
     }
 
     public function decidePutEnd(TwigToken $token)

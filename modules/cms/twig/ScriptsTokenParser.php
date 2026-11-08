@@ -23,7 +23,7 @@ class ScriptsTokenParser extends TwigTokenParser
     {
         $stream = $this->parser->getStream();
         $stream->expect(TwigToken::BLOCK_END_TYPE);
-        return new ScriptsNode($token->getLine(), $this->getTag());
+        return new ScriptsNode($token->getLine());
     }
 
     /**

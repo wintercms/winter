@@ -24,10 +24,10 @@ class SnowboardTokenParser extends TwigTokenParser
         do {
             $token = $stream->next();
 
-            if ($token->getType() === TwigToken::NAME_TYPE) {
+            if ($token->test(TwigToken::NAME_TYPE)) {
                 $modules[] = $token->getValue();
             }
-        } while ($token->getType() !== TwigToken::BLOCK_END_TYPE);
+        } while (!$token->test(TwigToken::BLOCK_END_TYPE));
 
         // Filter out invalid types
         $modules = array_filter(
@@ -47,7 +47,7 @@ class SnowboardTokenParser extends TwigTokenParser
             ];
         }
 
-        return new SnowboardNode($modules, $lineno, $this->getTag());
+        return new SnowboardNode($modules, $lineno);
     }
 
     /**

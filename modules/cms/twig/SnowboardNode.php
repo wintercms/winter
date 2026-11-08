@@ -6,6 +6,7 @@ use System\Models\Parameter;
 use Twig\Compiler as TwigCompiler;
 use Twig\Node\Node as TwigNode;
 use Url;
+use Twig\Attribute\YieldReady;
 
 /**
  * Represents a "snowboard" node
@@ -13,6 +14,7 @@ use Url;
  * @package winter\wn-cms-module
  * @author Winter CMS
  */
+#[YieldReady]
 class SnowboardNode extends TwigNode
 {
     /**
@@ -22,7 +24,7 @@ class SnowboardNode extends TwigNode
 
     public function __construct(array $modules, $lineno, $tag = 'snowboard')
     {
-        parent::__construct([], ['modules' => $modules], $lineno, $tag);
+        parent::__construct([], ['modules' => $modules], $lineno);
     }
 
     /**
@@ -55,17 +57,17 @@ class SnowboardNode extends TwigNode
         if (!static::$baseLoaded) {
             // Add manifest and vendor files
             $compiler
-                ->write("echo '<script data-module=\"snowboard-manifest\" src=\"{$manifestPath}{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+                ->write("yield '<script data-module=\"snowboard-manifest\" src=\"{$manifestPath}{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
             $vendorJs = $moduleMap['vendor'];
             $compiler
-                ->write("echo '<script data-module=\"snowboard-vendor\" src=\"{$basePath}{$vendorJs}.js{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+                ->write("yield '<script data-module=\"snowboard-vendor\" src=\"{$basePath}{$vendorJs}.js{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
 
             // Add base script
             $baseJs = $moduleMap['base'];
             $baseUrl = Url::to('/');
             $assetUrl = Url::asset('/');
             $compiler
-                ->write("echo '<script data-module=\"snowboard-base\" data-base-url=\"{$baseUrl}\" data-asset-url=\"{$assetUrl}\" src=\"{$basePath}{$baseJs}.js{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+                ->write("yield '<script data-module=\"snowboard-base\" data-base-url=\"{$baseUrl}\" data-asset-url=\"{$assetUrl}\" src=\"{$basePath}{$baseJs}.js{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
 
             static::$baseLoaded = true;
         }
@@ -73,7 +75,7 @@ class SnowboardNode extends TwigNode
         foreach ($modules as $module) {
             $moduleJs = $moduleMap[$module];
             $compiler
-                ->write("echo '<script data-module=\"{$module}\" src=\"{$basePath}{$moduleJs}.js{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+                ->write("yield '<script data-module=\"{$module}\" src=\"{$basePath}{$moduleJs}.js{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
         }
     }
 }

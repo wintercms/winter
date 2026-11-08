@@ -5,6 +5,7 @@ use System\Classes\CombineAssets;
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
 use Url;
+use Twig\Attribute\YieldReady;
 
 /**
  * Represents a "framework" node
@@ -12,11 +13,12 @@ use Url;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class FrameworkNode extends TwigNode
 {
     public function __construct($name, $lineno, $tag = 'framework')
     {
-        parent::__construct([], ['name' => $name], $lineno, $tag);
+        parent::__construct([], ['name' => $name], $lineno);
     }
 
     /**
@@ -29,7 +31,7 @@ class FrameworkNode extends TwigNode
         $build = Parameter::get('system::core.build', 'winter');
         $cacheBust = '?v=' . $build;
         $attrib = $this->getAttribute('name');
-        $includeExtras = strtolower(trim($attrib)) === 'extras';
+        $includeExtras = strtolower(trim((string) $attrib)) === 'extras';
 
         $compiler
             ->addDebugInfo($this)
@@ -41,20 +43,20 @@ class FrameworkNode extends TwigNode
             $compiler
                 ->write("if (\$_minify) {" . PHP_EOL)
                 ->indent()
-                    ->write("echo '<script src=\"{$basePath}/modules/system/assets/js/framework.combined-min.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL)
+                    ->write("yield '<script src=\"{$basePath}/modules/system/assets/js/framework.combined-min.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL)
                 ->outdent()
                 ->write("}" . PHP_EOL)
                 ->write("else {" . PHP_EOL)
                 ->indent()
-                    ->write("echo '<script src=\"{$basePath}/modules/system/assets/js/framework.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL)
-                    ->write("echo '<script src=\"{$basePath}/modules/system/assets/js/framework.extras.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL)
+                    ->write("yield '<script src=\"{$basePath}/modules/system/assets/js/framework.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL)
+                    ->write("yield '<script src=\"{$basePath}/modules/system/assets/js/framework.extras.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL)
                 ->outdent()
                 ->write("}" . PHP_EOL)
-                ->write("echo '<link rel=\"stylesheet\" property=\"stylesheet\" href=\"{$basePath}/modules/system/assets/css/framework.extras'.(\$_minify ? '-min' : '').'.css$cacheBust\">'.PHP_EOL;" . PHP_EOL)
+                ->write("yield '<link rel=\"stylesheet\" property=\"stylesheet\" href=\"{$basePath}/modules/system/assets/css/framework.extras'.(\$_minify ? '-min' : '').'.css$cacheBust\">'.PHP_EOL;" . PHP_EOL)
             ;
         }
         else {
-            $compiler->write("echo '<script src=\"{$basePath}/modules/system/assets/js/framework'.(\$_minify ? '-min' : '').'.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL);
+            $compiler->write("yield '<script src=\"{$basePath}/modules/system/assets/js/framework'.(\$_minify ? '-min' : '').'.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL);
         }
 
         $compiler->write('unset($_minify);' . PHP_EOL);

@@ -2,6 +2,7 @@
 
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
+use Twig\Attribute\YieldReady;
 
 /**
  * Represents a page node
@@ -9,11 +10,12 @@ use Twig\Compiler as TwigCompiler;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class PageNode extends TwigNode
 {
     public function __construct($lineno, $tag = 'page')
     {
-        parent::__construct([], [], $lineno, $tag);
+        parent::__construct([], [], $lineno);
     }
 
     /**
@@ -25,7 +27,7 @@ class PageNode extends TwigNode
     {
         $compiler
             ->addDebugInfo($this)
-            ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->pageFunction();\n")
+            ->write("yield \$this->env->getExtension('Cms\Twig\Extension')->pageFunction();\n")
         ;
     }
 }

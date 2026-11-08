@@ -2,6 +2,7 @@
 
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
+use Twig\Attribute\YieldReady;
 
 /**
  * Represents a "scripts" node
@@ -9,11 +10,12 @@ use Twig\Compiler as TwigCompiler;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class ScriptsNode extends TwigNode
 {
     public function __construct($lineno, $tag = 'scripts')
     {
-        parent::__construct([], [], $lineno, $tag);
+        parent::__construct([], [], $lineno);
     }
 
     /**
@@ -25,8 +27,8 @@ class ScriptsNode extends TwigNode
     {
         $compiler
             ->addDebugInfo($this)
-            ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->assetsFunction('js');\n")
-            ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->displayBlock('scripts');\n")
+            ->write("yield \$this->env->getExtension('Cms\Twig\Extension')->assetsFunction('js');\n")
+            ->write("yield \$this->env->getExtension('Cms\Twig\Extension')->displayBlock('scripts');\n")
         ;
     }
 }
