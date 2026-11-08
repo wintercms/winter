@@ -8,10 +8,12 @@ use Winter\Storm\Exception\ApplicationException;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use Backend\Models\User;
 use Backend\Widgets\Lists;
+use System\Tests\Concerns\AssertsNoDeprecations;
 
 class ListsTest extends PluginTestCase
 {
     use MigratesDatabaseOnce;
+    use AssertsNoDeprecations;
 
     public function testRestrictedColumnWithUserWithNoPermissions()
     {
@@ -121,6 +123,22 @@ class ListsTest extends PluginTestCase
 
         $this->assertNotNull($list->getColumn('id'));
         $this->assertNotNull($list->getColumn('email'));
+    }
+
+    public function testColumnWithoutTypeDefaultsToText()
+    {
+        $this->actingAs((new UserFixture)->asSuperUser());
+
+        $list = new Lists(null, [
+            'model' => new User,
+            'arrayName' => 'array',
+            'columns' => [
+                'email' => ['label' => 'Email'],
+            ],
+        ]);
+        $this->assertNoDeprecations(fn () => $list->render());
+
+        $this->assertSame('text', $list->getColumn('email')->type);
     }
 
     protected function restrictedListsFixture(bool $singlePermission = false)

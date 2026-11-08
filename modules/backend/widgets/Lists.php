@@ -559,7 +559,7 @@ class Lists extends WidgetBase
         $primarySearchable = [];
         $relationSearchable = [];
         if (
-            strlen($this->searchTerm) !== 0
+            strlen((string) $this->searchTerm) !== 0
             && trim($this->searchTerm) !== ''
             && ($searchableColumns = $this->getSearchableColumns())
         ) {
