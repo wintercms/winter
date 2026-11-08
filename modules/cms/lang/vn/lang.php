@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Không thể xóa template file ':name'. Vui lòng kiểm tra write permission.",
         'delete_success' => 'Đã xóa template: :count.',
         'file_name_required' => 'Tên file là bắt buộc.',
-        'safe_mode_enabled' => 'Safe mode đã được bật.'
     ],
     'dashboard' => [
         'active_theme' => [

@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Eroare la ștergerea fișierului șablon ':name'. Vă rugăm să verificați permisiunile de scriere.",
         'delete_success' => 'Șabloane șterse: :count.',
         'file_name_required' => 'Câmpul Nume fișier este obligatoriu.',
-        'safe_mode_enabled' => 'Modul sigur este activat în prezent. Editarea codului PHP al șabloanelor CMS este dezactivată. Pentru a dezactiva modul sigur, setați valoarea de configurare `cms.enableSafeMode` la `false`.',
     ],
     'tablou de bord' => [
         'active_theme' => [

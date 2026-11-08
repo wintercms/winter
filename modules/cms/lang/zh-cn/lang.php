@@ -11,7 +11,6 @@ return [
         'error_deleting' => "删除模板文件 ':name' 错误. 请检查写权限.",
         'delete_success' => '成功删除模板: :count.',
         'file_name_required' => '需要文件名字段.',
-        'safe_mode_enabled' => '已启用安全模式.',
     ],
     'dashboard' => [
         'active_theme' => [

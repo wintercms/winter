@@ -10,7 +10,6 @@ return [
         'error_deleting' => 'خطا در خذف فایل ":name". لطفا سطح دسترسی ها را بررسی نمایید.',
         'delete_success' => 'تعداد :count فایل با موفقیت حذف شد.',
         'file_name_required' => 'نام فایل را وارد نمایید.',
-        'safe_mode_enabled' => 'حالت محافظت شده فعال می باشد.',
     ],
     'dashboard' => [
         'active_theme' => [

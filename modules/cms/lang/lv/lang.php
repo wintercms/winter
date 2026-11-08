@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Kļūda dzēšot veidnes failu ':name'. Lūdzu, pārbaudiet rakstīšanas tiesības.",
         'delete_success' => 'Izdzēstās veidnes: :count.',
         'file_name_required' => 'Faila nosaukuma lauks ir obligāts.',
-        'safe_mode_enabled' => 'Šobrīd ir ieslēgts drošais režīms. PHP koda labošanas funkcionalitāte CMS veidnēs ir atspējota. Lai izslēgtu drošo režīmu, iestatiet `cms.enableSafeMode` konfigurācijas vērtību uz `false`.',
     ],
     'dashboard' => [
         'active_theme' => [

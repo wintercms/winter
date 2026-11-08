@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Nepavyko ištrinti šablono ':name'. Patikrinkite katalogo įrašymo nustatymus serveryje.",
         'delete_success' => 'Ištrinta šablonų: :count.',
         'file_name_required' => 'Failko pavadinimo laukelis yra būtinas.',
-        'safe_mode_enabled' => 'Saugusis režimas šiuo metu įjungtas.'
     ],
     'dashboard' => [
         'active_theme' => [

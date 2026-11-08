@@ -2,7 +2,6 @@
 
 use Url;
 use Route;
-use Config;
 
 /**
  * CMS Helper
@@ -35,14 +34,5 @@ class Cms
         }
 
         return Url::to($path);
-    }
-
-    public static function safeModeEnabled()
-    {
-        $safeMode = Config::get('cms.enableSafeMode', null);
-        if ($safeMode === null) {
-            $safeMode = !Config::get('app.debug', false);
-        }
-        return $safeMode;
     }
 }

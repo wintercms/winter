@@ -10,7 +10,6 @@ return [
         'error_deleting' => "Chyba pri mazaní šablony ':name'. kontrolujte oprávnenia na zápis.",
         'delete_success' => 'Šablony zmazané: :count.',
         'file_name_required' => 'Je nutné vyplniť Meno súboru.',
-        'safe_mode_enabled' => 'Bezpečný režim (Safe mode) je aktívny.'
     ],
     'dashboard' => [
         'active_theme' => [

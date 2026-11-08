@@ -11,7 +11,6 @@ return [
         'error_deleting' => 'Error eliminando el archivo de plantilla ":name". Por favor, revisa los permisos de escritura.',
         'delete_success' => 'Las plantillas fueron eliminadas satisfactoriamente: :count.',
         'file_name_required' => 'El campo Nombre es obligatorio.',
-        'safe_mode_enabled' => 'El modo seguro está activado actualmente.'
     ],
     'dashboard' => [
         'active_theme' => [

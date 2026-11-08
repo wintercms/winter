@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Hiba a(z) ':name' sablonfájl törlésekor. Ellenőrizze az írási engedélyeket.",
         'delete_success' => 'A sablonok törlése sikerült: :count.',
         'file_name_required' => 'A fájlnév mező kitöltése kötelező.',
-        'safe_mode_enabled' => 'A biztonságos mód jelenleg aktív.',
     ],
     'dashboard' => [
         'active_theme' => [

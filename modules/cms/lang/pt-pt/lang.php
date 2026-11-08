@@ -11,7 +11,6 @@ return [
         'error_deleting' => 'Erro ao apagar o ficheiro de modelo ":name". Verifique as permissões de escrita.',
         'delete_success' => 'Modelos excluídos com sucesso: :count.',
         'file_name_required' => 'O campo de nome do ficheiro é necessário.',
-        'safe_mode_enabled' => 'Modo de segurança está activado.',
     ],
     'dashboard' => [
         'active_theme' => [

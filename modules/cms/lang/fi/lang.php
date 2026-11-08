@@ -11,7 +11,6 @@ return [
         'error_deleting' => "Virhe poistaessa teemaa ':name'. Tarkista kirjoitusoikeudet.",
         'delete_success' => 'Poistetut teemat: :count.',
         'file_name_required' => 'Tiedoston nimi -kenttä on vaadittu.',
-        'safe_mode_enabled' => 'Turvatila on käytössä.'
     ],
     'dashboard' => [
         'active_theme' => [

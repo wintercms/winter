@@ -11,7 +11,6 @@ return [
         'error_deleting' => 'Erreur lors de la suppression du modèle ":name". Veuillez vérifier les permissions en écriture.',
         'delete_success' => 'Les modèles ont été supprimés avec succès : :count.',
         'file_name_required' => 'Le nom du fichier est requis.',
-        'safe_mode_enabled' => 'Le mode protégé est activé.',
     ],
     'dashboard' => [
         'active_theme' => [

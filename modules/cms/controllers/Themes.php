@@ -9,7 +9,6 @@ use Backend\Widgets\Form;
 use BackendMenu;
 use Cms\Classes\Theme as CmsTheme;
 use Cms\Classes\ThemeManager;
-use Cms\Helpers\Cms as CmsHelper;
 use Cms\Models\ThemeExport;
 use Cms\Models\ThemeImport;
 use Exception;
@@ -17,6 +16,7 @@ use File;
 use Flash;
 use Lang;
 use Redirect;
+use Response;
 use System\Classes\SettingsManager;
 use Url;
 use ValidationException;
@@ -302,8 +302,8 @@ class Themes extends Controller
 
     public function index_onLoadImportForm()
     {
-        if (CmsHelper::safeModeEnabled()) {
-            throw new ApplicationException(Lang::get('cms::lang.cms_object.safe_mode_enabled'));
+        if (!$this->user->hasAccess('cms.manage_themes')) {
+            return Response::make(Lang::get('backend::lang.page.access_denied.label'), 403);
         }
 
         $theme = $this->findThemeObject();
@@ -315,8 +315,8 @@ class Themes extends Controller
 
     public function index_onImport()
     {
-        if (CmsHelper::safeModeEnabled()) {
-            throw new ApplicationException(Lang::get('cms::lang.cms_object.safe_mode_enabled'));
+        if (!$this->user->hasAccess('cms.manage_themes')) {
+            return Response::make(Lang::get('backend::lang.page.access_denied.label'), 403);
         }
 
         $theme = $this->findThemeObject();

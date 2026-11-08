@@ -388,12 +388,17 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerTwigParser()
     {
-        // Register System Twig environment
+        // Register System Twig environment. This backs the `.htm` view engine registered below,
+        // so it renders the module and plugin views that ship in the repository.
         $this->app->singleton('twig.environment', function ($app) {
             return MarkupManager::makeBaseTwigEnvironment();
         });
 
-        // Register Mailer Twig environment
+        // Register Mailer Twig environment. Mail content is a view file in a repository, or a
+        // database row that only `system.manage_mail_templates` can write - and no stock role
+        // grants that without also granting the CMS template permissions, so its author already
+        // has PHP through the theme editor. Not sandboxed, for the same reason theme templates
+        // are not.
         $this->app->singleton('twig.environment.mailer', function ($app) {
             $twig = MarkupManager::makeBaseTwigEnvironment();
             $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
@@ -528,6 +533,7 @@ class ServiceProvider extends ModuleServiceProvider
                 ],
                 'system.manage_mail_templates' => [
                     'label' => 'system::lang.permissions.manage_mail_templates',
+                    'comment' => 'system::lang.permissions.manage_mail_templates_comment',
                     'tab' => 'system::lang.permissions.name',
                     'roles' => [UserRole::CODE_DEVELOPER],
                 ],

@@ -276,6 +276,37 @@ class CmsCompoundObjectTest extends TestCase
         $this->assertFileEqualsNormalized($referenceFilePath, $destFilePath);
     }
 
+    /**
+     * Safe mode refused a save that added a PHP code section whenever `cms.enableSafeMode` was
+     * unset and `app.debug` was off, which is every production install that never set it. The
+     * permission to edit a template is the permission to write its PHP, so the save goes through.
+     */
+    public function testSaveFullWithDebugModeOff()
+    {
+        \Config::set('app.debug', false);
+
+        $theme = Theme::load('apitest');
+
+        $destFilePath = $theme->getPath() . '/testobjects/compound.htm';
+        if (file_exists($destFilePath)) {
+            unlink($destFilePath);
+        }
+
+        $obj = TestCmsCompoundObject::inTheme($theme);
+        $obj->fill([
+            'fileName' => 'compound',
+            'settings' => ['var' => 'value'],
+            'code' => 'function a() {return true;}',
+            'markup' => '<p>Hello, world!</p>'
+        ]);
+        $obj->save();
+
+        $this->assertFileEqualsNormalized(
+            base_path() . '/modules/cms/tests/fixtures/reference/compound-full.htm',
+            $destFilePath
+        );
+    }
+
     public function testGetViewBagPopulated()
     {
         $theme = Theme::load('test');
