@@ -184,7 +184,7 @@ class CodeEditor extends FormWidgetBase
         $this->vars['scrollPastEnd'] = $this->scrollPastEnd;
         $this->vars['stretch'] = $this->formField->stretch;
         $this->vars['size'] = $this->formField->size;
-        $this->vars['readOnly'] = $this->readOnly;
+        $this->vars['readOnly'] = $this->readOnly || $this->formField->readOnly || $this->formField->disabled;
         $this->vars['displayIndentGuides'] = $this->displayIndentGuides;
         $this->vars['showPrintMargin'] = $this->showPrintMargin;
         $this->vars['showMinimap'] = $this->showMinimap;
