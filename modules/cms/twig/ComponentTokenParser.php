@@ -1,10 +1,10 @@
 <?php namespace Cms\Twig;
 
 use Twig\Node\Node as TwigNode;
+use Twig\Node\Nodes;
 use Twig\Token as TwigToken;
 use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
 use Twig\Error\SyntaxError as TwigErrorSyntax;
-use System\Twig\ParserCompatibility;
 
 /**
  * Parser for the `{% component %}` Twig tag.
@@ -16,8 +16,6 @@ use System\Twig\ParserCompatibility;
  */
 class ComponentTokenParser extends TwigTokenParser
 {
-    use ParserCompatibility;
-
     /**
      * Parses a token and returns a node.
      *
@@ -29,7 +27,7 @@ class ComponentTokenParser extends TwigTokenParser
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
 
-        $name = $this->parseTagExpression();
+        $name = $this->parser->parseExpression();
         $paramNames = [];
         $nodes = [$name];
 
@@ -40,7 +38,7 @@ class ComponentTokenParser extends TwigTokenParser
             if ($current->test(TwigToken::NAME_TYPE)) {
                 $paramNames[] = $current->getValue();
                 $stream->expect(TwigToken::OPERATOR_TYPE, '=');
-                $nodes[] = $this->parseTagExpression();
+                $nodes[] = $this->parser->parseExpression();
             }
             elseif ($current->test(TwigToken::BLOCK_END_TYPE)) {
                 $end = true;
@@ -54,7 +52,7 @@ class ComponentTokenParser extends TwigTokenParser
             }
         }
 
-        return new ComponentNode($this->makeNodeList($nodes), $paramNames, $token->getLine());
+        return new ComponentNode(new Nodes($nodes), $paramNames, $token->getLine());
     }
 
     /**

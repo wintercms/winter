@@ -1,6 +1,7 @@
 <?php namespace System\Twig;
 
 use Twig\Node\Node as TwigNode;
+use Twig\Node\Nodes;
 use Twig\Token as TwigToken;
 use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
 use Twig\Error\SyntaxError as TwigErrorSyntax;
@@ -19,8 +20,6 @@ use Twig\Error\SyntaxError as TwigErrorSyntax;
  */
 class MailPartialTokenParser extends TwigTokenParser
 {
-    use ParserCompatibility;
-
     /**
      * Parses a token and returns a node.
      *
@@ -32,7 +31,7 @@ class MailPartialTokenParser extends TwigTokenParser
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
 
-        $name = $this->parseTagExpression();
+        $name = $this->parser->parseExpression();
         $paramNames = [];
         $nodes = [$name];
         $hasBody = false;
@@ -53,7 +52,7 @@ class MailPartialTokenParser extends TwigTokenParser
             if ($current->test(TwigToken::NAME_TYPE)) {
                 $paramNames[] = $current->getValue();
                 $stream->expect(TwigToken::OPERATOR_TYPE, '=');
-                $nodes[] = $this->parseTagExpression();
+                $nodes[] = $this->parser->parseExpression();
             }
             elseif ($current->test(TwigToken::BLOCK_END_TYPE)) {
                 $end = true;
@@ -72,7 +71,7 @@ class MailPartialTokenParser extends TwigTokenParser
             $stream->expect(TwigToken::BLOCK_END_TYPE);
         }
 
-        return new MailPartialNode($this->makeNodeList($nodes), $paramNames, $body, $token->getLine());
+        return new MailPartialNode(new Nodes($nodes), $paramNames, $body, $token->getLine());
     }
 
     public function decidePartialEnd(TwigToken $token)

@@ -1,10 +1,10 @@
 <?php namespace Cms\Twig;
 
 use Twig\Node\Node as TwigNode;
+use Twig\Node\Nodes;
 use Twig\Token as TwigToken;
 use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
 use Twig\Error\SyntaxError as TwigErrorSyntax;
-use System\Twig\ParserCompatibility;
 
 /**
  * Parser for the `{% partial %}` Twig tag.
@@ -20,8 +20,6 @@ use System\Twig\ParserCompatibility;
  */
 class PartialTokenParser extends TwigTokenParser
 {
-    use ParserCompatibility;
-
     /**
      * Parses a token and returns a node.
      *
@@ -33,7 +31,7 @@ class PartialTokenParser extends TwigTokenParser
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
 
-        $name = $this->parseTagExpression();
+        $name = $this->parser->parseExpression();
         $paramNames = [];
         $nodes = [$name];
 
@@ -44,7 +42,7 @@ class PartialTokenParser extends TwigTokenParser
             if ($current->test(TwigToken::NAME_TYPE)) {
                 $paramNames[] = $current->getValue();
                 $stream->expect(TwigToken::OPERATOR_TYPE, '=');
-                $nodes[] = $this->parseTagExpression();
+                $nodes[] = $this->parser->parseExpression();
             }
             elseif ($current->test(TwigToken::BLOCK_END_TYPE)) {
                 $end = true;
@@ -58,7 +56,7 @@ class PartialTokenParser extends TwigTokenParser
             }
         }
 
-        return new PartialNode($this->makeNodeList($nodes), $paramNames, $token->getLine());
+        return new PartialNode(new Nodes($nodes), $paramNames, $token->getLine());
     }
 
     /**

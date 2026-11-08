@@ -48,15 +48,10 @@ final class FilterTokenParser extends AbstractTokenParser
     }
 
     /**
-     * Parses the filter chain applied to $node; Twig 3.21 deprecated the ExpressionParser that
-     * used to do this, so use its replacement where available (as its own "apply" tag does).
+     * Parses the filter chain applied to $node, as Twig's own "apply" tag does.
      */
     private function parseFilters(Node $node): Node
     {
-        if (!class_exists(FilterExpressionParser::class)) {
-            return $this->parser->getExpressionParser()->parseFilterExpressionRaw($node);
-        }
-
         $op = $this->parser->getEnvironment()->getExpressionParsers()->getByClass(FilterExpressionParser::class);
         while (true) {
             $node = $op->parse($this->parser, $node, $this->parser->getCurrentToken());
