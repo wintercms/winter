@@ -2363,6 +2363,7 @@ this.$el.off('keyup input paste','input:not(.ace_search_field), textarea:not(.ac
 this.$el.off('dispose-control',this.proxy(this.dispose))
 if(this.options.windowCloseConfirm)$(window).off('beforeunload',this.proxy(this.onBeforeUnload))}
 ChangeMonitor.prototype.change=function(ev,inputChange){if(this.paused)return
+if($(ev.target).parents(".control-filter").length)return
 if(ev.target.className==='ace_search_field')return
 if(!inputChange){var type=$(ev.target).attr('type')
 if(type==='text'||type==='password')return}if(!this.$el.hasClass('oc-data-changed')){this.$el.trigger('changed.oc.changeMonitor')

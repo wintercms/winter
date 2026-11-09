@@ -140,10 +140,13 @@ class CombineAssets
         // always allowed implicitly; this list adds the cross-tree roots that
         // legitimate themes/plugins/modules actually import from (e.g. a plugin
         // importing a module asset, or a theme importing its own ../vendor).
+        // `node_modules` is included because the system UI LESS imports Font
+        // Awesome's variables from it.
         $allowedImportRoots = [
             themes_path(),
             plugins_path(),
             base_path('modules'),
+            base_path('node_modules'),
         ];
 
         /*
@@ -416,7 +419,7 @@ class CombineAssets
      */
     protected function prepareRequest(array $assets, $localPath = null)
     {
-        if (substr($localPath, -1) != '/') {
+        if (substr((string) $localPath, -1) != '/') {
             $localPath = $localPath.'/';
         }
 

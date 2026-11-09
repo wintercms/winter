@@ -7,11 +7,14 @@ use Backend\Models\User;
 use Backend\Models\UserGroup;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Auth\AuthorizationException;
 use Winter\Storm\Database\Model;
 
 class UserAuthorizationTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected User $targetUser;
 
     public function setUp(): void

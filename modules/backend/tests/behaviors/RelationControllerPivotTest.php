@@ -9,6 +9,7 @@ use Backend\Tests\Fixtures\Models\PivotRelationFixture;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use Db;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Auth\AuthorizationException;
 use Winter\Storm\Database\Model;
 
@@ -28,6 +29,8 @@ use Winter\Storm\Database\Model;
  */
 class RelationControllerPivotTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     protected const SESSION_KEY = 'pivottestsessionkey';
 
     protected User $targetUser;

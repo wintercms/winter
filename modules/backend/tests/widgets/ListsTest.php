@@ -4,6 +4,7 @@ namespace Backend\Tests\Widgets;
 
 use Db;
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Winter\Storm\Exception\ApplicationException;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use Backend\Models\User;
@@ -11,6 +12,8 @@ use Backend\Widgets\Lists;
 
 class ListsTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function testRestrictedColumnWithUserWithNoPermissions()
     {
         $user = new UserFixture;

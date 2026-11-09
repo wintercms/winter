@@ -37,6 +37,13 @@ abstract class FormWidgetBase extends WidgetBase
     public $previewMode = false;
 
     /**
+     * @var bool Whether preview mode was set by the form or relation that built this widget, as
+     * opposed to being set by the widget itself while rendering. This is what decides whether a
+     * write handler is refused; see abortIfPreviewMode().
+     */
+    protected $previewModeFromConfig = false;
+
+    /**
      * @var bool Determines if this form field should display comments and labels.
      */
     public $showLabels = true;
@@ -88,7 +95,31 @@ abstract class FormWidgetBase extends WidgetBase
             'parentForm',
         ]);
 
+        // Recorded before any widget adjusts $previewMode for its own rendering, so that the
+        // write guard below follows what built this widget rather than how it draws itself
+        $this->previewModeFromConfig = (bool) $this->previewMode;
+
         parent::__construct($controller, $configuration);
+    }
+
+    /**
+     * Abort with an access-denied code if the form that built this widget is not editable.
+     *
+     * Widgets honour preview mode while rendering, but a handler is dispatched straight to the
+     * widget by alias, so it never passes through whatever authorized the page.
+     *
+     * A field-level `disabled` is deliberately not covered: the client decides whether it comes
+     * back, so it has never been a server side control. Only the form or relation configuration
+     * counts, which is what $previewModeFromConfig holds.
+     *
+     * Any handler that writes must call this first. Handlers that only read must not - a preview
+     * form is still allowed to be looked at.
+     */
+    protected function abortIfPreviewMode(): void
+    {
+        if ($this->previewModeFromConfig) {
+            abort(403);
+        }
     }
 
     /**

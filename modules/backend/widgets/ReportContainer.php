@@ -1,5 +1,6 @@
 <?php namespace Backend\Widgets;
 
+use Arr;
 use File;
 use Lang;
 use Flash;
@@ -163,7 +164,18 @@ class ReportContainer extends WidgetBase
 
         $widget = $this->findWidgetByAlias($alias);
 
-        $widget->setProperties(json_decode(Request::input('fields'), true));
+        $fields = Request::input('fields');
+        $properties = is_string($fields) ? json_decode($fields, true) : null;
+
+        $properties = is_array($properties)
+            ? $this->filterWidgetProperties($widget, $properties)
+            : [];
+
+        if (!$properties) {
+            throw new ApplicationException('Invalid widget properties posted.');
+        }
+
+        $widget->setProperties($properties);
 
         $this->saveWidgetProperties($alias, $widget->getProperties());
 
@@ -195,10 +207,16 @@ class ReportContainer extends WidgetBase
     public function onAddWidget()
     {
         $className = trim(Request::input('className'));
-        $size = trim(Request::input('size'));
+        $size = Request::input('size');
 
         if (!$className) {
             throw new ApplicationException('Please select a widget to add.');
+        }
+
+        // The same permission-filtered list onLoadAddPopup() offers and makeReportWidget()
+        // builds from, consulted before the name is used for anything else.
+        if (!array_key_exists($className, WidgetManager::instance()->listReportWidgets())) {
+            throw new ApplicationException('The selected class is not a report widget.');
         }
 
         if (!class_exists($className)) {
@@ -241,12 +259,12 @@ class ReportContainer extends WidgetBase
 
         $sortOrder = 0;
         foreach ($widgets as $widgetInfo) {
-            $sortOrder = max($sortOrder, $widgetInfo['sortOrder']);
+            $sortOrder = max($sortOrder, (int) $widgetInfo['sortOrder']);
         }
 
         $sortOrder++;
 
-        $widget->setProperty('ocWidgetWidth', $size);
+        $widget->setProperty('ocWidgetWidth', (int) $size);
 
         $widgets[$alias] = [
             'class'         => get_class($widget),
@@ -285,7 +303,7 @@ class ReportContainer extends WidgetBase
         $widgets = $this->getWidgetsFromUserPreferences();
         foreach ($aliases as $index => $alias) {
             if (isset($widgets[$alias])) {
-                $widgets[$alias]['sortOrder'] = $orders[$index];
+                $widgets[$alias]['sortOrder'] = (int) $orders[$index];
             }
         }
 
@@ -315,8 +333,9 @@ class ReportContainer extends WidgetBase
             }
         }
 
+        // A layout stored earlier may hold anything the preference store accepts.
         uasort($result, function ($a, $b) {
-            return $a['sortOrder'] - $b['sortOrder'];
+            return (int) $a['sortOrder'] <=> (int) $b['sortOrder'];
         });
 
         $this->reportWidgets = $result;
@@ -372,6 +391,28 @@ class ReportContainer extends WidgetBase
         }
 
         $this->setWidgetsToUserPreferences($widgets);
+    }
+
+    /**
+     * Restricts posted values to the properties this container publishes for the widget.
+     *
+     * setProperties() replaces the whole set, so a payload naming none of them comes back
+     * empty and onUpdateWidget() refuses it rather than resetting the widget to its defaults.
+     *
+     * @param \Backend\Classes\ReportWidgetBase $widget
+     * @param array $properties Property values as supplied by the request.
+     */
+    protected function filterWidgetProperties($widget, array $properties): array
+    {
+        $published = json_decode($this->getWidgetPropertyConfig($widget), true);
+
+        $properties = Arr::only($properties, array_column($published ?: [], 'property'));
+
+        if (isset($properties['ocWidgetWidth'])) {
+            $properties['ocWidgetWidth'] = (int) $properties['ocWidgetWidth'];
+        }
+
+        return $properties;
     }
 
     protected function findWidgetByAlias($alias)

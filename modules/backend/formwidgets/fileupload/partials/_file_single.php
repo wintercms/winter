@@ -25,7 +25,7 @@
     <!-- Existing file -->
     <div class="upload-files-container">
         <?php if ($singleFile): ?>
-            <div class="upload-object is-success" data-id="<?= $singleFile->id ?>" data-path="<?= $singleFile->pathUrl ?>">
+            <div class="upload-object is-success" data-id="<?= $singleFile->id ?>" data-path="<?= e($singleFile->pathUrl) ?>">
                 <div class="icon-container">
                     <i class="icon-file"></i>
                 </div>

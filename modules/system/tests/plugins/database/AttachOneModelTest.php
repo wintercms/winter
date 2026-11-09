@@ -3,6 +3,7 @@
 namespace System\Tests\Plugins\Database;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use System\Models\File as FileModel;
 use Database\Tester\Models\User;
 use Database\Tester\Models\SoftDeleteUser;
@@ -11,6 +12,8 @@ use Model;
 
 class AttachOneModelTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp() : void
     {
         parent::setUp();

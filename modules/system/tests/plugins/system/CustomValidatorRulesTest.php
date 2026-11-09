@@ -3,10 +3,13 @@
 namespace System\Tests\Plugins\System;
 
 use System\Tests\Bootstrap\PluginTestCase;
+use System\Tests\Concerns\MigratesDatabaseOnce;
 use Validator;
 
 class CustomValidatorRulesTest extends PluginTestCase
 {
+    use MigratesDatabaseOnce;
+
     public function setUp() : void
     {
         parent::setUp();

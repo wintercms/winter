@@ -35,5 +35,8 @@
         <env name="APP_ENV" value="testing"/>
         <env name="CACHE_DRIVER" value="array"/>
         <env name="SESSION_DRIVER" value="array"/>
+        <!-- Hashing is deliberately slow; the test suite creates users constantly and never
+             checks a real-cost hash, so the work factor comes down to keep CI honest. -->
+        <env name="BCRYPT_ROUNDS" value="4"/>
     </php>
 </phpunit>
