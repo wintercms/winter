@@ -656,6 +656,7 @@ return [
         'filter_documents' => 'Documents',
         'library' => 'Library',
         'size' => 'Size',
+        'dimensions' => 'Dimensions',
         'title' => 'Title',
         'last_modified' => 'Last modified',
         'public_url' => 'URL',
