@@ -5,6 +5,25 @@
  */
 +function ($) { "use strict";
 
+    // Every window resize makes each rich editor on the page recalculate, so a change that
+    // updates several triggered fields resizes once, after the browser has painted it
+    var resizeQueued = false
+
+    function queueResize() {
+        if (resizeQueued) {
+            return
+        }
+
+        resizeQueued = true
+
+        requestAnimationFrame(function () {
+            setTimeout(function () {
+                resizeQueued = false
+                $(window).trigger('resize')
+            })
+        })
+    }
+
     var TriggerOn = function (element, options) {
 
         var $el = this.$el = $(element);
@@ -99,7 +118,7 @@
             self.updateTargetAction(action, status)
         })
 
-        $(window).trigger('resize')
+        queueResize()
 
         this.$el.trigger('oc.triggerOn.afterUpdate', status)
     }

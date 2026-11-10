@@ -2491,7 +2491,10 @@ if(!data)$this.data('oc.inputPreset',(data=new InputPreset(this,options)))})}
 $.fn.inputPreset.Constructor=InputPreset
 $.fn.inputPreset.noConflict=function(){$.fn.inputPreset=old
 return this}
-$(document).render(function(){$('[data-input-preset]').inputPreset()})}(window.jQuery);+function($){"use strict";var TriggerOn=function(element,options){var $el=this.$el=$(element);this.options=options||{};if(this.options.triggerCondition===false)throw new Error('Trigger condition is not specified.')
+$(document).render(function(){$('[data-input-preset]').inputPreset()})}(window.jQuery);+function($){"use strict";var resizeQueued=false
+function queueResize(){if(resizeQueued){return}resizeQueued=true
+requestAnimationFrame(function(){setTimeout(function(){resizeQueued=false
+$(window).trigger('resize')})})}var TriggerOn=function(element,options){var $el=this.$el=$(element);this.options=options||{};if(this.options.triggerCondition===false)throw new Error('Trigger condition is not specified.')
 if(this.options.trigger===false)throw new Error('Trigger selector is not specified.')
 if(this.options.triggerAction===false)throw new Error('Trigger action is not specified.')
 this.triggerCondition=this.options.triggerCondition
@@ -2514,7 +2517,7 @@ return!triggered})
 this.updateTarget(triggered)}}
 TriggerOn.prototype.updateTarget=function(status){var self=this,actions=this.options.triggerAction.split('|')
 $.each(actions,function(index,action){self.updateTargetAction(action,status)})
-$(window).trigger('resize')
+queueResize()
 this.$el.trigger('oc.triggerOn.afterUpdate',status)}
 TriggerOn.prototype.updateTargetAction=function(action,status){if(action=='show'){this.$el.toggleClass('hide',!status).trigger('hide.oc.triggerapi',[!status])}else if(action=='hide'){this.$el.toggleClass('hide',status).trigger('hide.oc.triggerapi',[status])}else if(action=='enable'){this.$el.prop('disabled',!status).toggleClass('control-disabled',!status).trigger('disable.oc.triggerapi',[!status])}else if(action=='disable'){this.$el.prop('disabled',status).toggleClass('control-disabled',status).trigger('disable.oc.triggerapi',[status])}else if(action=='empty'&&status){this.$el.not('input[type=checkbox], input[type=radio], input[type=button], input[type=submit]').val('')
 this.$el.not(':not(input[type=checkbox], input[type=radio])').prop('checked',false)
