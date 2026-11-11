@@ -79,6 +79,8 @@ class TagsTest extends TestCase
         $output = $twig->createTemplate($template)->render([
             'name' => '<World>',
             'items' => ['a', 'b'],
+            'when' => \Carbon\Carbon::parse('2026-03-04 05:06:07'),
+            'interval' => new \DateInterval('P3D'),
         ]);
 
         // The cache-busting build number depends on what earlier tests stored, and the asset tags
