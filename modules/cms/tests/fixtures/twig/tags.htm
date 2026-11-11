@@ -25,3 +25,4 @@
 17[{% scripts %}|{% styles %}]
 18[{% spaceless %} <p> <i>{{ name }}</i> </p> {% endspaceless %}]
 19[{% page %}]
+20[{{ date('2026-01-02 03:04:05')|date('Y-m-d H:i') }}|{{ '2026-01-02'|date('D j M') }}|{{ when|date('Y-m-d') }}|{{ interval|date('%d days') }}|{{ date()|date('Y') == 'now'|date('Y') ? 'now' }}]
