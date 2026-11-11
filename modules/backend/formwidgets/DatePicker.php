@@ -93,13 +93,13 @@ class DatePicker extends FormWidgetBase
 
         if ($this->minDate !== null) {
             $this->minDate = is_int($this->minDate)
-                ? Carbon::createFromTimestamp($this->minDate)
+                ? Carbon::createFromTimestamp($this->minDate, date_default_timezone_get())
                 : Carbon::parse($this->minDate);
         }
 
         if ($this->maxDate !== null) {
             $this->maxDate = is_int($this->maxDate)
-                ? Carbon::createFromTimestamp($this->maxDate)
+                ? Carbon::createFromTimestamp($this->maxDate, date_default_timezone_get())
                 : Carbon::parse($this->maxDate);
         }
     }
