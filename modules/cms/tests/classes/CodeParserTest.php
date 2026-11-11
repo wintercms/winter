@@ -12,9 +12,12 @@ use Cms\Classes\PageCode;
 use Cms\Classes\Theme;
 use File;
 use ReflectionClass;
+use System\Tests\Concerns\AssertsNoDeprecations;
 
 class CodeParserTest extends TestCase
 {
+    use AssertsNoDeprecations;
+
     public function setUp(): void
     {
         parent::setup();
@@ -135,7 +138,7 @@ class CodeParserTest extends TestCase
         $this->assertNotEmpty($layout);
 
         $parser = new CodeParser($layout);
-        $info = $parser->parse();
+        $info = $this->assertNoDeprecations(fn () => $parser->parse());
 
         $this->assertIsArray($info);
         $this->assertArrayHasKey('filePath', $info);

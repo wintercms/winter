@@ -2,6 +2,8 @@
 
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
+use Twig\Attribute\YieldReady;
+use Twig\Node\CaptureNode;
 
 /**
  * Represents a put node
@@ -9,11 +11,12 @@ use Twig\Compiler as TwigCompiler;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class PutNode extends TwigNode
 {
     public function __construct(TwigNode $body, $name, $endType, $lineno, $tag = 'put')
     {
-        parent::__construct(['body' => $body], ['name' => $name, 'endType' => $endType], $lineno, $tag);
+        parent::__construct(['body' => $body], ['name' => $name, 'endType' => $endType], $lineno);
     }
 
     /**
@@ -23,22 +26,27 @@ class PutNode extends TwigNode
      */
     public function compile(TwigCompiler $compiler)
     {
+        $isOverwrite = strtolower((string) $this->getAttribute('endType')) == 'overwrite';
+        $contentsVar = '$'.$compiler->getVarName();
+
+        // Capture the body rather than relying on the block's output buffer, which a yielded
+        // body never reaches when Twig runs with "use_yield".
+        $capture = new CaptureNode($this->getNode('body'), $this->getTemplateLine());
+        $capture->setAttribute('raw', true);
+
         $compiler
             ->addDebugInfo($this)
-            ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->startBlock(")
+            ->write("\$this->env->getExtension('Cms\Twig\Extension')->startBlock(")
             ->raw("'".$this->getAttribute('name')."'")
-            ->write(");\n")
-        ;
-
-        $isOverwrite = strtolower($this->getAttribute('endType')) == 'overwrite';
-
-        $compiler->subcompile($this->getNode('body'));
-
-        $compiler
+            ->raw(");\n")
+            ->write($contentsVar.' = ')
+            ->subcompile($capture)
+            ->raw("\n")
             ->addDebugInfo($this)
-            ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->endBlock(")
+            ->write("\$this->env->getExtension('Cms\Twig\Extension')->endBlock(")
             ->raw($isOverwrite ? 'false' : 'true')
-            ->write(");\n")
+            ->raw(', '.$contentsVar.");\n")
+            ->write('unset('.$contentsVar.");\n")
         ;
     }
 }

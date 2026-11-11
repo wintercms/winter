@@ -23,7 +23,7 @@ class StylesTokenParser extends TwigTokenParser
     {
         $stream = $this->parser->getStream();
         $stream->expect(TwigToken::BLOCK_END_TYPE);
-        return new StylesNode($token->getLine(), $this->getTag());
+        return new StylesNode($token->getLine());
     }
 
     /**

@@ -1,0 +1,27 @@
+{% put head %}<meta name="a">{% endput %}
+{% put head %}<meta name="b">{% for i in items %}[{{ i }}]{% endfor %}{% endput %}
+{% put over %}first{% endput %}
+{% put over %}second {{ name }}{% endput overwrite %}
+{% put wrapped %}<b>{% default %}</b>{% endput %}
+{% put txt %}<i>{{ name }}</i>{% endput %}
+{% put nested %}outer-{% put inner %}INNER{% endput %}-after{% endput %}
+{% set captured %}{% put fromset %}SET{% endput %}cap:{% partial "page-partial" firstName=name lastName="Simpson" %}{% endset %}
+1[{% placeholder head %}]
+2[{% placeholder over %}]
+3[{% placeholder missing default %}fallback {{ name }}{% endplaceholder %}]
+4[{% placeholder wrapped default %}inner {{ name }}{% endplaceholder %}]
+5[{% placeholder txt type="text" %}]
+6[{% placeholder nested %}|{% placeholder inner %}]
+7[{{ captured }}|{% placeholder fromset %}]
+8[{% partial "page-partial" firstName="Homer" lastName="Simpson" %}]
+9[{% content "text-content.txt" %}]
+10[{% content "page-content.htm" foo=name %}]
+11[{% component 'theblock' output=name %}]
+12[{% flash %}{{ type }}:{{ message }};{% endflash %}]
+13[{% flash error %}{{ type }}:{{ message }};{% endflash %}]
+14[{% framework %}]
+15[{% framework extras %}]
+16[{% snowboard all %}]
+17[{% scripts %}|{% styles %}]
+18[{% spaceless %} <p> <i>{{ name }}</i> </p> {% endspaceless %}]
+19[{% page %}]

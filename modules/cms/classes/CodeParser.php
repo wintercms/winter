@@ -126,7 +126,7 @@ class CodeParser
         $uniqueName = str_replace('.', '', uniqid('', true)).'_'.md5(mt_rand());
         $className = 'Cms'.$uniqueName.'Class';
 
-        $body = $this->object->code;
+        $body = (string) $this->object->code;
         $body = preg_replace('/^\s*function/m', 'public function', $body);
 
         $namespaces = [];

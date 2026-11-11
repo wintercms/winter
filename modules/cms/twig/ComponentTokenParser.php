@@ -1,6 +1,7 @@
 <?php namespace Cms\Twig;
 
 use Twig\Node\Node as TwigNode;
+use Twig\Node\Nodes;
 use Twig\Token as TwigToken;
 use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
 use Twig\Error\SyntaxError as TwigErrorSyntax;
@@ -26,7 +27,7 @@ class ComponentTokenParser extends TwigTokenParser
         $lineno = $token->getLine();
         $stream = $this->parser->getStream();
 
-        $name = $this->parser->getExpressionParser()->parseExpression();
+        $name = $this->parser->parseExpression();
         $paramNames = [];
         $nodes = [$name];
 
@@ -34,28 +35,24 @@ class ComponentTokenParser extends TwigTokenParser
         while (!$end) {
             $current = $stream->next();
 
-            switch ($current->getType()) {
-                case TwigToken::NAME_TYPE:
-                    $paramNames[] = $current->getValue();
-                    $stream->expect(TwigToken::OPERATOR_TYPE, '=');
-                    $nodes[] = $this->parser->getExpressionParser()->parseExpression();
-                    break;
-
-                case TwigToken::BLOCK_END_TYPE:
-                    $end = true;
-                    break;
-
-                default:
-                    throw new TwigErrorSyntax(
-                        sprintf('Invalid syntax in the component tag. Line %s', $lineno),
-                        $stream->getCurrent()->getLine(),
-                        $stream->getSourceContext()
-                    );
-                    break;
+            if ($current->test(TwigToken::NAME_TYPE)) {
+                $paramNames[] = $current->getValue();
+                $stream->expect(TwigToken::OPERATOR_TYPE, '=');
+                $nodes[] = $this->parser->parseExpression();
+            }
+            elseif ($current->test(TwigToken::BLOCK_END_TYPE)) {
+                $end = true;
+            }
+            else {
+                throw new TwigErrorSyntax(
+                    sprintf('Invalid syntax in the component tag. Line %s', $lineno),
+                    $stream->getCurrent()->getLine(),
+                    $stream->getSourceContext()
+                );
             }
         }
 
-        return new ComponentNode(new TwigNode($nodes), $paramNames, $token->getLine(), $this->getTag());
+        return new ComponentNode(new Nodes($nodes), $paramNames, $token->getLine());
     }
 
     /**

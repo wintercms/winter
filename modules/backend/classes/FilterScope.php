@@ -72,6 +72,36 @@ class FilterScope
     public $defaults;
 
     /**
+     * @var mixed The "default" config value, set by evalConfig().
+     */
+    public $default;
+
+    /**
+     * @var string|null Earliest selectable date (date and daterange scopes).
+     */
+    public $minDate;
+
+    /**
+     * @var string|null Latest selectable date (date and daterange scopes).
+     */
+    public $maxDate;
+
+    /**
+     * @var int|null First day of the week in the date picker (date and daterange scopes).
+     */
+    public $firstDay;
+
+    /**
+     * @var int|null Years either side of the current year offered in the picker (date and daterange scopes).
+     */
+    public $yearRange;
+
+    /**
+     * @var bool|null Whether dates ignore the backend timezone (date and daterange scopes).
+     */
+    public $ignoreTimezone;
+
+    /**
      * @var string Raw SQL conditions to use when applying this scope.
      */
     public $conditions;
@@ -106,7 +136,7 @@ class FilterScope
      */
     public function displayAs($type, $config = [])
     {
-        $this->type = strtolower($type) ?: $this->type;
+        $this->type = strtolower((string) $type) ?: $this->type;
         $this->config = $this->evalConfig($config);
         return $this;
     }

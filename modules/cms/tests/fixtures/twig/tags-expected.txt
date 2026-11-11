@@ -1,0 +1,31 @@
+1[<meta name="a"><meta name="b">[a][b]]
+2[second &lt;World&gt;]
+3[fallback &lt;World&gt;]
+4[<b>inner &lt;World&gt;</b>]
+5[&lt;i&gt;&amp;lt;World&amp;gt;&lt;/i&gt;]
+6[outer--after|INNER]
+7[cap:PAGE PARTIAL &lt;World&gt; Simpson|SET]
+8[PAGE PARTIAL Homer Simpson]
+9[Pen is &lt;mightier&gt; than the sword, HTML is &lt;richer&gt; than the text]
+10[PAGE CONTENT]
+11[Custom output: <World>]
+12[success:Saved;error:Failed;]
+13[error:Failed;]
+14[<script src="http://localhost/modules/system/assets/js/framework.js?v=BUILD"></script>
+]
+15[<script src="http://localhost/modules/system/assets/js/framework.js?v=BUILD"></script>
+<script src="http://localhost/modules/system/assets/js/framework.extras.js?v=BUILD"></script>
+<link rel="stylesheet" property="stylesheet" href="http://localhost/modules/system/assets/css/framework.extras.css?v=BUILD">
+]
+16[<script data-module="snowboard-manifest" src="http://localhost/modules/system/assets/js/build/manifest.js?v=BUILD"></script>
+<script data-module="snowboard-vendor" src="http://localhost/modules/system/assets/js/snowboard/build/snowboard.vendor.js?v=BUILD"></script>
+<script data-module="snowboard-base" data-base-url="http://localhost/" data-asset-url="http://localhost/" src="http://localhost/modules/system/assets/js/snowboard/build/snowboard.base.js?v=BUILD"></script>
+<script data-module="request" src="http://localhost/modules/system/assets/js/snowboard/build/snowboard.request.js?v=BUILD"></script>
+<script data-module="attr" src="http://localhost/modules/system/assets/js/snowboard/build/snowboard.data-attr.js?v=BUILD"></script>
+<script data-module="extras" src="http://localhost/modules/system/assets/js/snowboard/build/snowboard.extras.js?v=BUILD"></script>
+]
+17[|]
+18[<p><i>&lt;World&gt;</i></p>]
+19[Pass
+Custom output: Would you look over Picasso's shoulder
+Custom output: And tell him about his brush strokes?]

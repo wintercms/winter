@@ -357,7 +357,9 @@ class SettingsManager
     {
         return (object) [
             'itemCode' => $this->contextItemCode,
-            'owner' => strtolower($this->aliases[$this->contextOwner] ?? $this->contextOwner),
+            'owner' => $this->contextOwner === null
+                ? null
+                : strtolower($this->aliases[$this->contextOwner] ?? $this->contextOwner),
         ];
     }
 
@@ -369,6 +371,11 @@ class SettingsManager
      */
     public function findSettingItem($owner, $code)
     {
+        // Pages outside a settings controller have no context, so getContext() yields nulls.
+        if (empty($owner) || empty($code)) {
+            return false;
+        }
+
         if ($this->items === null) {
             $this->loadItems();
         }

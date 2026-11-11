@@ -2,6 +2,7 @@
 
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
+use Twig\Attribute\YieldReady;
 
 /**
  * Represents a "styles" node
@@ -9,11 +10,12 @@ use Twig\Compiler as TwigCompiler;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class StylesNode extends TwigNode
 {
     public function __construct($lineno, $tag = 'styles')
     {
-        parent::__construct([], [], $lineno, $tag);
+        parent::__construct([], [], $lineno);
     }
 
     /**
@@ -25,8 +27,8 @@ class StylesNode extends TwigNode
     {
         $compiler
             ->addDebugInfo($this)
-            ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->assetsFunction('css');\n")
-            ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->displayBlock('styles');\n")
+            ->write("yield \$this->env->getExtension('Cms\Twig\Extension')->assetsFunction('css');\n")
+            ->write("yield \$this->env->getExtension('Cms\Twig\Extension')->displayBlock('styles');\n")
         ;
     }
 }

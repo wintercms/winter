@@ -419,7 +419,7 @@ class CombineAssets
      */
     protected function prepareRequest(array $assets, $localPath = null)
     {
-        if (substr($localPath, -1) != '/') {
+        if (substr((string) $localPath, -1) != '/') {
             $localPath = $localPath.'/';
         }
 

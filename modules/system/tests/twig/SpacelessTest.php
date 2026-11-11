@@ -3,9 +3,12 @@
 namespace System\Tests\Twig;
 
 use System\Tests\Bootstrap\TestCase;
+use System\Tests\Concerns\AssertsNoDeprecations;
 
 class SpacelessTest extends TestCase
 {
+    use AssertsNoDeprecations;
+
     public function testSpacelessNode()
     {
         $twig = $this->app->make('twig.environment');
@@ -33,5 +36,16 @@ class SpacelessTest extends TestCase
                 trim($template->render())
             )
         );
+    }
+
+    public function testSpacelessNodeRaisesNoDeprecations()
+    {
+        $twig = $this->app->make('twig.environment');
+
+        $output = $this->assertNoDeprecations(function () use ($twig) {
+            return $twig->createTemplate('{% spaceless %} <p> <i>{{ name }}</i> </p> {% endspaceless %}')->render(['name' => '<x>']);
+        });
+
+        $this->assertEquals('<p><i>&lt;x&gt;</i></p>', $output);
     }
 }

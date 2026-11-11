@@ -26,7 +26,7 @@ class DefaultTokenParser extends TwigTokenParser
     {
         $stream = $this->parser->getStream();
         $stream->expect(TwigToken::BLOCK_END_TYPE);
-        return new DefaultNode($token->getLine(), $this->getTag());
+        return new DefaultNode($token->getLine());
     }
 
     /**

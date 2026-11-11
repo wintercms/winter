@@ -9,10 +9,12 @@ use Backend\Widgets\Filter;
 use Carbon\Carbon;
 use System\Tests\Bootstrap\PluginTestCase;
 use System\Tests\Concerns\MigratesDatabaseOnce;
+use System\Tests\Concerns\AssertsNoDeprecations;
 
 class FilterWidgetTest extends PluginTestCase
 {
     use MigratesDatabaseOnce;
+    use AssertsNoDeprecations;
 
     //
     // Permission / scope restriction tests (existing)
@@ -522,6 +524,26 @@ class FilterWidgetTest extends PluginTestCase
     //
     // Helpers
     //
+
+    public function testDateScopeOptionsAreDeclaredProperties()
+    {
+        $this->actingAs((new UserFixture)->asSuperUser());
+
+        $filter = $this->createFilterWithScope('created', [
+            'type' => 'daterange',
+            'label' => 'Created',
+            'default' => null,
+            'yearRange' => 5,
+        ]);
+        $this->assertNoDeprecations(fn () => $filter->render());
+
+        $scope = $filter->getScope('created');
+        $this->assertSame('2000-01-01', $scope->minDate);
+        $this->assertSame('2099-12-31', $scope->maxDate);
+        $this->assertSame(0, $scope->firstDay);
+        $this->assertSame(5, $scope->yearRange);
+        $this->assertFalse($scope->ignoreTimezone);
+    }
 
     protected function restrictedFilterFixture(bool $singlePermission = false)
     {

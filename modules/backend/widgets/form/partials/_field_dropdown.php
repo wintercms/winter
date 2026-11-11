@@ -8,7 +8,7 @@ if ($fieldOptions instanceof Illuminate\Support\Collection) {
 <!-- Dropdown -->
 <?php if ($this->previewMode || $field->readOnly): ?>
     <div class="form-control" <?= $field->readOnly ? 'disabled="disabled"' : ''; ?>>
-        <?= (isset($fieldOptions[$field->value])) ? e(trans($fieldOptions[$field->value])) : '' ?>
+        <?= (isset($fieldOptions[$field->value])) ? e(trans($fieldOptions[$field->value]), false) : '' ?>
     </div>
     <input type="hidden" name="<?= $field->getName() ?>" value="<?= htmlspecialchars((string) $field->value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
 <?php else:

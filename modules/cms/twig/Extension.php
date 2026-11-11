@@ -142,7 +142,7 @@ class Extension extends TwigExtension
             return null;
         }
 
-        $result = str_replace('<!-- X_WINTER_DEFAULT_BLOCK_CONTENT -->', trim($default), $result);
+        $result = str_replace('<!-- X_WINTER_DEFAULT_BLOCK_CONTENT -->', trim((string) $default), $result);
         return $result;
     }
 
@@ -219,15 +219,20 @@ class Extension extends TwigExtension
             $result = $event;
         }
 
-        $result = str_replace('<!-- X_WINTER_DEFAULT_BLOCK_CONTENT -->', trim($default), $result);
+        $result = str_replace('<!-- X_WINTER_DEFAULT_BLOCK_CONTENT -->', trim((string) $default), $result);
         return $result;
     }
 
     /**
-     * Closes a layout block.
+     * Closes a layout block. `{% put %}` passes its captured body as $contents, which is written
+     * into the block's buffer so the block stack behaves as if the body had been echoed.
      */
-    public function endBlock($append = true): void
+    public function endBlock($append = true, ?string $contents = null): void
     {
+        if ($contents !== null) {
+            echo $contents;
+        }
+
         Block::endBlock($append);
     }
 }

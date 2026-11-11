@@ -2,6 +2,8 @@
 
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
+use Twig\Attribute\YieldReady;
+use Twig\Node\CaptureNode;
 
 /**
  * Represents a placeholder node
@@ -9,6 +11,7 @@ use Twig\Compiler as TwigCompiler;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class PlaceholderNode extends TwigNode
 {
     public function __construct($name, $paramValues, $body, $lineno, $tag = 'placeholder')
@@ -22,7 +25,7 @@ class PlaceholderNode extends TwigNode
         $attributes = $paramValues;
         $attributes['name'] = $name;
 
-        parent::__construct($nodes, $attributes, $lineno, $tag);
+        parent::__construct($nodes, $attributes, $lineno);
     }
 
     /**
@@ -41,23 +44,26 @@ class PlaceholderNode extends TwigNode
             ->raw("] = null;");
 
         if ($hasBody) {
+            $capture = new CaptureNode($this->getNode('default'), $this->getTemplateLine());
+            $capture->setAttribute('raw', true);
+
             $compiler
                 ->addDebugInfo($this)
-                ->write('ob_start();')
-                ->subcompile($this->getNode('default'))
                 ->write("\$context[")
                 ->raw("'".$varId."'")
-                ->raw("] = ob_get_clean();");
+                ->raw("] = ")
+                ->subcompile($capture)
+                ->raw("\n");
         }
 
         $isText = $this->hasAttribute('type') && $this->getAttribute('type') == 'text';
 
         $compiler->addDebugInfo($this);
         if (!$isText) {
-            $compiler->write("echo \$this->env->getExtension('Cms\Twig\Extension')->displayBlock(");
+            $compiler->write("yield \$this->env->getExtension('Cms\Twig\Extension')->displayBlock(");
         }
         else {
-            $compiler->write("echo twig_escape_filter(\$this->env, \$this->env->getExtension('Cms\Twig\Extension')->displayBlock(");
+            $compiler->write("yield \$this->env->getRuntime(\\Twig\\Runtime\\EscaperRuntime::class)->escape(\$this->env->getExtension('Cms\Twig\Extension')->displayBlock(");
         }
 
         $compiler
