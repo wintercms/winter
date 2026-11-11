@@ -362,6 +362,8 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerLogging()
     {
+        $this->silenceNullDeprecationChannel();
+
         Event::listen(\Illuminate\Log\Events\MessageLogged::class, function ($event) {
             if (!EventLog::useLogging()) {
                 return;
@@ -382,6 +384,31 @@ class ServiceProvider extends ModuleServiceProvider
                 EventLog::addException($throwable);
             }
         });
+    }
+
+    /**
+     * Laravel still fires MessageLogged for deprecations sent to the "null" channel, which the
+     * listener above would copy into the event log. Laravel uses channels.deprecations when it
+     * exists, so define a silent one unless the app chose a real deprecations channel.
+     */
+    protected function silenceNullDeprecationChannel(): void
+    {
+        if (Config::get('logging.channels.deprecations')) {
+            return;
+        }
+
+        $options = Config::get('logging.deprecations');
+        $channel = is_array($options) ? ($options['channel'] ?? 'null') : ($options ?? 'null');
+
+        if ($channel !== 'null') {
+            return;
+        }
+
+        Config::set('logging.channels.deprecations', [
+            'driver' => 'monolog',
+            'handler' => \Monolog\Handler\NullHandler::class,
+            'tap' => [\System\Classes\SilentLogChannel::class],
+        ]);
     }
 
     /*
