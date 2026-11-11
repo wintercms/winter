@@ -77,6 +77,11 @@ abstract class ComponentBase extends Extendable
     protected $externalPropertyNames = [];
 
     /**
+     * @var string|null The plugins path, resolved on the first call to getPath().
+     */
+    protected $resolvedPluginsPath;
+
+    /**
      * Component constructor. Takes in the page or layout code section object
      * and properties set by the page or layout.
      * @param null|CodeBase $cmsObject
@@ -115,7 +120,7 @@ abstract class ComponentBase extends Extendable
      */
     public function getPath()
     {
-        return plugins_path() . $this->dirName;
+        return ($this->resolvedPluginsPath ??= plugins_path()) . $this->dirName;
     }
 
     /**
