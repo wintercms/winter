@@ -379,6 +379,7 @@ registerHTMLLanguageService('twig', undefined, {
                 },
                 occurrencesHighlight: this.config.get('showOccurrences') ? 'singleFile' : 'off',
                 quickSuggestions: this.config.get('showSuggestions'),
+                readOnly: this.config.get('readOnly'),
                 renderLineHighlight: this.getLineHighlightOption(),
                 renderWhitespace: this.config.get('showInvisibles') ? 'all' : 'selection',
                 scrollbar: {
