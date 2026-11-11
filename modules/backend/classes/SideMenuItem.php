@@ -4,6 +4,8 @@
  * Class SideMenuItem
  *
  * @package Backend\Classes
+ *
+ * @phpstan-consistent-constructor
  */
 class SideMenuItem
 {

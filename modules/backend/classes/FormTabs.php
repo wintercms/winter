@@ -203,7 +203,7 @@ class FormTabs implements IteratorAggregate, ArrayAccess
     /**
      * Returns an icon for the tab based on the tab's name.
      * @param string $name
-     * @return string
+     * @return string|null
      */
     public function getIcon($name)
     {
@@ -216,7 +216,7 @@ class FormTabs implements IteratorAggregate, ArrayAccess
      * Returns a tab pane CSS class.
      * @param string $index
      * @param string $label
-     * @return string
+     * @return string|null
      */
     public function getPaneCssClass($index = null, $label = null)
     {

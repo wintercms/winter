@@ -118,7 +118,7 @@ class PluginBase extends ServiceProviderBase
     /**
      * Registers back-end navigation items for this plugin.
      *
-     * @return array
+     * @return array|null
      */
     public function registerNavigation()
     {
@@ -141,7 +141,7 @@ class PluginBase extends ServiceProviderBase
     /**
      * Registers back-end quick actions for this plugin.
      *
-     * @return array
+     * @return array|null
      */
     public function registerQuickActions()
     {
@@ -164,7 +164,7 @@ class PluginBase extends ServiceProviderBase
     /**
      * Registers any back-end permissions used by this plugin.
      *
-     * @return array
+     * @return array|null
      */
     public function registerPermissions()
     {
@@ -177,7 +177,7 @@ class PluginBase extends ServiceProviderBase
     /**
      * Registers any back-end configuration links used by this plugin.
      *
-     * @return array
+     * @return array|null
      */
     public function registerSettings()
     {
