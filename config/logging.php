@@ -23,6 +23,7 @@ return [
     | This option controls the log channel that should be used to log warnings
     | regarding deprecated PHP and library features. This allows you to get
     | your application ready for upcoming major versions of dependencies.
+    | When left as "null", Winter also keeps them out of the backend event log.
     |
     */
 
