@@ -2,6 +2,7 @@
 
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
+use Twig\Attribute\YieldReady;
 
 /**
  * Represents a partial node
@@ -9,11 +10,12 @@ use Twig\Compiler as TwigCompiler;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class PartialNode extends TwigNode
 {
     public function __construct(TwigNode $nodes, $paramNames, $lineno, $tag = 'partial')
     {
-        parent::__construct(['nodes' => $nodes], ['names' => $paramNames], $lineno, $tag);
+        parent::__construct(['nodes' => $nodes], ['names' => $paramNames], $lineno);
     }
 
     /**
@@ -34,7 +36,7 @@ class PartialNode extends TwigNode
         }
 
         $compiler
-            ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->partialFunction(")
+            ->write("yield \$this->env->getExtension('Cms\Twig\Extension')->partialFunction(")
             ->subcompile($this->getNode('nodes')->getNode(0))
             ->write(", \$context['__cms_partial_params']")
             ->write(", true")

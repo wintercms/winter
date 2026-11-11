@@ -45,7 +45,7 @@ class PlaceholderTokenParser extends TwigTokenParser
             $params = $this->loadParams($stream);
         }
 
-        return new PlaceholderNode($name, $params, $body, $token->getLine(), $this->getTag());
+        return new PlaceholderNode($name, $params, $body, $token->getLine());
     }
 
     public function decidePlaceholderEnd(TwigToken $token)
@@ -61,25 +61,21 @@ class PlaceholderTokenParser extends TwigTokenParser
         while (!$end) {
             $current = $stream->next();
 
-            switch ($current->getType()) {
-                case TwigToken::NAME_TYPE:
-                    $paramName = $current->getValue();
-                    $stream->expect(TwigToken::OPERATOR_TYPE, '=');
-                    $current = $stream->next();
-                    $params[$paramName] = $current->getValue();
-                    break;
-
-                case TwigToken::BLOCK_END_TYPE:
-                    $end = true;
-                    break;
-
-                default:
-                    throw new TwigErrorSyntax(
-                        sprintf('Invalid syntax in the placeholder tag. Line %s', $stream->getCurrent()->getLine()),
-                        $stream->getCurrent()->getLine(),
-                        $stream->getSourceContext()
-                    );
-                    break;
+            if ($current->test(TwigToken::NAME_TYPE)) {
+                $paramName = $current->getValue();
+                $stream->expect(TwigToken::OPERATOR_TYPE, '=');
+                $current = $stream->next();
+                $params[$paramName] = $current->getValue();
+            }
+            elseif ($current->test(TwigToken::BLOCK_END_TYPE)) {
+                $end = true;
+            }
+            else {
+                throw new TwigErrorSyntax(
+                    sprintf('Invalid syntax in the placeholder tag. Line %s', $stream->getCurrent()->getLine()),
+                    $stream->getCurrent()->getLine(),
+                    $stream->getSourceContext()
+                );
             }
         }
 

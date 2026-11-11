@@ -30,7 +30,7 @@ class FrameworkTokenParser extends TwigTokenParser
         }
 
         $stream->expect(TwigToken::BLOCK_END_TYPE);
-        return new FrameworkNode($name, $lineno, $this->getTag());
+        return new FrameworkNode($name, $lineno);
     }
 
     /**

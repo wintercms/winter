@@ -23,7 +23,7 @@ class PageTokenParser extends TwigTokenParser
     {
         $stream = $this->parser->getStream();
         $stream->expect(TwigToken::BLOCK_END_TYPE);
-        return new PageNode($token->getLine(), $this->getTag());
+        return new PageNode($token->getLine());
     }
 
     /**

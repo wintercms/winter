@@ -5,7 +5,7 @@ $sideMenu = $menu->sideMenu[$context->sideMenuCode ?? null] ?? null;
 $settingsManager = \System\Classes\SettingsManager::instance();
 $settingsContext = $settingsManager->getContext();
 $settingsItem = null;
-if ($settingsContext) {
+if ($settingsContext->owner && $settingsContext->itemCode) {
     $settingsItem = $settingsManager->findSettingItem($settingsContext->owner, $settingsContext->itemCode);
 }
 ?>

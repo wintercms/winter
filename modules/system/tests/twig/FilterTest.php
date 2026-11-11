@@ -3,9 +3,12 @@
 namespace System\Tests\Twig;
 
 use System\Tests\Bootstrap\TestCase;
+use System\Tests\Concerns\AssertsNoDeprecations;
 
 class FilterTest extends TestCase
 {
+    use AssertsNoDeprecations;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -151,5 +154,22 @@ EXPECT,
         $template = $this->twig->createTemplate('{% filter md_line %}{{ value }}{% endfilter %}');
 
         $this->assertEquals('', $template->render(['value' => null]));
+    }
+
+    public function testFilterRaisesOnlyItsOwnDeprecation()
+    {
+        $output = $this->assertNoDeprecations(function () {
+            return $this->twig->createTemplate('{% filter upper|raw %}<b>{{ var }}</b>{% endfilter %}')->render(['var' => '<i>']);
+        }, ['The "filter" tag is deprecated']);
+
+        $this->assertEquals('<B>&LT;I&GT;</B>', $output);
+    }
+
+    public function testFilterBodyKeepsBlockScope()
+    {
+        // Unlike "apply", the body renders as a block, so variables it sets do not leak out.
+        $template = $this->twig->createTemplate('{% set x = "outer" %}{% filter upper %}{{ x }}{% set x = "inner" %}{% endfilter %}{{ x }}');
+
+        $this->assertEquals('OUTERouter', $template->render());
     }
 }

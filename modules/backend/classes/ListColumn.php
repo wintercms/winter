@@ -130,7 +130,7 @@ class ListColumn
      */
     public function displayAs($type, $config)
     {
-        $this->type = strtolower($type) ?: $this->type;
+        $this->type = strtolower((string) $type) ?: $this->type;
         $this->config = $this->evalConfig($config);
         return $this;
     }

@@ -2,6 +2,7 @@
 
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
+use Twig\Attribute\YieldReady;
 
 /**
  * Represents a flash node
@@ -9,11 +10,12 @@ use Twig\Compiler as TwigCompiler;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class FlashNode extends TwigNode
 {
     public function __construct($name, TwigNode $body, $lineno, $tag = 'flash')
     {
-        parent::__construct(['body' => $body], ['name' => $name], $lineno, $tag);
+        parent::__construct(['body' => $body], ['name' => $name], $lineno);
     }
 
     /**
