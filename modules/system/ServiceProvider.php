@@ -215,7 +215,8 @@ class ServiceProvider extends ModuleServiceProvider
                 'secure_asset'   => 'secure_asset',
                 'date'           => [function (Environment $env, $value = null, $timezone = null) {
                     if (!($value instanceof DateInterval)) {
-                        $value = DateTime::makeCarbon($value)->toDateTime();
+                        // makeCarbon() treats null as now, but preg_match() deprecates being given it.
+                        $value = DateTime::makeCarbon($value ?? 'now')->toDateTime();
                     }
 
                     if (is_null($value) || $value === 'now') {
@@ -226,7 +227,7 @@ class ServiceProvider extends ModuleServiceProvider
                         return DateTime::makeCarbon(new \DateTime($value, false !== $timezone ? $timezone : $env->getExtension(CoreExtension::class)->getTimezone()));
                     }
 
-                    return twig_date_converter($env, $value, $timezone);
+                    return $env->getExtension(CoreExtension::class)->convertDate($value, $timezone);
                 }, 'options' => ['needs_environment' => true]],
 
                 // Classes
@@ -254,7 +255,7 @@ class ServiceProvider extends ModuleServiceProvider
                         $value = DateTime::makeCarbon($value)->toDateTime();
                     }
 
-                    return twig_date_format_filter($env, $value, $format, $timezone);
+                    return $env->getExtension(CoreExtension::class)->formatDate($value, $format, $timezone);
                 }, 'options' => ['needs_environment' => true]],
                 'md'             => function ($value) {
                     return (is_string($value) && $value !== '') ? Markdown::parse($value) : '';

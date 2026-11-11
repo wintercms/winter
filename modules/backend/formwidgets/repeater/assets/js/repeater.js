@@ -301,7 +301,7 @@
 
     Repeater.prototype.collapse = function($item) {
         $item.addClass('collapsed')
-        $('.repeater-item-collapsed-title', $item).text(this.getCollapseTitle($item))
+        $item.children('.repeater-item-collapsed-title').text(this.getCollapseTitle($item))
     }
 
     Repeater.prototype.expand = function($item) {
