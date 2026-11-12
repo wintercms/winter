@@ -33,6 +33,7 @@
 
         this.bindDependants()
         this.bindCheckboxlist()
+        this.bindFormDataEvents()
         this.toggleEmptyTabs()
         this.bindLazyTabs()
         this.bindCollapsibleSections()
@@ -44,6 +45,7 @@
     FormWidget.prototype.dispose = function() {
         this.unbindDependants()
         this.unbindCheckboxList()
+        this.unbindFormDataEvents()
         this.unbindLazyTabs()
         this.unbindCollapsibleSections()
 
@@ -86,6 +88,47 @@
     FormWidget.prototype.unbindCheckboxList = function() {
         this.$el.off('click', '[data-field-checkboxlist-all]')
         this.$el.off('click', '[data-field-checkboxlist-none]')
+    }
+
+    /*
+     * Discards entries of fields disabled at runtime: the browser drops the
+     * disabled control from the entry list but not the hidden fallback sharing
+     * its name. Browsers without the formdata event skip this and behave as before.
+     */
+    FormWidget.prototype.bindFormDataEvents = function() {
+        if (!('FormDataEvent' in window) || !this.$form.length) {
+            return
+        }
+
+        this.$form.on('formdata', this.proxy(this.onFormData))
+    }
+
+    /*
+     * Unbind the formdata listener
+     */
+    FormWidget.prototype.unbindFormDataEvents = function() {
+        this.$form.off('formdata', this.proxy(this.onFormData))
+    }
+
+    /*
+     * Deletes each entry of a field whose visible checkbox is disabled - by
+     * name, so the field's hidden fallback dies with it; repeats are no-ops.
+     * matches(':disabled') covers disabling inherited from a fieldset too.
+     */
+    FormWidget.prototype.onFormData = function(event) {
+        var formData = event.originalEvent && event.originalEvent.formData
+
+        if (!formData) {
+            return
+        }
+
+        this.getFieldElements().each(function() {
+            $('input[type=checkbox]', this).each(function() {
+                if (this.name && this.matches(':disabled')) {
+                    formData.delete(this.name)
+                }
+            })
+        })
     }
 
     /*

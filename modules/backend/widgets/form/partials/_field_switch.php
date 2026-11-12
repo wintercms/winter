@@ -6,6 +6,12 @@ if ($this->previewMode || $field->readOnly) {
 
 $on = isset($field->config['on']) ? $field->config['on'] : 'backend::lang.form.field_on';
 $off = isset($field->config['off']) ? $field->config['off'] : 'backend::lang.form.field_off';
+
+/*
+ * Keep the hidden fallback in sync with the visible control: a disabled
+ * control must not submit its value (WHATWG HTML 4.10.22.4).
+ */
+$hiddenDisabled = $previewMode || $field->disabled || $field->hasAttribute('disabled', 'field');
 ?>
 
 <!-- Switch -->
@@ -21,7 +27,7 @@ $off = isset($field->config['off']) ? $field->config['off'] : 'backend::lang.for
         type="hidden"
         name="<?= $field->getName() ?>"
         value="0"
-        <?= $previewMode ? 'disabled="disabled"' : '' ?>>
+        <?= $hiddenDisabled ? 'disabled="disabled"' : '' ?>>
 
     <label class="custom-switch" <?= $previewMode ? 'onclick="return false"' : '' ?>>
         <input
