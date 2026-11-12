@@ -23,7 +23,7 @@ class MailSettingTest extends PluginTestCase
 
     public function tearDown(): void
     {
-        Cache::forget(MailSetting::instance()->cacheKey);
+        Cache::forget('system::settings.system_mail_settings');
         MailSetting::instance()->resetDefault();
         SettingsModel::clearInternalCache();
 
@@ -43,7 +43,7 @@ class MailSettingTest extends PluginTestCase
      */
     protected function reloadSettings(): void
     {
-        Cache::forget(MailSetting::instance()->cacheKey);
+        Cache::forget('system::settings.system_mail_settings');
         SettingsModel::clearInternalCache();
     }
 
