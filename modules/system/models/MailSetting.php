@@ -36,6 +36,11 @@ class MailSetting extends Model
      */
     public $settingsFields = 'fields.yaml';
 
+    /**
+     * @var array Settings that are encrypted at rest
+     */
+    public $settingsEncrypted = ['smtp_password'];
+
     /*
      * Validation rules
      */

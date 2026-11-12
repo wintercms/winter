@@ -1,10 +1,12 @@
 <?php namespace System\Behaviors;
 
 use Exception;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use System\Classes\ModelBehavior;
 use Winter\Storm\Database\Model;
@@ -21,6 +23,15 @@ use Winter\Storm\Database\Model;
  * Optionally:
  *
  *     public $settingsCacheTtl = 1440;
+ *
+ * Settings that should be encrypted at rest (i.e. API keys or passwords) can be listed with:
+ *
+ *     public $settingsEncrypted = ['api_key'];
+ *
+ * These values are encrypted with the application key when the record is saved and decrypted
+ * when it is loaded, so they are always readable as plain values through the model. Values
+ * stored before a setting was marked as encrypted are read as-is and are encrypted the next
+ * time the settings are saved.
  *
  */
 class SettingsModel extends ModelBehavior
@@ -201,7 +212,7 @@ class SettingsModel extends ModelBehavior
      */
     public function afterModelFetch()
     {
-        $this->fieldValues = $this->model->value ?: [];
+        $this->fieldValues = $this->decryptSettingsValues($this->model->value ?: []);
         $this->model->attributes = array_merge($this->fieldValues, $this->model->attributes);
     }
 
@@ -223,8 +234,58 @@ class SettingsModel extends ModelBehavior
     {
         $this->model->item = $this->recordCode;
         if ($this->fieldValues) {
-            $this->model->value = $this->fieldValues;
+            $this->model->value = $this->encryptSettingsValues($this->fieldValues);
         }
+    }
+
+    /**
+     * Returns the names of the settings that are encrypted at rest.
+     */
+    protected function getEncryptedKeys(): array
+    {
+        if (!$this->model->propertyExists('settingsEncrypted')) {
+            return [];
+        }
+
+        return (array) $this->model->settingsEncrypted;
+    }
+
+    /**
+     * Encrypts the values of the settings that are flagged as encrypted. Empty values are
+     * left as they are, there is nothing to protect in them.
+     */
+    protected function encryptSettingsValues(array $values): array
+    {
+        foreach ($this->getEncryptedKeys() as $key) {
+            $value = $values[$key] ?? null;
+
+            if ($value !== null && $value !== '') {
+                $values[$key] = Crypt::encrypt($value);
+            }
+        }
+
+        return $values;
+    }
+
+    /**
+     * Decrypts the values of the settings that are flagged as encrypted. Values that cannot
+     * be decrypted were stored before the setting was encrypted and are returned unchanged.
+     */
+    protected function decryptSettingsValues(array $values): array
+    {
+        foreach ($this->getEncryptedKeys() as $key) {
+            if (!isset($values[$key]) || !is_string($values[$key])) {
+                continue;
+            }
+
+            try {
+                $values[$key] = Crypt::decrypt($values[$key]);
+            } catch (DecryptException $e) {
+                // Stored as plain text, it will be encrypted on the next save
+            }
+        }
+
+        return $values;
     }
 
     /**
