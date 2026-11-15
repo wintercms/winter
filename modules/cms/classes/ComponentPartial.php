@@ -197,7 +197,7 @@ class ComponentPartial extends Extendable implements CmsObjectContract
      */
     public function getTwigCacheKey()
     {
-        return $this->getFilePath();
+        return $this->getFilePath() . '?' . hash('xxh128', (string) $this->getTwigContent());
     }
 
     /**

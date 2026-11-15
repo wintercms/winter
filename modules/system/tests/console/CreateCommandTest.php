@@ -2,9 +2,8 @@
 
 namespace System\Tests\Console;
 
-use File;
-use InvalidArgumentException;
 use System\Tests\Bootstrap\TestCase;
+use Winter\Storm\Support\Facades\File;
 
 class CreateCommandTest extends TestCase
 {

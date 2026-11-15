@@ -15,9 +15,7 @@ jobs:
     name: Update manifest
     runs-on: ubuntu-latest
     env:
-      phpVersion: "8.4"
-      extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
-      key: winter-cms-cache-develop
+      GITHUB_TOKEN: ${{ secrets.COMPOSER_GITHUB_TOKEN }}
     steps:
       - name: Checkout changes
         uses: actions/checkout@v4
@@ -25,8 +23,8 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ env.phpVersion }}
-          extensions: ${{ env.extensions }}
+          php-version: 8.4
+          extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
 
       - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --no-scripts

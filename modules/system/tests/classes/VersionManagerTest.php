@@ -2,6 +2,7 @@
 
 namespace System\Tests\Classes;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use System\Tests\Bootstrap\TestCase;
 use System\Classes\VersionManager;
 
@@ -138,13 +139,7 @@ class VersionManagerTest extends TestCase
         $this->assertArrayHasKey('1.5.1', $result);
     }
 
-    /**
-     * @dataProvider versionInfoProvider
-     *
-     * @param $versionInfo
-     * @param $expectedComments
-     * @param $expectedScripts
-     */
+    #[DataProvider('versionInfoProvider')]
     public function testExtractScriptsAndComments($versionInfo, $expectedComments, $expectedScripts)
     {
         $manager = VersionManager::instance();
@@ -157,7 +152,7 @@ class VersionManagerTest extends TestCase
         $this->assertEquals($expectedScripts, $scripts);
     }
 
-    public function versionInfoProvider()
+    public static function versionInfoProvider()
     {
         return [
             [

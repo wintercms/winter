@@ -155,7 +155,7 @@ class ListsTest extends PluginTestCase
         $this->assertStringNotContainsString('groups_count', $sql);
     }
 
-    public function keyOnlyRecordKeysProvider(): array
+    public static function keyOnlyRecordKeysProvider(): array
     {
         return [
             'sort by a table column' => ['id', null],
@@ -177,7 +177,7 @@ class ListsTest extends PluginTestCase
         $this->assertStringContainsString('groups_count', $sql);
     }
 
-    public function fullSelectRecordKeysProvider(): array
+    public static function fullSelectRecordKeysProvider(): array
     {
         return [
             'sort by a relation count' => ['groups', null],
