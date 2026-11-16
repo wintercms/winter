@@ -57,6 +57,11 @@ class FilterScope
     public $dependsOn;
 
     /**
+     * @var mixed Default value for this filter scope.
+     */
+    public $default;
+
+    /**
      * @var string Specifies contextual visibility of this form scope.
      */
     public $context;

@@ -15,6 +15,8 @@ use Winter\Storm\Filesystem\PathResolver;
  *
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
+ *
+ * @phpstan-consistent-constructor
  */
 class Asset extends Extendable
 {

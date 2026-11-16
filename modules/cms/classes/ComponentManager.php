@@ -81,7 +81,7 @@ class ComponentManager
      *     });
      *
      * @param callable $definitions
-     * @return array Array values are class names.
+     * @return void
      */
     public function registerComponents(callable $definitions)
     {
@@ -195,7 +195,7 @@ class ComponentManager
      * @param array $properties The properties set by the Page or Layout.
      * @param bool $isSoftComponent Defines if this is a soft component.
      *
-     * @return ComponentBase The component object.
+     * @return ComponentBase|null The component object, or null for an unresolvable soft component.
      * @throws SystemException If the (hard) component cannot be found or is not registered.
      */
     public function makeComponent($name, $cmsObject = null, $properties = [], $isSoftComponent = false)
