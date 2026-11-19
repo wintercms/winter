@@ -126,6 +126,104 @@ describe('Form Widget dependsOn', function () {
             });
     });
 
+    /**
+     * Build a form whose `items` field holds one nested form widget per item, like the
+     * repeater does, each with the same field names and its own refresh data.
+     *
+     * @param {Object} fields - Map of field names to arrays of field names they depend on.
+     * @param {Number} count - Number of items.
+     * @param {String} parentFields - Extra field HTML for the parent form.
+     */
+    function buildRepeaterHtml(fields, count, parentFields) {
+        var items = '';
+        for (var index = 0; index < count; index++) {
+            items += '<div data-control="formwidget" data-refresh-handler="onRefreshItem"'
+                + " data-refresh-data='\"_repeater_index\": \"" + index + "\"'>";
+            for (var name in fields) {
+                items += '<div data-field-name="' + name + '"';
+                if (fields[name].length) {
+                    items += " data-field-depends='" + JSON.stringify(fields[name]) + "'";
+                }
+                items += '><input type="text" name="items[' + index + '][' + name + ']"></div>';
+            }
+            items += '</div>';
+        }
+
+        return '<form>'
+            + '<div data-control="formwidget" data-refresh-handler="onRefreshField">'
+            + (parentFields || '')
+            + '<div data-field-name="items">' + items + '</div>'
+            + '</div>'
+            + '</form>';
+    }
+
+    function refreshedItems(requestSpy) {
+        return requestSpy.mock.calls.map(function (call) {
+            return call[1].data._repeater_index + ':' + call[1].data.fields.join(',');
+        });
+    }
+
+    it('only refreshes the dependants in the item whose field changed', function (done) {
+        buildDom(buildRepeaterHtml({ fieldA: [], fieldB: ['fieldA'], fieldC: ['fieldB'] }, 3))
+            .then(function (dom) {
+                var $ = dom.window.jQuery;
+                var requestSpy = jest.spyOn($.fn, 'request');
+
+                $('[data-field-name="fieldA"]').eq(1).trigger('change');
+
+                // A->B (300ms) then B->C (600ms), both in item 1 only
+                setTimeout(function () {
+                    try {
+                        expect(refreshedItems(requestSpy)).toEqual(['1:fieldB', '1:fieldC']);
+                        done();
+                    } catch (e) {
+                        done(e);
+                    }
+                }, 1500);
+            });
+    });
+
+    it('refreshes the dependants in nested forms when a parent form field changes', function (done) {
+        var parentField = '<div data-field-name="order"><input type="text" name="order"></div>';
+
+        buildDom(buildRepeaterHtml({ fieldA: ['order'] }, 2, parentField))
+            .then(function (dom) {
+                var $ = dom.window.jQuery;
+                var requestSpy = jest.spyOn($.fn, 'request');
+
+                $('[data-field-name="order"]').trigger('change');
+
+                setTimeout(function () {
+                    try {
+                        expect(refreshedItems(requestSpy).sort()).toEqual(['0:fieldA', '1:fieldA']);
+                        done();
+                    } catch (e) {
+                        done(e);
+                    }
+                }, 500);
+            });
+    });
+
+    it('keeps the dependants of other items bound when an item is disposed', function (done) {
+        buildDom(buildRepeaterHtml({ fieldA: [], fieldB: ['fieldA'] }, 2))
+            .then(function (dom) {
+                var $ = dom.window.jQuery;
+                var requestSpy = jest.spyOn($.fn, 'request');
+
+                $('[data-field-name="items"] > [data-control="formwidget"]').eq(0).trigger('dispose-control');
+                $('[data-field-name="fieldA"]').eq(1).trigger('change');
+
+                setTimeout(function () {
+                    try {
+                        expect(refreshedItems(requestSpy)).toEqual(['1:fieldB']);
+                        done();
+                    } catch (e) {
+                        done(e);
+                    }
+                }, 500);
+            });
+    });
+
     it('stops cycle in a three-field circular chain (A -> B -> C -> A)', function (done) {
         buildDom(buildFormHtml({ fieldA: ['fieldC'], fieldB: ['fieldA'], fieldC: ['fieldB'] }))
             .then(function (dom) {
