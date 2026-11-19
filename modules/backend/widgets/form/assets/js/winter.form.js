@@ -6,7 +6,8 @@
  */
 +function ($) { "use strict";
     var Base = $.wn.foundation.base,
-        BaseProto = Base.prototype
+        BaseProto = Base.prototype,
+        formWidgetCount = 0
 
     var FormWidget = function (element, options) {
         this.$el = $(element)
@@ -18,6 +19,11 @@
          */
         this.dependantUpdateInterval = 300
         this.dependantUpdateTimers = {}
+
+        /*
+         * Unique event namespace, so this form only unbinds its own dependency handlers
+         */
+        this.dependantEvent = 'change.oc.formwidget.dependants' + (++formWidgetCount)
 
         $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
@@ -111,13 +117,15 @@
             fieldMap = this._getDependants()
 
         /*
-         * When a field is updated, refresh its dependents
+         * When a field is updated, refresh its dependents. Fields of other forms with the same
+         * name, such as the other items of a repeater, are ignored.
          */
         $.each(fieldMap, function(fieldName, toRefresh) {
-            $(document).on('change.oc.formwidget',
-                '[data-field-name="' + fieldName + '"]',
-                $.proxy(self.onRefreshDependants, self, fieldName, toRefresh)
-            )
+            $(document).on(self.dependantEvent, '[data-field-name="' + fieldName + '"]', function(event) {
+                if (self.isDependencyField(this)) {
+                    self.onRefreshDependants(fieldName, toRefresh, event)
+                }
+            })
         })
     }
 
@@ -125,11 +133,27 @@
      * Dispose of the dependant field handlers
      */
     FormWidget.prototype.unbindDependants = function() {
-        var fieldMap = this._getDependants()
+        $(document).off(this.dependantEvent)
+    }
 
-        $.each(fieldMap, function(fieldName, toRefresh) {
-            $(document).off('change.oc.formwidget', '[data-field-name="' + fieldName + '"]')
-        })
+    /*
+     * Whether a field can update the dependants of this form: it belongs to this form,
+     * or to a form this one is nested in.
+     */
+    FormWidget.prototype.isDependencyField = function(fieldElement) {
+        var form = $(fieldElement).closest('[data-control="formwidget"]').get(0),
+            el = this.$el.get(0)
+
+        return !form || form === el || $.contains(form, el)
+    }
+
+    /*
+     * Retrieve the field elements of this form by name, without those of nested forms
+     */
+    FormWidget.prototype.getFieldElementsByName = function(fieldName) {
+        var selector = '[data-field-name="' + fieldName + '"]'
+
+        return this.$el.find(selector).not(this.$el.find('[data-control="formwidget"] ' + selector))
     }
 
     /*
@@ -201,13 +225,18 @@
             formEl.request(self.options.refreshHandler, {
                 data: refreshData
             }).success(function() {
+                // the form was disposed while the request ran
+                if (!self.$el) {
+                    return
+                }
+
                 self.toggleEmptyTabs()
 
                 var newChain = cascadeChain.concat([fieldName])
                 $.each(toRefresh.fields, function(key, field) {
                     var cascadeEvent = $.Event('change')
                     cascadeEvent.cascadeChain = newChain
-                    $('[data-field-name="' + field + '"]').trigger(cascadeEvent)
+                    self.getFieldElementsByName(field).trigger(cascadeEvent)
                 })
             })
         }, this.dependantUpdateInterval)
