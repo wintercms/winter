@@ -24,6 +24,7 @@ return [
     ],
     'theme' => [
         'not_found_name' => "El tema ':name' no se encuentra.",
+        'by_author' => 'Por :name',
         'active' => [
             'not_set' => 'El tema activo no se ha establecido.',
             'not_found' => 'El tema activo no se encuentra.'
@@ -91,14 +92,28 @@ return [
         'dir_name_taken' => 'Este directorio ya existe.',
         'find_more_themes' => 'Buscar nuevos temas',
         'saving' => 'Guardando tema...',
-        'return' => 'Volver a la lista de temas'
+        'return' => 'Volver a la lista de temas',
+        'default_description' => 'Tema personalizado generado para :url',
+        'scaffold' => [
+            'label' => 'Estructura base',
+            'empty' => 'Vacía',
+            'less' => 'Básica (LESS)',
+            'tailwind' => 'Tailwind CSS',
+        ]
     ],
     'maintenance' => [
         'settings_menu' => 'Modo de mantenimiento',
         'settings_menu_description' => 'Configura la página del modo de mantenimiento y cambia su configuración',
         'is_enabled' => 'Activar el modo de mantenimiento',
         'is_enabled_comment' => 'Selecciona la página para mostrar cuando el modo de mantenimiento esté activado.',
-        'hint' => 'El modo de mantenimiento mostrará la página de mantenimiento a los visitantes que no estén conectados en el área de back-end.'
+        'hint' => 'El modo de mantenimiento mostrará la página de mantenimiento a los visitantes que no estén conectados en el área de back-end.',
+        'allowed_ips' => [
+            'name' => 'Direcciones IP permitidas',
+            'description' => 'Direcciones IP que pueden ver el sitio mientras el modo de mantenimiento está activo',
+            'prompt' => 'Añadir una dirección IP',
+            'ip' => 'Dirección IP',
+            'label' => 'Descripción',
+        ]
     ],
     'page' => [
         'not_found_name' => "La página ':name' no se encuentra",
@@ -184,7 +199,15 @@ return [
         'open_searchbox' => 'Abrir caja de búsqueda',
         'close_searchbox' => 'Cerrar caja de búsqueda',
         'open_replacebox' => 'Abrir caja de reemplazo',
-        'close_replacebox'  => 'Cerrar caja de reemplazo'
+        'close_replacebox'  => 'Cerrar caja de reemplazo',
+        'commit' => 'Confirmar',
+        'reset' => 'Restablecer',
+        'commit_confirm' => '¿Seguro que quieres guardar los cambios de este archivo en el sistema de archivos? Se sobrescribirá el archivo existente en el sistema de archivos',
+        'reset_confirm' => '¿Seguro que quieres restablecer este archivo a la copia que hay en el sistema de archivos? Se sustituirá por completo por el archivo del sistema de archivos',
+        'committing' => 'Confirmando',
+        'resetting' => 'Restableciendo',
+        'commit_success' => 'El elemento (:type) se ha guardado en el sistema de archivos',
+        'reset_success' => 'El elemento (:type) se ha restablecido a la versión del sistema de archivos'
     ],
     'asset' => [
         'menu_label' => 'Recursos',
@@ -236,7 +259,10 @@ return [
         'invalid_request' => 'La plantilla no puede ser guardada porque tiene datos de componente inválidos.',
         'no_records' => 'No se encontraron componentes',
         'not_found' => "El componente ':name' no se encuentra.",
-        'method_not_found' => "El componente ':name' no contiene un método ':method'."
+        'no_default_partial' => "Este componente no tiene un parcial 'default'",
+        'method_not_found' => "El componente ':name' no contiene un método ':method'.",
+        'soft_component' => 'Componente opcional',
+        'soft_component_description' => 'Este componente no está disponible, pero es opcional.'
     ],
     'template' => [
         'invalid_type' => 'Tipo de plantilla desconocido.',
@@ -244,16 +270,24 @@ return [
         'saved' => 'La plantilla se guardó correctamente.',
         'no_list_records' => 'No se encontraron registros',
         'delete_confirm' => '¿Deseas eliminar las plantillas seleccionadas?',
-        'order_by' => 'Ordenar por'
+        'order_by' => 'Ordenar por',
+        'type_not_permitted' => 'Necesitas el permiso ":permission" para gestionar :type'
     ],
     'permissions' => [
         'name' => 'CMS',
         'manage_content' => 'Gestionar archivos de contenido del sitio',
+        'manage_content_comment' => 'Este permiso solo debe concederse a usuarios de confianza, ya que permite acceder directamente a los archivos de contenido del tema.',
         'manage_assets' => 'Gestionar recursos del sitio - imágenes, archivos JavasCript, archivos CSS',
+        'manage_assets_comment' => 'Este permiso solo debe concederse a usuarios de confianza, ya que permite acceder directamente a los archivos de recursos del tema, que se combinan y se sirven públicamente.',
         'manage_pages' => 'Crear, modificar y eliminar páginas del sitio',
+        'manage_pages_comment' => 'Este permiso solo debe concederse a usuarios de confianza, ya que permite acceder directamente a los archivos de contenido de las páginas del tema, incluido el código PHP si está habilitado.',
         'manage_layouts' => 'Crear, modificar y eliminar diseños del CMS',
+        'manage_layouts_comment' => 'Este permiso solo debe concederse a usuarios de confianza, ya que permite acceder directamente a los archivos de diseño del tema, incluido el código PHP si está habilitado.',
         'manage_partials' => 'Crear, modificar y eliminar parciales del CMS',
+        'manage_partials_comment' => 'Este permiso solo debe concederse a usuarios de confianza, ya que permite acceder directamente a los archivos de parciales del tema, incluido el código PHP si está habilitado.',
         'manage_themes' => 'Activar, desactivar y configurar temas del CMS',
+        'manage_themes_comment' => 'Este permiso solo debe concederse a usuarios de confianza, ya que permite al usuario añadir temas nuevos, cambiar el tema existente o eliminar temas por completo.',
+        'manage_theme_options' => 'Configurar las opciones de personalización del tema activo',
     ],
     'theme_log' => [
         'hint' => 'Este registro muestra todos los cambios hechos al tema por los administradores en el área de back-end.',

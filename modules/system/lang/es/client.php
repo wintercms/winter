@@ -46,7 +46,8 @@ return [
     ],
     'alert' => [
         'confirm_button_text' => 'OK',
-        'cancel_button_text' => 'Cancelar'
+        'cancel_button_text' => 'Cancelar',
+        'widget_remove_confirm' => '¿Eliminar este módulo?'
     ],
     'datepicker' => [
         'previousMonth' => 'Mes Anterior',
@@ -54,6 +55,12 @@ return [
         'months' => ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
         'weekdays' => ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
         'weekdaysShort' => ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab']
+    ],
+    'colorpicker' => [
+        'last_color' => 'Usar el color seleccionado anteriormente',
+        'aria_palette' => 'Área de selección de color',
+        'aria_hue' => 'Control deslizante de selección de tono',
+        'aria_opacity' => 'Control deslizante de selección de opacidad',
     ],
     'filter' => [
         'group' => [
@@ -91,6 +98,7 @@ return [
             'title' => 'Seleccione el editor de código fuente a usar',
             'description' => 'Su entorno de sistema operativo debe estar configurado para escuchar a uno de estos esquemas de URL.',
             'openWith' => 'Abrir con',
+            'remember_choice' => 'Recordar la opción seleccionada para esta sesión',
             'rememberChoice' => 'Recuerde la opción seleccionada para esta sesión del navegador',
             'open' => 'Abrir',
             'cancel' => 'Cancelar'
